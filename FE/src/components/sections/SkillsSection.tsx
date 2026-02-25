@@ -5,88 +5,81 @@ interface SkillsSectionProps {
   skills: Skill[];
 }
 
+const proficiencyConfig = {
+  beginner:     { color: 'from-yellow-400 to-yellow-500',  badge: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', width: '25%' },
+  intermediate: { color: 'from-blue-400 to-blue-500',      badge: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',         width: '50%' },
+  advanced:     { color: 'from-green-400 to-emerald-500',  badge: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',       width: '75%' },
+  expert:       { color: 'from-primary-500 to-purple-600', badge: 'bg-primary-100 text-primary-700 dark:bg-primary-950/60 dark:text-primary-400', width: '95%' },
+};
+
 const SkillsSection: React.FC<SkillsSectionProps> = ({ skills }) => {
   if (skills.length === 0) return null;
 
   const categories = [
-    { key: 'programming', label: 'Programming Languages' },
-    { key: 'framework', label: 'Frameworks & Libraries' },
-    { key: 'database', label: 'Databases' },
-    { key: 'tool', label: 'Tools & Platforms' },
-    { key: 'soft', label: 'Soft Skills' },
-    { key: 'other', label: 'Other Skills' },
+    { key: 'programming', label: 'Languages', emoji: '💻' },
+    { key: 'framework',   label: 'Frameworks & Libraries', emoji: '🧩' },
+    { key: 'database',    label: 'Databases', emoji: '🗄️' },
+    { key: 'tool',        label: 'Tools & Platforms', emoji: '🔧' },
+    { key: 'soft',        label: 'Soft Skills', emoji: '🤝' },
+    { key: 'other',       label: 'Other', emoji: '✨' },
   ];
 
-  const groupedSkills = categories.map(category => ({
-    ...category,
-    skills: skills.filter(skill => skill.category === category.key),
-  })).filter(group => group.skills.length > 0);
-
-  const proficiencyColors = {
-    beginner: 'bg-yellow-500',
-    intermediate: 'bg-blue-500',
-    advanced: 'bg-green-500',
-    expert: 'bg-purple-500',
-  };
+  const grouped = categories
+    .map((c) => ({ ...c, skills: skills.filter((s) => s.category === c.key) }))
+    .filter((g) => g.skills.length > 0);
 
   return (
     <section id="skills" className="section-padding">
       <div className="container-custom">
-        {/* Section Title */}
-        <div className="text-center mb-12">
-          <h2 className="heading-secondary">Skills & Expertise</h2>
-          <div className="w-20 h-1 bg-primary-600 mx-auto mt-4 rounded-full"></div>
+        {/* Header */}
+        <div className="section-header">
+          <span className="section-label">Expertise</span>
+          <h2 className="heading-secondary text-gray-900 dark:text-white">Skills & Technologies</h2>
+          <div className="section-underline" />
         </div>
 
-        {/* Skills Grid */}
-        <div className="space-y-12">
-          {groupedSkills.map((group, groupIndex) => (
-            <div key={group.key} className="animate-slide-up" style={{ animationDelay: `${groupIndex * 0.1}s` }}>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-                {group.label}
-              </h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {group.skills.map((skill, index) => (
-                  <div key={index} className="card p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-3">
+        <div className="space-y-14">
+          {grouped.map((group, gi) => (
+            <div key={group.key} className="animate-fade-in-up" style={{ animationDelay: `${gi * 0.1}s` }}>
+              <div className="flex items-center gap-3 mb-6">
+                <span className="text-2xl">{group.emoji}</span>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{group.label}</h3>
+                <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700 ml-2" />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {group.skills.map((skill, si) => {
+                  const cfg = proficiencyConfig[skill.proficiency] || proficiencyConfig.intermediate;
+                  return (
+                    <div key={si} className="card p-5 hover:-translate-y-1 transition-transform duration-200">
+                      <div className="flex items-center gap-3 mb-4">
                         {skill.icon && (
-                          <div className="w-10 h-10 flex items-center justify-center 
-                                        bg-primary-100 dark:bg-primary-900/30 rounded-lg">
-                            <span className="text-2xl">{skill.icon}</span>
+                          <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-700/80
+                                          flex items-center justify-center text-xl flex-shrink-0">
+                            {skill.icon}
                           </div>
                         )}
-                        <div>
-                          <h4 className="font-semibold text-gray-900 dark:text-white">
-                            {skill.name}
-                          </h4>
-                          <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full mt-1
-                                         text-white ${proficiencyColors[skill.proficiency]}`}>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-gray-900 dark:text-white text-sm truncate">{skill.name}</p>
+                          <span className={`inline-block px-2 py-0.5 rounded-md text-xs font-medium mt-1 ${cfg.badge}`}>
                             {skill.proficiency}
                           </span>
                         </div>
-                      </div>
-                    </div>
-
-                    {/* Progress Bar */}
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600 dark:text-gray-400">Proficiency</span>
-                        <span className="font-medium text-gray-900 dark:text-white">
+                        <span className="text-sm font-bold text-gray-400 dark:text-gray-500 flex-shrink-0">
                           {skill.proficiency_percentage}%
                         </span>
                       </div>
-                      <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+
+                      {/* Progress bar */}
+                      <div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                         <div
-                          className={`h-full rounded-full transition-all duration-1000 ease-out
-                                    ${proficiencyColors[skill.proficiency]}`}
+                          className={`h-full rounded-full bg-gradient-to-r ${cfg.color} transition-all duration-1000 ease-out`}
                           style={{ width: `${skill.proficiency_percentage}%` }}
-                        ></div>
+                        />
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           ))}

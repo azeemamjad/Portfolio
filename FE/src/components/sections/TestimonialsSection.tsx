@@ -9,78 +9,73 @@ interface TestimonialsSectionProps {
 const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials }) => {
   if (testimonials.length === 0) return null;
 
-  const renderStars = (rating: number) => {
-    return Array.from({ length: 5 }, (_, i) => (
+  const featured = testimonials.filter((t) => t.is_featured);
+  const display = featured.length > 0 ? featured : testimonials;
+
+  const renderStars = (rating: number) =>
+    Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
-        className={`w-4 h-4 ${
-          i < rating
-            ? 'fill-yellow-400 text-yellow-400'
-            : 'text-gray-300 dark:text-gray-600'
-        }`}
+        className={`w-4 h-4 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200 dark:text-gray-700'}`}
       />
     ));
-  };
-
-  const featuredTestimonials = testimonials.filter(t => t.is_featured);
-  const displayTestimonials = featuredTestimonials.length > 0 ? featuredTestimonials : testimonials;
 
   return (
-    <section className="section-padding bg-gray-50 dark:bg-gray-800/50">
+    <section className="section-padding">
       <div className="container-custom">
-        {/* Section Title */}
-        <div className="text-center mb-12">
-          <h2 className="heading-secondary">Testimonials</h2>
-          <div className="w-20 h-1 bg-primary-600 mx-auto mt-4 rounded-full"></div>
-          <p className="text-gray-600 dark:text-gray-400 mt-4 max-w-2xl mx-auto">
-            What clients and colleagues say about working with me.
+        {/* Header */}
+        <div className="section-header">
+          <span className="section-label">Social Proof</span>
+          <h2 className="heading-secondary text-gray-900 dark:text-white">What People Say</h2>
+          <div className="section-underline" />
+          <p className="text-gray-500 dark:text-gray-400 mt-5 max-w-xl mx-auto text-base">
+            Feedback from clients and colleagues I've had the pleasure of working with.
           </p>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayTestimonials.map((testimonial, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {display.map((t, i) => (
             <div
-              key={testimonial.id}
-              className="card p-6 animate-slide-up"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              key={t.id}
+              className="card p-7 flex flex-col animate-fade-in-up hover:-translate-y-1"
+              style={{ animationDelay: `${i * 0.08}s` }}
             >
-              {/* Quote Icon */}
-              <div className="mb-4">
-                <Quote className="w-8 h-8 text-primary-600 dark:text-primary-400 opacity-50" />
+              {/* Quote icon + stars */}
+              <div className="flex items-start justify-between mb-5">
+                <div className="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-950/50
+                                flex items-center justify-center">
+                  <Quote className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                </div>
+                <div className="flex items-center gap-0.5">
+                  {renderStars(t.rating)}
+                </div>
               </div>
 
-              {/* Content */}
-              <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                "{testimonial.content}"
+              {/* Testimonial text */}
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed flex-1 mb-6 italic text-sm">
+                "{t.content}"
               </p>
 
-              {/* Rating */}
-              <div className="flex items-center gap-1 mb-4">
-                {renderStars(testimonial.rating)}
-              </div>
-
-              {/* Client Info */}
-              <div className="flex items-center gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                {testimonial.client_image ? (
+              {/* Client */}
+              <div className="flex items-center gap-3 pt-5 border-t border-gray-100 dark:border-gray-700">
+                {t.client_image ? (
                   <img
-                    src={testimonial.client_image}
-                    alt={testimonial.client_name}
-                    className="w-12 h-12 rounded-full object-cover"
+                    src={t.client_image}
+                    alt={t.client_name}
+                    className="w-11 h-11 rounded-xl object-cover flex-shrink-0"
                   />
                 ) : (
-                  <div className="w-12 h-12 rounded-full bg-primary-600 flex items-center justify-center text-white font-bold">
-                    {testimonial.client_name.charAt(0)}
+                  <div className="w-11 h-11 rounded-xl flex-shrink-0
+                                  bg-gradient-to-br from-primary-500 to-purple-600
+                                  flex items-center justify-center text-white text-base font-bold">
+                    {t.client_name.charAt(0).toUpperCase()}
                   </div>
                 )}
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-900 dark:text-white">
-                    {testimonial.client_name}
-                  </p>
-                  {testimonial.client_role && (
-                    <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
-                      {testimonial.client_role}
-                      {testimonial.client_company && ` at ${testimonial.client_company}`}
+                <div className="min-w-0">
+                  <p className="font-semibold text-gray-900 dark:text-white text-sm truncate">{t.client_name}</p>
+                  {t.client_role && (
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                      {t.client_role}{t.client_company ? ` · ${t.client_company}` : ''}
                     </p>
                   )}
                 </div>

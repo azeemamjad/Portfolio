@@ -10,7 +10,6 @@ const AnimatedBackground: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas size
     const setCanvasSize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -18,58 +17,64 @@ const AnimatedBackground: React.FC = () => {
     setCanvasSize();
     window.addEventListener('resize', setCanvasSize);
 
-    // Gradient orbs
     const orbs: Array<{
       x: number;
       y: number;
       vx: number;
       vy: number;
       radius: number;
-      color: string;
+      colorIndex: number;
     }> = [];
 
-    // Create gradient orbs
-    const orbCount = 3;
+    const orbCount = 4;
     for (let i = 0; i < orbCount; i++) {
       orbs.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        radius: 200 + Math.random() * 300,
-        color: i === 0 ? 'rgba(59, 130, 246, 0.03)' : i === 1 ? 'rgba(139, 92, 246, 0.03)' : 'rgba(236, 72, 153, 0.03)',
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: 250 + Math.random() * 350,
+        colorIndex: i,
       });
     }
 
-    // Check if dark mode
     const isDarkMode = () => document.documentElement.classList.contains('dark');
 
-    // Animation
+    // Dark mode: vivid colors; Light mode: subtle pastel tints
+    const darkColors = [
+      'rgba(99, 102, 241, 0.18)',   // indigo
+      'rgba(168, 85, 247, 0.14)',   // purple
+      'rgba(236, 72, 153, 0.10)',   // pink
+      'rgba(59, 130, 246, 0.12)',   // blue
+    ];
+    const lightColors = [
+      'rgba(99, 102, 241, 0.06)',
+      'rgba(168, 85, 247, 0.05)',
+      'rgba(236, 72, 153, 0.04)',
+      'rgba(59, 130, 246, 0.05)',
+    ];
+
     let animationFrameId: number;
+
     const animate = () => {
       const dark = isDarkMode();
-      
-      // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Draw gradient orbs
       orbs.forEach((orb) => {
-        // Update position
         orb.x += orb.vx;
         orb.y += orb.vy;
 
-        // Wrap around screen
         if (orb.x < -orb.radius) orb.x = canvas.width + orb.radius;
         if (orb.x > canvas.width + orb.radius) orb.x = -orb.radius;
         if (orb.y < -orb.radius) orb.y = canvas.height + orb.radius;
         if (orb.y > canvas.height + orb.radius) orb.y = -orb.radius;
 
-        // Create gradient
+        const color = dark ? darkColors[orb.colorIndex] : lightColors[orb.colorIndex];
+
         const gradient = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, orb.radius);
-        gradient.addColorStop(0, orb.color);
+        gradient.addColorStop(0, color);
         gradient.addColorStop(1, 'transparent');
 
-        // Draw orb
         ctx.fillStyle = gradient;
         ctx.beginPath();
         ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
@@ -92,16 +97,7 @@ const AnimatedBackground: React.FC = () => {
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"
-        style={{ 
-          zIndex: 0,
-        }}
-      />
-      {/* Subtle noise texture overlay */}
-      <div 
-        className="absolute inset-0 opacity-[0.015] dark:opacity-[0.02]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-        }}
+        style={{ zIndex: 0 }}
       />
     </div>
   );
