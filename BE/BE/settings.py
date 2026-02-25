@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-onnxgw1(ksfw)&63sszg0j8_th)_tvp^+^%v$jyz1i3sx&6c33
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["72.62.175.219", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["dev-link.cloud", "www.dev-link.cloud", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -140,7 +140,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:5173",
     "http://127.0.0.1:3000",
-    "http://72.62.175.219:3000"
+    "http://dev-link.cloud",
+    "https://dev-link.cloud"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
