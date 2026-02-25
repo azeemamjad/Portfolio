@@ -144,6 +144,11 @@ CORS_ALLOWED_ORIGINS = [
     "https://dev-link.cloud"
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://dev-link.cloud",
+    "https://dev-link.cloud"
+]
+
 CORS_ALLOW_CREDENTIALS = True
 
 # REST Framework Settings
