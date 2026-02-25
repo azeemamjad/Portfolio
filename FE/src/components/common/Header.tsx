@@ -22,6 +22,7 @@ const Header: React.FC<HeaderProps> = ({ username, profileImage }) => {
   const navLinks = [
     { name: 'Home', hash: '' },
     { name: 'About', hash: '#about' },
+    { name: 'Road Map', hash: '#timeline' },
     { name: 'Projects', hash: '#projects' },
     { name: 'Skills', hash: '#skills' },
     { name: 'Contact', hash: '#contact' },

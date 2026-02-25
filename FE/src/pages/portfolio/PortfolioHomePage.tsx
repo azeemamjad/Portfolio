@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Download, Mail } from 'lucide-react';
 import type { Portfolio } from '../../types';
+import TimelineSection from '../../components/sections/TimelineSection';
 
 interface PortfolioHomePageProps {
   portfolio: Portfolio;
@@ -112,6 +113,9 @@ const PortfolioHomePage: React.FC<PortfolioHomePageProps> = ({ portfolio }) => {
           </div>
         </div>
       </section>
+
+      {/* Timeline / Road Map */}
+      <TimelineSection achievements={achievements} />
 
       {/* Featured Projects Preview */}
       {featuredProjects.length > 0 && (

@@ -16,6 +16,7 @@ import SkillsSection from '../components/sections/SkillsSection';
 import ServicesSection from '../components/sections/ServicesSection';
 import TestimonialsSection from '../components/sections/TestimonialsSection';
 import AchievementsSection from '../components/sections/AchievementsSection';
+import TimelineSection from '../components/sections/TimelineSection';
 import ContactSection from '../components/sections/ContactSection';
 
 const PortfolioPage: React.FC = () => {
@@ -82,6 +83,7 @@ const PortfolioPage: React.FC = () => {
         <main>
           <HeroSection portfolio={portfolio} />
           <AboutSection about={portfolio.about} />
+          <TimelineSection achievements={portfolio.achievements} />
           <ProjectsSection projects={portfolio.projects} />
           <SkillsSection skills={portfolio.skills} />
           <ServicesSection services={portfolio.services} />

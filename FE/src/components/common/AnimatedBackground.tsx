@@ -92,12 +92,35 @@ const AnimatedBackground: React.FC = () => {
     };
   }, []);
 
+  // Plus-sign SVG tile (indigo, will be tinted by opacity)
+  const plusSvg = `url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='15' y='9' width='2' height='14' rx='1' fill='%236366f1'/%3E%3Crect x='9' y='15' width='14' height='2' rx='1' fill='%236366f1'/%3E%3C/svg%3E")`;
+
   return (
     <div className="fixed inset-0 w-full h-full pointer-events-none overflow-hidden">
+      {/* Orb canvas */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"
         style={{ zIndex: 0 }}
+      />
+      {/* + pattern texture — subtle in light, slightly more visible in dark */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: plusSvg,
+          backgroundSize: '32px 32px',
+          opacity: 0.035,
+          zIndex: 1,
+        }}
+      />
+      <div
+        className="absolute inset-0 hidden dark:block"
+        style={{
+          backgroundImage: plusSvg,
+          backgroundSize: '32px 32px',
+          opacity: 0.04,
+          zIndex: 1,
+        }}
       />
     </div>
   );

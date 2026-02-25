@@ -1,9 +1,8 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, User, Briefcase, Code, Award, MessageCircle, Sun, Moon, Monitor } from 'lucide-react';
-import { useTheme } from '../../contexts/ThemeContext';
-import type { Theme } from '../../contexts/ThemeContext';
+import { Home, User, Briefcase, Code, Award, MessageCircle } from 'lucide-react';
 import AnimatedBackground from '../common/AnimatedBackground';
+import ThemeToggle from '../common/ThemeToggle';
 
 interface PortfolioLayoutProps {
   username: string;
@@ -15,8 +14,6 @@ interface PortfolioLayoutProps {
 const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({ username, name, profileImage, children }) => {
   const displayName = name || username;
   const location = useLocation();
-  const { theme, setTheme } = useTheme();
-
   const navItems = [
     { path: `/${username}`, label: 'Home', icon: Home },
     { path: `/${username}/about`, label: 'About', icon: User },
@@ -32,12 +29,6 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({ username, name, profi
     }
     return location.pathname.startsWith(path);
   };
-
-  const themes: { value: Theme; icon: React.ReactNode; label: string }[] = [
-    { value: 'light', icon: <Sun className="w-4 h-4" />, label: 'Light' },
-    { value: 'dark', icon: <Moon className="w-4 h-4" />, label: 'Dark' },
-    { value: 'system', icon: <Monitor className="w-4 h-4" />, label: 'System' },
-  ];
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 relative overflow-hidden flex flex-col">
@@ -90,34 +81,8 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({ username, name, profi
               })}
             </nav>
 
-            {/* Theme Toggle & Mobile Menu */}
-            <div className="flex items-center gap-4">
-              {/* Theme Dropdown */}
-              <div className="relative group">
-                <button
-                  className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                  aria-label="Toggle theme"
-                >
-                  {themes.find(t => t.value === theme)?.icon}
-                </button>
-                <div className="absolute right-0 mt-2 w-36 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                  {themes.map((t) => (
-                    <button
-                      key={t.value}
-                      onClick={() => setTheme(t.value)}
-                      className={`w-full flex items-center gap-3 px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                        theme === t.value
-                          ? 'text-primary-600 dark:text-primary-400 font-medium'
-                          : 'text-gray-700 dark:text-gray-300'
-                      }`}
-                    >
-                      {t.icon}
-                      <span className="text-sm">{t.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
+            {/* Theme Toggle */}
+            <ThemeToggle />
           </div>
 
           {/* Mobile Navigation */}
