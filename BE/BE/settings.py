@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-onnxgw1(ksfw)&63sszg0j8_th)_tvp^+^%v$jyz1i3sx&6c33
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["dev-link.cloud", "www.dev-link.cloud", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["backend.dev-link.cloud", "localhost", "127.0.0.1"]
 
 
 # Application definition
