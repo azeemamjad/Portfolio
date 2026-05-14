@@ -39,7 +39,7 @@ const PortfolioPage: React.FC = () => {
         setPortfolio(data);
         
         // Update document title
-        document.title = `${data.username}'s Portfolio`;
+        document.title = `${data.name || data.username} : Portfolio`;
         
         // Update theme color meta tag if available
         if (data.theme_color) {
