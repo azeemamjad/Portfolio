@@ -10,8 +10,6 @@ interface PortfolioLayoutProps {
   children: React.ReactNode;
 }
 
-const COMPANY_LOGO = 'https://dev-link.cloud/media/company/company-logo.png';
-
 const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({ username, name, profileImage, children }) => {
   const displayName = name || username;
   const location = useLocation();
@@ -96,18 +94,7 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({ username, name, profi
 
             {/* Logo */}
             <Link to={`/${username}`} className="flex items-center gap-3 group flex-shrink-0">
-              {/* Company logo */}
-              <img
-                src={COMPANY_LOGO}
-                alt="Company"
-                className="h-8 w-auto object-contain group-hover:scale-105 transition-transform duration-200"
-              />
-
-              {/* Divider */}
-              <span className="hidden sm:block w-px h-7 bg-neutral-300/70" />
-
-              {/* User avatar */}
-              <div className="relative hidden sm:block">
+              <div className="relative">
                 {profileImage ? (
                   <img
                     src={profileImage}
@@ -122,8 +109,7 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({ username, name, profi
                 {/* Online dot */}
                 <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-white" />
               </div>
-
-              <div className="hidden sm:flex flex-col leading-none">
+              <div className="flex flex-col leading-none">
                 <span className="text-sm font-bold text-neutral-900 group-hover:text-orange-600 transition-colors duration-200 font-display tracking-wide">
                   {displayName}
                 </span>
