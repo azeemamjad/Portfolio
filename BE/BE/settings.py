@@ -145,8 +145,8 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://dev-link.cloud",
-    "https://dev-link.cloud",
+    "http://backend.dev-link.cloud",
+    "https://backend.dev-link.cloud",
     "http://www.dev-link.cloud",
     "https://www.dev-link.cloud"
 ]
