@@ -11,6 +11,7 @@ import Loading from '../components/common/Loading';
 import ErrorMessage from '../components/common/ErrorMessage';
 import AnimatedBackground from '../components/common/AnimatedBackground';
 import ThemeToggle from '../components/common/ThemeToggle';
+import AdUnit from '../components/common/AdUnit';
 
 const CompanyHomePage: React.FC = () => {
   const [company, setCompany] = useState<CompanyProfile | null>(null);
@@ -360,8 +361,12 @@ const CompanyHomePage: React.FC = () => {
         </div>
       </section>
 
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6069900441347155"
-        crossOrigin="anonymous"></script>
+      {/* Ad slot */}
+      <section className="relative z-10 py-8">
+        <div className="container-custom">
+          <AdUnit slot="YOUR_AD_SLOT_ID" />
+        </div>
+      </section>
 
       {/* ───── Footer ───── */}
       <footer className="relative z-10 border-t border-gray-200 dark:border-gray-800 py-8">
