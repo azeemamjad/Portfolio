@@ -114,7 +114,7 @@ const CompanyHomePage: React.FC = () => {
               <div className="flex flex-wrap justify-center gap-3 mb-12">
                 {company.services_list.map((s, i) => (
                   <span key={i}
-                        className="px-4 py-2 rounded-xl bg-white dark:bg-gray-800
+                    className="px-4 py-2 rounded-xl bg-white dark:bg-gray-800
                                    border border-gray-200 dark:border-gray-700
                                    text-gray-700 dark:text-gray-300 text-sm font-medium
                                    shadow-sm">
@@ -127,7 +127,7 @@ const CompanyHomePage: React.FC = () => {
             {/* CTA */}
             {company.email && (
               <a href={`mailto:${company.email}`}
-                 className="btn-primary inline-flex items-center gap-2">
+                className="btn-primary inline-flex items-center gap-2">
                 <Mail className="w-4 h-4" />
                 Contact Us
               </a>
@@ -243,25 +243,25 @@ const CompanyHomePage: React.FC = () => {
               {developers.length > 1 && (
                 <>
                   <button onClick={prevSlide}
-                          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 md:-translate-x-14
+                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 md:-translate-x-14
                                      w-11 h-11 rounded-xl bg-white dark:bg-gray-800
                                      border border-gray-200 dark:border-gray-700
                                      flex items-center justify-center shadow-lg
                                      hover:bg-primary-600 hover:text-white hover:border-primary-600
                                      text-gray-600 dark:text-gray-400
                                      transition-all duration-200 z-10"
-                          aria-label="Previous">
+                    aria-label="Previous">
                     <ChevronLeft className="w-5 h-5" />
                   </button>
                   <button onClick={nextSlide}
-                          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 md:translate-x-14
+                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 md:translate-x-14
                                      w-11 h-11 rounded-xl bg-white dark:bg-gray-800
                                      border border-gray-200 dark:border-gray-700
                                      flex items-center justify-center shadow-lg
                                      hover:bg-primary-600 hover:text-white hover:border-primary-600
                                      text-gray-600 dark:text-gray-400
                                      transition-all duration-200 z-10"
-                          aria-label="Next">
+                    aria-label="Next">
                     <ChevronRight className="w-5 h-5" />
                   </button>
 
@@ -271,11 +271,10 @@ const CompanyHomePage: React.FC = () => {
                       <button
                         key={i}
                         onClick={() => setCurrentSlide(i)}
-                        className={`h-2 rounded-full transition-all duration-300 ${
-                          i === currentSlide
-                            ? 'bg-primary-600 dark:bg-primary-400 w-7'
-                            : 'bg-gray-300 dark:bg-gray-600 w-2 hover:bg-gray-400 dark:hover:bg-gray-500'
-                        }`}
+                        className={`h-2 rounded-full transition-all duration-300 ${i === currentSlide
+                          ? 'bg-primary-600 dark:bg-primary-400 w-7'
+                          : 'bg-gray-300 dark:bg-gray-600 w-2 hover:bg-gray-400 dark:hover:bg-gray-500'
+                          }`}
                         aria-label={`Slide ${i + 1}`}
                       />
                     ))}
@@ -301,7 +300,7 @@ const CompanyHomePage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
             {company.email && (
               <a href={`mailto:${company.email}`}
-                 className="card p-7 text-center group hover:-translate-y-1">
+                className="card p-7 text-center group hover:-translate-y-1">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-100 to-purple-100
                                 dark:from-primary-950/50 dark:to-purple-950/50
                                 flex items-center justify-center mx-auto mb-4
@@ -314,7 +313,7 @@ const CompanyHomePage: React.FC = () => {
             )}
             {company.phone && (
               <a href={`tel:${company.phone}`}
-                 className="card p-7 text-center group hover:-translate-y-1">
+                className="card p-7 text-center group hover:-translate-y-1">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-100 to-purple-100
                                 dark:from-primary-950/50 dark:to-purple-950/50
                                 flex items-center justify-center mx-auto mb-4
@@ -344,11 +343,11 @@ const CompanyHomePage: React.FC = () => {
             <div className="flex justify-center gap-4 mt-10">
               {[
                 { url: company.linkedin_url, icon: Linkedin, label: 'LinkedIn' },
-                { url: company.github_url,   icon: Github,   label: 'GitHub' },
-                { url: company.twitter_url,  icon: Twitter,  label: 'Twitter' },
+                { url: company.github_url, icon: Github, label: 'GitHub' },
+                { url: company.twitter_url, icon: Twitter, label: 'Twitter' },
               ].filter(s => s.url).map(({ url, icon: Icon, label }) => (
                 <a key={label} href={url!} target="_blank" rel="noopener noreferrer" aria-label={label}
-                   className="w-11 h-11 rounded-xl flex items-center justify-center
+                  className="w-11 h-11 rounded-xl flex items-center justify-center
                               bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700
                               text-gray-500 dark:text-gray-400
                               hover:bg-primary-600 hover:text-white hover:border-primary-600
@@ -360,6 +359,9 @@ const CompanyHomePage: React.FC = () => {
           )}
         </div>
       </section>
+
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6069900441347155"
+        crossOrigin="anonymous"></script>
 
       {/* ───── Footer ───── */}
       <footer className="relative z-10 border-t border-gray-200 dark:border-gray-800 py-8">
