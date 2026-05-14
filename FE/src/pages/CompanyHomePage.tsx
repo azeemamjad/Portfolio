@@ -29,6 +29,7 @@ const CompanyHomePage: React.FC = () => {
         ]);
         setCompany(companyData);
         setDevelopers(developersData);
+        document.title = `${companyData.name}: Home`;
         setError(null);
       } catch (err: any) {
         setError(err.response?.data?.detail || 'Failed to load company data');
