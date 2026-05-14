@@ -141,12 +141,16 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://127.0.0.1:3000",
     "http://dev-link.cloud",
-    "https://dev-link.cloud"
+    "https://dev-link.cloud",
+    "http://www.dev-link.cloud",
+    "https://www.dev-link.cloud"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://dev-link.cloud",
-    "https://dev-link.cloud"
+    "https://dev-link.cloud",
+    "http://www.dev-link.cloud",
+    "https://www.dev-link.cloud"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
