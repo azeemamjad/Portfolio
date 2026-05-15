@@ -6,17 +6,26 @@ SITE_URL = 'https://dev-link.cloud'
 MEDIA_BASE = 'https://backend.dev-link.cloud/media/'
 
 
-def _abs_image(path):
-    if not path:
+def _abs_image(field):
+    """Convert an ImageField or path string to an absolute URL."""
+    if not field:
         return ''
-    if str(path).startswith('http'):
-        return str(path)
-    return MEDIA_BASE + str(path)
+    # ImageField object — get the file name
+    name = getattr(field, 'name', None) or str(field)
+    if not name:
+        return ''
+    if name.startswith('http'):
+        return name
+    # Remove any leading slash or 'media/' prefix to avoid doubling
+    name = name.lstrip('/')
+    if name.startswith('media/'):
+        name = name[len('media/'):]
+    return MEDIA_BASE + name
 
 
 def _html(title, description, image, url):
-    title = (title or '').replace('"', '&quot;')
-    description = (description or '').replace('"', '&quot;')
+    title = (title or '').replace('"', '&quot;').replace('<', '&lt;').replace('>', '&gt;')
+    description = (description or '').replace('"', '&quot;').replace('<', '&lt;').replace('>', '&gt;')
     return HttpResponse(f'''<!DOCTYPE html>
 <html>
 <head>
@@ -28,6 +37,8 @@ def _html(title, description, image, url):
   <meta property="og:title" content="{title}">
   <meta property="og:description" content="{description}">
   <meta property="og:image" content="{image}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="Dev Link">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{title}">
@@ -54,12 +65,15 @@ def og_company(request):
 def og_portfolio(request, username, **kwargs):
     try:
         p = Portfolio.objects.get(username=username, is_active=True)
-        title = f'{p.name or username} : Portfolio'
-        description = p.tagline or ''
+        name = p.name or username
+        tagline = p.tagline or ''
+        # "Azeem Amjad: Software Engineer" format
+        title = f'{name}: {tagline}' if tagline else name
+        description = tagline
         image = _abs_image(p.profile_image)
         url = f'{SITE_URL}/{username}'
     except Portfolio.DoesNotExist:
-        title = f'{username} : Portfolio'
+        title = username
         description = ''
         image = ''
         url = f'{SITE_URL}/{username}'
@@ -70,8 +84,9 @@ def og_blog_post(request, username, slug):
     try:
         p = Portfolio.objects.get(username=username, is_active=True)
         post = BlogPost.objects.get(portfolio=p, slug=slug, status='published')
-        title = f'{post.title} | {p.name or username}'
+        title = post.title
         description = post.excerpt or p.tagline or ''
+        # Prefer post thumbnail, fall back to profile picture
         image = _abs_image(post.featured_image) or _abs_image(p.profile_image)
         url = f'{SITE_URL}/{username}/blog/{slug}'
     except (Portfolio.DoesNotExist, BlogPost.DoesNotExist):
