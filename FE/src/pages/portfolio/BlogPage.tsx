@@ -114,7 +114,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, username }) => {
 
   return (
     <Link
-      to={`/${username}/blog/${post.id}`}
+      to={`/${username}/blog/${post.slug}`}
       className="card group flex flex-col overflow-hidden hover:-translate-y-1"
     >
       {/* Cover image */}

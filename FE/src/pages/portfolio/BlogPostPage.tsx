@@ -9,17 +9,17 @@ import Loading from '../../components/common/Loading';
 import ErrorMessage from '../../components/common/ErrorMessage';
 
 const BlogPostPage: React.FC = () => {
-  const { username, postId } = useParams<{ username: string; postId: string }>();
+  const { username, slug } = useParams<{ username: string; slug: string }>();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!username || !postId) return;
+    if (!username || !slug) return;
     const fetch = async () => {
       try {
         setLoading(true);
-        const data = await portfolioAPI.getBlogPost(username, Number(postId));
+        const data = await portfolioAPI.getBlogPost(username, slug);
         setPost(data);
       } catch (err: any) {
         if (err.response?.status === 404) {
@@ -32,7 +32,7 @@ const BlogPostPage: React.FC = () => {
       }
     };
     fetch();
-  }, [username, postId]);
+  }, [username, slug]);
 
   if (loading) return <Loading />;
   if (error || !post) return <ErrorMessage message={error || 'Post not found'} />;

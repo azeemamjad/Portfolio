@@ -84,7 +84,7 @@ const PortfolioRouter: React.FC = () => {
         <Route path="/skills" element={<SkillsPage skills={portfolio.skills} />} />
         <Route path="/achievements" element={<AchievementsPage achievements={portfolio.achievements} />} />
         <Route path="/blog" element={<BlogPage />} />
-        <Route path="/blog/:postId" element={<BlogPostPage />} />
+        <Route path="/blog/:slug" element={<BlogPostPage />} />
         <Route 
           path="/contact" 
           element={

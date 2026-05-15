@@ -55,7 +55,8 @@ class BlogPostViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint for blog posts within a portfolio
     """
-    
+    lookup_field = 'slug'
+
     def get_queryset(self):
         username = self.kwargs.get('username')
         portfolio = get_object_or_404(Portfolio, username=username, is_active=True)

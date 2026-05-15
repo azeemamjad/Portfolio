@@ -42,8 +42,8 @@ export const portfolioAPI = {
   },
 
   // Get single blog post
-  getBlogPost: async (username: string, postId: number): Promise<BlogPost> => {
-    const response = await api.get(`/api/${username}/blog/${postId}/`);
+  getBlogPost: async (username: string, slug: string): Promise<BlogPost> => {
+    const response = await api.get(`/api/${username}/blog/${slug}/`);
     return response.data;
   },
 

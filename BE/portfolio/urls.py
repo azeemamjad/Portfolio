@@ -20,7 +20,7 @@ urlpatterns = [
     path('api/<str:username>/projects/featured/', ProjectViewSet.as_view({'get': 'featured'}), name='portfolio-projects-featured'),
     
     path('api/<str:username>/blog/', BlogPostViewSet.as_view({'get': 'list'}), name='portfolio-blog'),
-    path('api/<str:username>/blog/<int:pk>/', BlogPostViewSet.as_view({'get': 'retrieve'}), name='portfolio-blog-detail'),
+    path('api/<str:username>/blog/<slug:slug>/', BlogPostViewSet.as_view({'get': 'retrieve'}), name='portfolio-blog-detail'),
     path('api/<str:username>/blog/featured/', BlogPostViewSet.as_view({'get': 'featured'}), name='portfolio-blog-featured'),
     
     path('api/<str:username>/resources/', ResourceViewSet.as_view({'get': 'list'}), name='portfolio-resources'),
