@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, Clock, Eye, Tag, Star, Calendar } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { portfolioAPI } from '../../services/api';
 import type { BlogPost } from '../../types';
 import Loading from '../../components/common/Loading';
@@ -123,8 +125,11 @@ const BlogPostPage: React.FC = () => {
                        prose-blockquote:border-l-orange-400 prose-blockquote:text-neutral-500
                        prose-img:rounded-xl prose-img:shadow-md
                        max-w-none"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+          >
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {post.content}
+            </ReactMarkdown>
+          </div>
 
           {/* Footer nav */}
           <div className="mt-16 pt-8 border-t border-neutral-100">
