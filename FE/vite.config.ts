@@ -9,7 +9,7 @@ export default defineConfig({
     allowedHosts: ['dev-link.cloud', 'www.dev-link.cloud'],
     hmr: {
       host: 'dev-link.cloud',
-      port: 443,
+      clientPort: 443,
       protocol: 'wss',
     },
   }
