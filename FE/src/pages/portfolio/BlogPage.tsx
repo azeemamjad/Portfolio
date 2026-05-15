@@ -36,7 +36,7 @@ const BlogPage: React.FC = () => {
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
   if (loading) return <Loading />;
-  if (error) return <ErrorMessage message={error} />;
+  if (error) return <ErrorMessage title="Error Loading Blog" message={error} />;
 
   return (
     <div className="section-padding">

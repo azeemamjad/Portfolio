@@ -35,7 +35,7 @@ const BlogPostPage: React.FC = () => {
   }, [username, slug]);
 
   if (loading) return <Loading />;
-  if (error || !post) return <ErrorMessage message={error || 'Post not found'} />;
+  if (error || !post) return <ErrorMessage title="Post Not Found" message={error || 'Post not found'} />;
 
   const dateStr = post.published_at
     ? new Date(post.published_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
