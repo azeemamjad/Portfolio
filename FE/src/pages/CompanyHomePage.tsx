@@ -11,7 +11,6 @@ import Loading from '../components/common/Loading';
 import ErrorMessage from '../components/common/ErrorMessage';
 import AnimatedBackground from '../components/common/AnimatedBackground';
 import ThemeToggle from '../components/common/ThemeToggle';
-import AdUnit from '../components/common/AdUnit';
 
 const CompanyHomePage: React.FC = () => {
   const [company, setCompany] = useState<CompanyProfile | null>(null);
@@ -358,13 +357,6 @@ const CompanyHomePage: React.FC = () => {
               ))}
             </div>
           )}
-        </div>
-      </section>
-
-      {/* Ad slot */}
-      <section className="relative z-10 py-8">
-        <div className="container-custom">
-          <AdUnit slot="YOUR_AD_SLOT_ID" />
         </div>
       </section>
 
