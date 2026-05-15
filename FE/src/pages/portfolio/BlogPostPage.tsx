@@ -5,8 +5,6 @@ import { portfolioAPI } from '../../services/api';
 import type { BlogPost } from '../../types';
 import Loading from '../../components/common/Loading';
 import ErrorMessage from '../../components/common/ErrorMessage';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 
 const BlogPostPage: React.FC = () => {
   const { username, postId } = useParams<{ username: string; postId: string }>();
@@ -125,11 +123,8 @@ const BlogPostPage: React.FC = () => {
                        prose-blockquote:border-l-orange-400 prose-blockquote:text-neutral-500
                        prose-img:rounded-xl prose-img:shadow-md
                        max-w-none"
-          >
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {post.content}
-            </ReactMarkdown>
-          </div>
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
 
           {/* Footer nav */}
           <div className="mt-16 pt-8 border-t border-neutral-100">
