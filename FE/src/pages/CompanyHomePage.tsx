@@ -10,7 +10,6 @@ import type { CompanyProfile, FeaturedDeveloper } from '../types';
 import Loading from '../components/common/Loading';
 import ErrorMessage from '../components/common/ErrorMessage';
 import AnimatedBackground from '../components/common/AnimatedBackground';
-import ThemeToggle from '../components/common/ThemeToggle';
 
 const CompanyHomePage: React.FC = () => {
   const [company, setCompany] = useState<CompanyProfile | null>(null);
@@ -83,7 +82,6 @@ const CompanyHomePage: React.FC = () => {
                 )}
               </div>
             </div>
-            <ThemeToggle />
           </div>
         </div>
       </header>

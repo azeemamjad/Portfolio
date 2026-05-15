@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, User, Briefcase, Code, Award, MessageCircle } from 'lucide-react';
+import { Home, User, Briefcase, Code, Award, MessageCircle, BookOpen } from 'lucide-react';
 import AnimatedBackground from '../common/AnimatedBackground';
 
 interface PortfolioLayoutProps {
@@ -25,6 +25,7 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({ username, name, profi
     { path: `/${username}/projects`,     label: 'Projects',     icon: Briefcase },
     { path: `/${username}/skills`,       label: 'Skills',       icon: Code },
     { path: `/${username}/achievements`, label: 'Achievements', icon: Award },
+    { path: `/${username}/blog`,         label: 'Blog',         icon: BookOpen },
     { path: `/${username}/contact`,      label: 'Contact',      icon: MessageCircle },
   ];
 

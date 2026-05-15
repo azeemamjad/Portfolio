@@ -13,6 +13,8 @@ import ProjectsPage from './ProjectsPage';
 import SkillsPage from './SkillsPage';
 import AchievementsPage from './AchievementsPage';
 import ContactPage from './ContactPage';
+import BlogPage from './BlogPage';
+import BlogPostPage from './BlogPostPage';
 
 // Common
 import Loading from '../../components/common/Loading';
@@ -81,6 +83,8 @@ const PortfolioRouter: React.FC = () => {
         <Route path="/projects" element={<ProjectsPage projects={portfolio.projects} />} />
         <Route path="/skills" element={<SkillsPage skills={portfolio.skills} />} />
         <Route path="/achievements" element={<AchievementsPage achievements={portfolio.achievements} />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/:postId" element={<BlogPostPage />} />
         <Route 
           path="/contact" 
           element={
