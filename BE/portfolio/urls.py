@@ -4,6 +4,7 @@ from .views import (
     PortfolioViewSet, ProjectViewSet, BlogPostViewSet,
     ResourceViewSet, NewsletterSubscribeView, ContactMessageView
 )
+from .og_views import og_company, og_portfolio, og_blog_post
 
 # Create a router for the portfolio viewset
 router = DefaultRouter()
@@ -29,4 +30,10 @@ urlpatterns = [
     
     path('api/<str:username>/newsletter/subscribe/', NewsletterSubscribeView.as_view(), name='portfolio-newsletter-subscribe'),
     path('api/<str:username>/contact/', ContactMessageView.as_view(), name='portfolio-contact'),
+
+    # OG preview routes for social media crawlers (must be last)
+    path('', og_company, name='og-company'),
+    path('<str:username>/blog/<slug:slug>/', og_blog_post, name='og-blog-post'),
+    path('<str:username>/<path:rest>', og_portfolio, name='og-portfolio-sub'),
+    path('<str:username>/', og_portfolio, name='og-portfolio'),
 ]
