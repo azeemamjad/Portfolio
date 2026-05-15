@@ -78,8 +78,8 @@ const BlogPostPage: React.FC = () => {
                 Featured
               </span>
             )}
-            {post.tags_list.map((tag) => (
-              <span key={tag} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full
+            {post.tags_list.map((tag, i) => (
+              <span key={`${tag}-${i}`} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full
                                          bg-neutral-100 text-neutral-500 text-xs font-medium">
                 <Tag className="w-3 h-3" />
                 {tag}
