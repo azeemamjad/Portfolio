@@ -110,7 +110,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, username }) => {
     ? new Date(post.published_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
     : new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
-  const readTime = Math.max(1, Math.ceil(post.content.split(/\s+/).length / 200));
+  const readTime = Math.max(1, Math.ceil((post.content || post.excerpt || '').split(/\s+/).length / 200));
 
   return (
     <Link
