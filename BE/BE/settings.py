@@ -47,6 +47,9 @@ ALLOWED_HOSTS = env_list(
     'backend.dev-link.cloud,dev-link.cloud,www.dev-link.cloud,localhost,127.0.0.1',
 )
 
+BACKEND_HOST = os.environ.get('BACKEND_HOST', '0.0.0.0')
+BACKEND_PORT = int(os.environ.get('BACKEND_PORT', '8000'))
+
 
 # Application definition
 
