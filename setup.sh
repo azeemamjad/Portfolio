@@ -8,19 +8,30 @@ echo "📦 Setting up Backend..."
 cd BE
 
 echo "Installing Python dependencies..."
-pip install -r requirements.txt
+if [ ! -d .venv ]; then
+    python3 -m venv .venv
+fi
+.venv/bin/pip install -r requirements.txt
+
+echo "Creating .env file..."
+if [ ! -f .env ]; then
+    cp .env.example .env
+    echo "✅ Created BE/.env from .env.example — edit DATABASE_URL and SECRET_KEY before production"
+else
+    echo "⚠️  BE/.env already exists, skipping..."
+fi
 
 echo "Running migrations..."
-python manage.py migrate
+.venv/bin/python manage.py migrate
 
 echo "Creating media directories..."
-mkdir -p media/profiles media/projects media/projects/thumbnails media/blog media/achievements media/testimonials media/resumes media/resources media/resources/thumbnails
+mkdir -p media/profiles media/projects media/projects/thumbnails media/blog media/achievements media/testimonials media/resumes media/resources media/resources/thumbnails media/company
 
 echo ""
 echo "✅ Backend setup complete!"
 echo ""
 echo "To create a superuser for admin access, run:"
-echo "  cd BE && python manage.py createsuperuser"
+echo "  cd BE && .venv/bin/python manage.py createsuperuser"
 echo ""
 
 # Frontend Setup
@@ -32,10 +43,10 @@ npm install
 
 echo "Creating .env file..."
 if [ ! -f .env ]; then
-    echo "VITE_API_URL=http://localhost:8000" > .env
-    echo "✅ Created .env file"
+    cp .env.example .env
+    echo "✅ Created FE/.env from .env.example"
 else
-    echo "⚠️  .env file already exists, skipping..."
+    echo "⚠️  FE/.env already exists, skipping..."
 fi
 
 cd ..
@@ -45,13 +56,17 @@ echo "✅ Frontend setup complete!"
 echo ""
 echo "🎉 Setup complete! You can now:"
 echo ""
-echo "1. Start the backend server:"
-echo "   cd BE && python manage.py runserver"
+echo "1. Copy and configure environment files (if not done already):"
+echo "   cp BE/.env.example BE/.env"
+echo "   cp FE/.env.example FE/.env"
 echo ""
-echo "2. In a new terminal, start the frontend:"
+echo "2. Start the backend server:"
+echo "   cd BE && .venv/bin/python manage.py runserver"
+echo ""
+echo "3. In a new terminal, start the frontend:"
 echo "   cd FE && npm run dev"
 echo ""
-echo "3. Access the admin panel at: http://localhost:8000/admin"
-echo "4. Access the frontend at: http://localhost:5173"
+echo "4. Access the admin panel at: http://localhost:8000/admin"
+echo "5. Access the frontend at: http://localhost:3000"
 echo ""
 echo "Happy coding! 🚀"
