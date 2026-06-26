@@ -48,7 +48,7 @@ ALLOWED_HOSTS = env_list(
 )
 
 BACKEND_HOST = os.environ.get('BACKEND_HOST', '0.0.0.0')
-BACKEND_PORT = int(os.environ.get('BACKEND_PORT', '8000'))
+BACKEND_PORT = int(os.environ.get('BACKEND_PORT') or os.environ.get('PORT', '8000'))
 
 
 # Application definition
@@ -72,6 +72,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -187,7 +188,7 @@ if USE_S3_STORAGE:
             'BACKEND': 'storages.backends.s3.S3Storage',
         },
         'staticfiles': {
-            'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+            'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
         },
     }
 else:
@@ -201,7 +202,7 @@ else:
             },
         },
         'staticfiles': {
-            'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+            'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
         },
     }
 
@@ -220,8 +221,8 @@ CORS_ALLOWED_ORIGINS = env_list(
 
 CSRF_TRUSTED_ORIGINS = env_list(
     'CSRF_TRUSTED_ORIGINS',
-    'http://dev-link.cloud,https://dev-link.cloud,'
-    'http://www.dev-link.cloud,https://www.dev-link.cloud',
+    'https://dev-link.cloud,https://www.dev-link.cloud,'
+    'https://backend.dev-link.cloud',
 )
 
 CORS_ALLOW_CREDENTIALS = True
