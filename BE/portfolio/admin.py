@@ -1,9 +1,10 @@
 from django.contrib import admin
 from .models import (
-    Portfolio, About, Skill, Project, CaseStudy, Service,
+    Portfolio, About, Skill, Project, ProjectImage, CaseStudy, Service,
     Testimonial, Achievement, BlogPost, Resource, Newsletter,
-    ContactMessage, Hobby
+    Hobby,
 )
+from .contact_message_admin import ContactMessageAdmin  # noqa: F401 — registers ContactMessage
 
 
 @admin.register(Portfolio)
@@ -62,6 +63,12 @@ class TestimonialInline(admin.TabularInline):
     fields = ['client_name', 'content', 'rating', 'is_featured']
 
 
+class ProjectImageInline(admin.TabularInline):
+    model = ProjectImage
+    extra = 1
+    fields = ['image', 'caption', 'order']
+
+
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ['title', 'portfolio', 'is_featured', 'order', 'created_at']
@@ -69,6 +76,7 @@ class ProjectAdmin(admin.ModelAdmin):
     search_fields = ['title', 'description', 'technologies']
     prepopulated_fields = {'slug': ('title',)}
     list_editable = ['is_featured', 'order']
+    inlines = [ProjectImageInline, CaseStudyInline, TestimonialInline]
     
     fieldsets = (
         ('Basic Information', {
@@ -87,16 +95,26 @@ class ProjectAdmin(admin.ModelAdmin):
             'fields': ('is_featured', 'order')
         }),
     )
-    
-    inlines = [CaseStudyInline, TestimonialInline]
 
 
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
     list_display = ['name', 'portfolio', 'category', 'proficiency', 'proficiency_percentage', 'order']
     list_filter = ['category', 'proficiency', 'portfolio']
-    search_fields = ['name', 'portfolio__username']
+    search_fields = ['name', 'summary', 'portfolio__username']
     list_editable = ['order', 'proficiency_percentage']
+    fieldsets = (
+        (None, {
+            'fields': ('portfolio', 'name', 'category', 'icon', 'order'),
+        }),
+        ('Proficiency', {
+            'fields': ('proficiency', 'proficiency_percentage'),
+        }),
+        ('Summary', {
+            'fields': ('summary',),
+            'description': 'Short hover text shown on the portfolio homepage skill network.',
+        }),
+    )
 
 
 @admin.register(Service)
@@ -162,15 +180,6 @@ class NewsletterAdmin(admin.ModelAdmin):
     list_filter = ['is_active', 'portfolio', 'subscribed_at']
     search_fields = ['email', 'name']
     list_editable = ['is_active']
-
-
-@admin.register(ContactMessage)
-class ContactMessageAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'portfolio', 'subject', 'is_read', 'created_at']
-    list_filter = ['is_read', 'portfolio', 'created_at']
-    search_fields = ['name', 'email', 'subject', 'message']
-    list_editable = ['is_read']
-    readonly_fields = ['created_at']
 
 
 @admin.register(Hobby)

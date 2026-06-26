@@ -17,7 +17,7 @@ urlpatterns = [
     
     # Portfolio-specific endpoints
     path('api/<str:username>/projects/', ProjectViewSet.as_view({'get': 'list'}), name='portfolio-projects'),
-    path('api/<str:username>/projects/<int:pk>/', ProjectViewSet.as_view({'get': 'retrieve'}), name='portfolio-project-detail'),
+    path('api/<str:username>/projects/<slug:slug>/', ProjectViewSet.as_view({'get': 'retrieve'}), name='portfolio-project-detail'),
     path('api/<str:username>/projects/featured/', ProjectViewSet.as_view({'get': 'featured'}), name='portfolio-projects-featured'),
     
     path('api/<str:username>/blog/', BlogPostViewSet.as_view({'get': 'list'}), name='portfolio-blog'),

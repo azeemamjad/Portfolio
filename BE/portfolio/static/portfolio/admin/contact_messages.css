@@ -1,0 +1,338 @@
+/* Contact Messages — custom admin inbox */
+
+.cm-page-title {
+  font-size: 1.75rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 0.25rem !important;
+  color: #1e293b;
+}
+
+.cm-page-subtitle {
+  margin: 0 0 1.25rem;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+/* Dashboard stats */
+.cm-dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.cm-stat {
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  border: 1px solid transparent;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.cm-stat__value {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.cm-stat__label {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+
+.cm-stat--total {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-color: #e2e8f0;
+  color: #334155;
+}
+
+.cm-stat--unread {
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border-color: #fed7aa;
+  color: #c2410c;
+}
+
+.cm-stat--today {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.cm-stat--starred {
+  background: linear-gradient(135deg, #fefce8, #fef9c3);
+  border-color: #fde047;
+  color: #a16207;
+}
+
+/* Portfolio strip */
+.cm-portfolio-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.cm-portfolio-strip__label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  margin-right: 0.25rem;
+}
+
+.cm-portfolio-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: #475569;
+}
+
+.cm-portfolio-chip__unread {
+  color: #ea580c;
+  font-weight: 700;
+}
+
+.cm-portfolio-chip__total {
+  background: #f1f5f9;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+/* List table rows */
+#result_list tbody tr:has(.cm-badge--unread) {
+  background: #fffbeb !important;
+}
+
+#result_list tbody tr:has(.cm-badge--unread):hover {
+  background: #fef3c7 !important;
+}
+
+#result_list tbody tr:has(.cm-star--on) {
+  box-shadow: inset 3px 0 0 #eab308;
+}
+
+/* Badges */
+.cm-badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.cm-badge--unread {
+  background: #ffedd5;
+  color: #c2410c;
+  border: 1px solid #fdba74;
+}
+
+.cm-badge--read {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+/* Star */
+.cm-star {
+  font-size: 1.1rem;
+  color: #cbd5e1;
+  cursor: default;
+}
+
+.cm-star--on {
+  color: #eab308;
+  text-shadow: 0 0 8px rgba(234, 179, 8, 0.35);
+}
+
+/* Sender */
+.cm-sender {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 160px;
+}
+
+.cm-sender__name {
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.cm-sender__email {
+  font-size: 0.8rem;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.cm-sender__email:hover {
+  text-decoration: underline;
+}
+
+/* Subject */
+.cm-subject {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  max-width: 360px;
+}
+
+.cm-subject--unread .cm-subject__title {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.cm-subject__title {
+  font-weight: 600;
+  color: #334155;
+}
+
+.cm-subject__preview {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  line-height: 1.35;
+}
+
+/* Portfolio badge */
+.cm-portfolio {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #fff !important;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Time */
+.cm-time {
+  font-size: 0.8rem;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+/* Detail view */
+.cm-detail-card {
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+  margin-bottom: 0.5rem;
+}
+
+.cm-detail-card__header {
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border-bottom: 1px solid #fed7aa;
+}
+
+.cm-detail-card__label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #ea580c;
+  margin-bottom: 0.35rem;
+}
+
+.cm-detail-card__subject {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.cm-detail-card__body {
+  padding: 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #334155;
+  white-space: normal;
+}
+
+/* Action bar */
+.cm-action-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+.cm-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 1rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.cm-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+}
+
+.cm-btn--primary {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #fff !important;
+}
+
+.cm-btn--secondary {
+  background: #f1f5f9;
+  color: #475569 !important;
+  border: 1px solid #e2e8f0;
+}
+
+.cm-btn--ghost {
+  background: #fff;
+  color: #2563eb !important;
+  border: 1px solid #bfdbfe;
+}
+
+/* Workflow fieldset */
+fieldset.cm-workflow {
+  border: 1px solid #fde047 !important;
+  border-radius: 10px;
+  background: #fffef5;
+}
+
+.cm-detail-hint {
+  margin-top: 1.5rem;
+  padding: 0.85rem 1rem;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  color: #1e40af;
+  font-size: 0.9rem;
+}
+
+/* Dark admin theme compatibility */
+@media (prefers-color-scheme: dark) {
+  html[data-theme="dark"] .cm-page-title,
+  .theme-dark .cm-page-title {
+    color: #f1f5f9;
+  }
+}

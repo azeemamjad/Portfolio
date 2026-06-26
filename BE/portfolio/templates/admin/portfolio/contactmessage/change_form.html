@@ -1,0 +1,16 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block content_title %}
+<h1 class="cm-page-title">📨 Message from {{ original.name }}</h1>
+<p class="cm-page-subtitle">
+  Received {{ original.created_at|timesince }} ago
+  {% if original.portfolio %} · Portfolio <strong>@{{ original.portfolio.username }}</strong>{% endif %}
+</p>
+{% endblock %}
+
+{% block after_related_objects %}
+<div class="cm-detail-hint">
+  <strong>Tip:</strong> Opening a message marks it as read. Use <em>Star</em> for follow-ups and <em>Admin notes</em> for private reminders.
+</div>
+{% endblock %}
