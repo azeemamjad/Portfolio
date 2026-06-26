@@ -34,7 +34,7 @@ const BlogPostPage: React.FC = () => {
     fetch();
   }, [username, slug]);
 
-  if (loading) return <Loading />;
+  if (loading) return <Loading label="Loading article..." />;
   if (error || !post) return <ErrorMessage title="Post Not Found" message={error || 'Post not found'} />;
 
   const dateStr = post.published_at

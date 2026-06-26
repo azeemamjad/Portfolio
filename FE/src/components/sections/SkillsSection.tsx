@@ -1,88 +1,177 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import {
+  Code,
+  Database,
+  Layers,
+  Sparkles,
+  Users,
+  Wrench,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import type { Skill } from '../../types';
+import SectionHeader from '../common/SectionHeader';
+import SkillsMarquee from '../common/SkillsMarquee';
 
 interface SkillsSectionProps {
   skills: Skill[];
+  showHeader?: boolean;
 }
 
-const proficiencyConfig = {
-  beginner:     { color: 'from-yellow-400 to-yellow-500',  badge: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', width: '25%' },
-  intermediate: { color: 'from-blue-400 to-blue-500',      badge: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',         width: '50%' },
-  advanced:     { color: 'from-green-400 to-emerald-500',  badge: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',       width: '75%' },
-  expert:       { color: 'from-primary-500 to-purple-600', badge: 'bg-primary-100 text-primary-700 dark:bg-primary-950/60 dark:text-primary-400', width: '95%' },
+const proficiencyConfig: Record<
+  Skill['proficiency'],
+  { badge: string; bar: string; label: string }
+> = {
+  beginner: {
+    badge: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/35 dark:text-yellow-300',
+    bar: 'from-yellow-400 to-amber-500',
+    label: 'Beginner',
+  },
+  intermediate: {
+    badge: 'bg-blue-100 text-blue-800 dark:bg-blue-900/35 dark:text-blue-300',
+    bar: 'from-blue-400 to-blue-600',
+    label: 'Intermediate',
+  },
+  advanced: {
+    badge: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/35 dark:text-emerald-300',
+    bar: 'from-emerald-400 to-green-600',
+    label: 'Advanced',
+  },
+  expert: {
+    badge: 'bg-accent-50 text-accent-700 dark:bg-accent/20 dark:text-accent-300',
+    bar: 'from-accent-400 to-accent-600',
+    label: 'Expert',
+  },
 };
 
-const SkillsSection: React.FC<SkillsSectionProps> = ({ skills }) => {
-  if (skills.length === 0) return null;
+const categories: {
+  key: Skill['category'];
+  label: string;
+  eyebrow: string;
+  icon: LucideIcon;
+}[] = [
+  { key: 'programming', label: 'Languages', eyebrow: 'Code', icon: Code },
+  { key: 'framework', label: 'Frameworks & Libraries', eyebrow: 'Build', icon: Layers },
+  { key: 'database', label: 'Databases', eyebrow: 'Data', icon: Database },
+  { key: 'tool', label: 'Tools & Platforms', eyebrow: 'Ops', icon: Wrench },
+  { key: 'soft', label: 'Soft Skills', eyebrow: 'People', icon: Users },
+  { key: 'other', label: 'Other', eyebrow: 'More', icon: Sparkles },
+];
 
-  const categories = [
-    { key: 'programming', label: 'Languages', emoji: '💻' },
-    { key: 'framework',   label: 'Frameworks & Libraries', emoji: '🧩' },
-    { key: 'database',    label: 'Databases', emoji: '🗄️' },
-    { key: 'tool',        label: 'Tools & Platforms', emoji: '🔧' },
-    { key: 'soft',        label: 'Soft Skills', emoji: '🤝' },
-    { key: 'other',       label: 'Other', emoji: '✨' },
-  ];
-
-  const grouped = categories
-    .map((c) => ({ ...c, skills: skills.filter((s) => s.category === c.key) }))
-    .filter((g) => g.skills.length > 0);
+function SkillCard({ skill }: { skill: Skill }) {
+  const cfg = proficiencyConfig[skill.proficiency] ?? proficiencyConfig.intermediate;
+  const summary =
+    skill.summary?.trim() || `Hands-on experience with ${skill.name} across real projects.`;
 
   return (
-    <section id="skills" className="section-padding">
-      <div className="container-custom">
-        {/* Header */}
-        <div className="section-header">
-          <span className="section-label">Expertise</span>
-          <h2 className="heading-secondary text-gray-900 dark:text-white">Skills & Technologies</h2>
-          <div className="section-underline" />
+    <article className="skills-glass-card">
+      <div className="skills-glass-card__shine" aria-hidden />
+      <div className="skills-glass-card__top">
+        {skill.icon ? (
+          <div className="skills-glass-card__icon">{skill.icon}</div>
+        ) : (
+          <div className="skills-glass-card__icon skills-glass-card__icon--fallback">
+            {skill.name.charAt(0)}
+          </div>
+        )}
+        <div className="skills-glass-card__meta min-w-0 flex-1">
+          <h4 className="skills-glass-card__name">{skill.name}</h4>
+          <span className={`skills-glass-card__badge ${cfg.badge}`}>{cfg.label}</span>
         </div>
+        <span className="skills-glass-card__pct">{skill.proficiency_percentage}%</span>
+      </div>
 
-        <div className="space-y-14">
-          {grouped.map((group, gi) => (
-            <div key={group.key} className="animate-fade-in-up" style={{ animationDelay: `${gi * 0.1}s` }}>
-              <div className="flex items-center gap-3 mb-6">
-                <span className="text-2xl">{group.emoji}</span>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{group.label}</h3>
-                <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700 ml-2" />
-              </div>
+      <p className="skills-glass-card__summary">{summary}</p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {group.skills.map((skill, si) => {
-                  const cfg = proficiencyConfig[skill.proficiency] || proficiencyConfig.intermediate;
-                  return (
-                    <div key={si} className="card p-5 hover:-translate-y-1 transition-transform duration-200">
-                      <div className="flex items-center gap-3 mb-4">
-                        {skill.icon && (
-                          <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-700/80
-                                          flex items-center justify-center text-xl flex-shrink-0">
-                            {skill.icon}
-                          </div>
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-gray-900 dark:text-white text-sm truncate">{skill.name}</p>
-                          <span className={`inline-block px-2 py-0.5 rounded-md text-xs font-medium mt-1 ${cfg.badge}`}>
-                            {skill.proficiency}
-                          </span>
-                        </div>
-                        <span className="text-sm font-bold text-gray-400 dark:text-gray-500 flex-shrink-0">
-                          {skill.proficiency_percentage}%
-                        </span>
-                      </div>
+      <div className="skills-glass-card__bar-track" aria-hidden>
+        <div
+          className={`skills-glass-card__bar-fill bg-gradient-to-r ${cfg.bar}`}
+          style={{ width: `${skill.proficiency_percentage}%` }}
+        />
+      </div>
+    </article>
+  );
+}
 
-                      {/* Progress bar */}
-                      <div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full rounded-full bg-gradient-to-r ${cfg.color} transition-all duration-1000 ease-out`}
-                          style={{ width: `${skill.proficiency_percentage}%` }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+const SkillsSection: React.FC<SkillsSectionProps> = ({ skills, showHeader = true }) => {
+  const sortedSkills = useMemo(
+    () => [...skills].sort((a, b) => a.order - b.order),
+    [skills],
+  );
+
+  if (skills.length === 0) return null;
+
+  const grouped = categories
+    .map((c) => ({
+      ...c,
+      skills: sortedSkills.filter((s) => s.category === c.key),
+    }))
+    .filter((g) => g.skills.length > 0);
+
+  const expertCount = skills.filter((s) => s.proficiency === 'expert').length;
+  const avgProficiency = Math.round(
+    skills.reduce((sum, s) => sum + s.proficiency_percentage, 0) / skills.length,
+  );
+
+  const stats = [
+    { label: 'Skills', value: skills.length },
+    { label: 'Categories', value: grouped.length },
+    { label: 'Expert level', value: expertCount },
+    { label: 'Avg. proficiency', value: `${avgProficiency}%` },
+  ];
+
+  return (
+    <section id="skills" className={`skills-section${showHeader ? ' section-padding' : ' page-content-section'}`}>
+      <div className="container-custom skills-section__container">
+        {showHeader && <SectionHeader label="Expertise" title="Skills & Technologies" />}
+
+        {!showHeader && (
+          <SkillsMarquee
+            skills={sortedSkills}
+            headline="Technologies I work with"
+            className="skills-section__marquee"
+          />
+        )}
+
+        <div className="skills-section__stats">
+          {stats.map((stat) => (
+            <div key={stat.label} className="skills-stat-card">
+              <div className="skills-stat-card__shine" aria-hidden />
+              <p className="skills-stat-card__value">{stat.value}</p>
+              <p className="skills-stat-card__label">{stat.label}</p>
             </div>
           ))}
+        </div>
+
+        <div className="skills-section__categories">
+          {grouped.map((group, gi) => {
+            const Icon = group.icon;
+            return (
+              <div
+                key={group.key}
+                className="skills-section__category animate-fade-in-up"
+                style={{ animationDelay: `${gi * 0.08}s` }}
+              >
+                <header className="skills-section__category-head">
+                  <div className="skills-section__category-icon">
+                    <Icon className="w-4 h-4 text-accent" />
+                  </div>
+                  <div>
+                    <p className="skills-section__category-eyebrow">{group.eyebrow}</p>
+                    <h3 className="skills-section__category-title">{group.label}</h3>
+                  </div>
+                  <span className="skills-section__category-count">
+                    {group.skills.length} skill{group.skills.length === 1 ? '' : 's'}
+                  </span>
+                </header>
+
+                <div className="skills-section__grid">
+                  {group.skills.map((skill) => (
+                    <SkillCard key={skill.name} skill={skill} />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

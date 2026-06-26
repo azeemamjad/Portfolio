@@ -23,9 +23,9 @@ export const portfolioAPI = {
     return response.data;
   },
 
-  // Get single project
-  getProject: async (username: string, projectId: number): Promise<Project> => {
-    const response = await api.get(`/api/${username}/projects/${projectId}/`);
+  // Get single project by slug
+  getProject: async (username: string, slug: string): Promise<Project> => {
+    const response = await api.get(`/api/${username}/projects/${slug}/`);
     return response.data;
   },
 

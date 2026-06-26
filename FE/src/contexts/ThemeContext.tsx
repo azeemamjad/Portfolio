@@ -1,18 +1,18 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-export type Theme = 'light' | 'dark';
+export type ColorMode = 'light' | 'dark';
 
 export interface ThemeContextType {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-  actualTheme: Theme;
+  theme: ColorMode;
+  setTheme: (theme: ColorMode) => void;
+  actualTheme: ColorMode;
 }
 
-const STORAGE_KEY = 'portfolio-theme';
+const STORAGE_KEY = 'portfolio-color-mode';
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-function getInitialTheme(): Theme {
+function getInitialTheme(): ColorMode {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored === 'light' || stored === 'dark') {
     return stored;
@@ -21,14 +21,14 @@ function getInitialTheme(): Theme {
 }
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>(getInitialTheme);
+  const [theme, setThemeState] = useState<ColorMode>(getInitialTheme);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
     localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 
-  const setTheme = (next: Theme) => setThemeState(next);
+  const setTheme = (next: ColorMode) => setThemeState(next);
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, actualTheme: theme }}>

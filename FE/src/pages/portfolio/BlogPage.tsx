@@ -5,6 +5,7 @@ import { portfolioAPI } from '../../services/api';
 import type { BlogPost } from '../../types';
 import Loading from '../../components/common/Loading';
 import ErrorMessage from '../../components/common/ErrorMessage';
+import PageHero from '../../components/common/PageHero';
 
 const PAGE_SIZE = 6;
 
@@ -35,23 +36,19 @@ const BlogPage: React.FC = () => {
 
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
-  if (loading) return <Loading />;
+  if (loading) return <Loading label="Loading blog..." />;
   if (error) return <ErrorMessage title="Error Loading Blog" message={error} />;
 
   return (
-    <div className="section-padding">
-      <div className="container-custom">
-
-        {/* Header */}
-        <div className="section-header mb-12">
-          <span className="section-label">Writing</span>
-          <h1 className="heading-secondary text-neutral-900">Blog</h1>
-          <div className="section-underline" />
-          <p className="text-neutral-500 mt-4 max-w-xl mx-auto text-sm">
-            Thoughts, tutorials, and insights on software development.
-          </p>
-        </div>
-
+    <>
+      <PageHero
+        label="Writing"
+        title="My"
+        highlight="Blogs"
+        description="Thoughts, tutorials, and insights on software development."
+      />
+      <div className="page-content-section">
+        <div className="container-custom mt-8 md:mt-10">
         {posts.length === 0 ? (
           <div className="text-center py-20">
             <BookOpen className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
@@ -95,8 +92,9 @@ const BlogPage: React.FC = () => {
             )}
           </>
         )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
-import { Send, Mail, CheckCircle, AlertCircle } from 'lucide-react';
+import { Send, Mail, CheckCircle, AlertCircle, Linkedin, Phone, MapPin } from 'lucide-react';
 import { portfolioAPI } from '../../services/api';
-import type { ContactFormData } from '../../types';
+import type { About, ContactFormData } from '../../types';
+import SectionHeader from '../common/SectionHeader';
+import Card from '../common/Card';
 
 interface ContactSectionProps {
   username: string;
   email?: string;
+  about?: About;
+  showHeader?: boolean;
 }
 
-const ContactSection: React.FC<ContactSectionProps> = ({ username, email }) => {
+const ContactSection: React.FC<ContactSectionProps> = ({
+  username,
+  email,
+  about,
+  showHeader = true,
+}) => {
   const [formData, setFormData] = useState<ContactFormData>({ name: '', email: '', subject: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -38,31 +47,26 @@ const ContactSection: React.FC<ContactSectionProps> = ({ username, email }) => {
   };
 
   return (
-    <section id="contact" className="section-padding bg-section-alt">
+    <section id="contact" className={showHeader ? 'section-padding bg-section-alt' : 'page-content-section'}>
       <div className="container-custom">
-        {/* Header */}
-        <div className="section-header">
-          <span className="section-label">Let's Talk</span>
-          <h2 className="heading-secondary text-gray-900 dark:text-white">Get in Touch</h2>
-          <div className="section-underline" />
-          <p className="text-gray-500 dark:text-gray-400 mt-5 max-w-xl mx-auto text-base">
-            Have a project in mind or just want to say hi? My inbox is always open.
-          </p>
-        </div>
+        {showHeader && (
+          <SectionHeader
+            label="Let's Talk"
+            title="Get in Touch"
+            description="Have a project in mind or just want to say hi? My inbox is always open."
+          />
+        )}
 
         <div className="max-w-2xl mx-auto">
-          <div className="card p-8 md:p-10">
+          <Card className="p-8 md:p-10" hover={false}>
             {submitStatus === 'success' ? (
               <div className="text-center py-10 animate-fade-in-up">
-                <div className="w-16 h-16 rounded-2xl bg-green-100 dark:bg-green-900/30
-                                flex items-center justify-center mx-auto mb-5">
+                <div className="w-16 h-16 rounded-2xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-5">
                   <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Message Sent!</h3>
-                <p className="text-gray-500 dark:text-gray-400 mb-7">
-                  Thanks for reaching out — I'll get back to you soon!
-                </p>
-                <button onClick={() => setSubmitStatus('idle')} className="btn-secondary">
+                <h3 className="text-2xl font-bold text-content mb-2">Message Sent!</h3>
+                <p className="text-content-muted mb-7">Thanks for reaching out — I'll get back to you soon!</p>
+                <button type="button" onClick={() => setSubmitStatus('idle')} className="btn-secondary">
                   Send Another
                 </button>
               </div>
@@ -70,8 +74,8 @@ const ContactSection: React.FC<ContactSectionProps> = ({ username, email }) => {
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      Name <span className="text-primary-500">*</span>
+                    <label htmlFor="name" className="block text-sm font-semibold text-content mb-2">
+                      Name <span className="text-accent">*</span>
                     </label>
                     <input
                       type="text" id="name" name="name"
@@ -80,8 +84,8 @@ const ContactSection: React.FC<ContactSectionProps> = ({ username, email }) => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      Email <span className="text-primary-500">*</span>
+                    <label htmlFor="email" className="block text-sm font-semibold text-content mb-2">
+                      Email <span className="text-accent">*</span>
                     </label>
                     <input
                       type="email" id="email" name="email"
@@ -92,9 +96,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ username, email }) => {
                 </div>
 
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Subject
-                  </label>
+                  <label htmlFor="subject" className="block text-sm font-semibold text-content mb-2">Subject</label>
                   <input
                     type="text" id="subject" name="subject"
                     value={formData.subject} onChange={handleChange}
@@ -103,8 +105,8 @@ const ContactSection: React.FC<ContactSectionProps> = ({ username, email }) => {
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Message <span className="text-primary-500">*</span>
+                  <label htmlFor="message" className="block text-sm font-semibold text-content mb-2">
+                    Message <span className="text-accent">*</span>
                   </label>
                   <textarea
                     id="message" name="message"
@@ -115,20 +117,14 @@ const ContactSection: React.FC<ContactSectionProps> = ({ username, email }) => {
                 </div>
 
                 {submitStatus === 'error' && (
-                  <div className="flex items-start gap-3 p-4 rounded-xl
-                                  bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800
-                                  text-red-700 dark:text-red-400 text-sm">
+                  <div className="flex items-start gap-3 p-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm">
                     <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
                     {errorMessage}
                   </div>
                 )}
 
                 <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="btn-primary flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
-                  >
+                  <button type="submit" disabled={isSubmitting} className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
                     {isSubmitting ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -143,9 +139,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ username, email }) => {
                   </button>
 
                   {email && (
-                    <a href={`mailto:${email}`}
-                       className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400
-                                  hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                    <a href={`mailto:${email}`} className="flex items-center gap-2 text-sm text-content-muted hover:text-accent transition-colors">
                       <Mail className="w-4 h-4" />
                       Or email directly
                     </a>
@@ -153,7 +147,39 @@ const ContactSection: React.FC<ContactSectionProps> = ({ username, email }) => {
                 </div>
               </form>
             )}
-          </div>
+          </Card>
+
+          {about && (
+            <div className="mt-12 pt-8 border-t border-line">
+              <p className="text-center text-sm text-content-muted mb-6">Prefer a direct line?</p>
+              <div className="flex flex-wrap justify-center items-center gap-6">
+                {about.email && (
+                  <a href={`mailto:${about.email}`} className="inline-flex items-center gap-2 text-sm font-medium text-content-muted hover:text-accent transition-colors">
+                    <Mail className="w-4 h-4" />
+                    {about.email}
+                  </a>
+                )}
+                {about.linkedin_url && (
+                  <a href={about.linkedin_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-medium text-content-muted hover:text-accent transition-colors">
+                    <Linkedin className="w-4 h-4" />
+                    LinkedIn
+                  </a>
+                )}
+                {about.phone && (
+                  <a href={`tel:${about.phone}`} className="inline-flex items-center gap-2 text-sm font-medium text-content-muted hover:text-accent transition-colors">
+                    <Phone className="w-4 h-4" />
+                    {about.phone}
+                  </a>
+                )}
+                {about.location && (
+                  <span className="inline-flex items-center gap-2 text-sm text-content-muted">
+                    <MapPin className="w-4 h-4" />
+                    {about.location}
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
