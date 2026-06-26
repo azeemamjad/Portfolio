@@ -5,6 +5,7 @@ import type { Portfolio } from '../../types';
 
 // Layout
 import PortfolioLayout from '../../components/layouts/PortfolioLayout';
+import { PortfolioAccentProvider } from '../../contexts/PortfolioAccentContext';
 
 // Pages
 import PortfolioHomePage from './PortfolioHomePage';
@@ -15,6 +16,7 @@ import AchievementsPage from './AchievementsPage';
 import ContactPage from './ContactPage';
 import BlogPage from './BlogPage';
 import BlogPostPage from './BlogPostPage';
+import ProjectDetailPage from './ProjectDetailPage';
 
 // Common
 import Loading from '../../components/common/Loading';
@@ -68,7 +70,7 @@ const PortfolioRouter: React.FC = () => {
   }, [username]);
 
   if (loading) {
-    return <Loading />;
+    return <Loading label="Loading portfolio..." />;
   }
 
   if (error || !portfolio) {
@@ -76,26 +78,29 @@ const PortfolioRouter: React.FC = () => {
   }
 
   return (
-    <PortfolioLayout username={portfolio.username} name={portfolio.name} profileImage={portfolio.profile_image}>
-      <Routes>
-        <Route path="/" element={<PortfolioHomePage portfolio={portfolio} />} />
-        <Route path="/about" element={<AboutPage about={portfolio.about} />} />
-        <Route path="/projects" element={<ProjectsPage projects={portfolio.projects} />} />
-        <Route path="/skills" element={<SkillsPage skills={portfolio.skills} />} />
-        <Route path="/achievements" element={<AchievementsPage achievements={portfolio.achievements} />} />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/blog/:slug" element={<BlogPostPage />} />
-        <Route 
-          path="/contact" 
-          element={
-            <ContactPage 
-              username={portfolio.username} 
-              about={portfolio.about} 
-            />
-          } 
-        />
-      </Routes>
-    </PortfolioLayout>
+    <PortfolioAccentProvider themeColor={portfolio.theme_color}>
+      <PortfolioLayout username={portfolio.username} name={portfolio.name} profileImage={portfolio.profile_image}>
+        <Routes>
+          <Route path="/" element={<PortfolioHomePage portfolio={portfolio} />} />
+          <Route path="/about" element={<AboutPage about={portfolio.about} username={portfolio.username} />} />
+          <Route path="/projects" element={<ProjectsPage projects={portfolio.projects} username={portfolio.username} />} />
+          <Route path="/projects/:slug" element={<ProjectDetailPage />} />
+          <Route path="/skills" element={<SkillsPage skills={portfolio.skills} />} />
+          <Route path="/achievements" element={<AchievementsPage achievements={portfolio.achievements} />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
+          <Route
+            path="/contact"
+            element={
+              <ContactPage
+                username={portfolio.username}
+                about={portfolio.about}
+              />
+            }
+          />
+        </Routes>
+      </PortfolioLayout>
+    </PortfolioAccentProvider>
   );
 };
 

@@ -37,6 +37,14 @@ export interface Skill {
   proficiency: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   proficiency_percentage: number;
   icon: string;
+  summary: string;
+  order: number;
+}
+
+export interface ProjectImage {
+  id: number;
+  image: string;
+  caption: string;
   order: number;
 }
 
@@ -58,6 +66,7 @@ export interface Project {
   order: number;
   start_date: string | null;
   end_date: string | null;
+  images?: ProjectImage[];
   case_study?: CaseStudy;
   testimonials: Testimonial[];
   created_at: string;
@@ -178,9 +187,20 @@ export interface CompanyProfile {
   updated_at: string;
 }
 
+export interface PortfolioCarousel {
+  id: number;
+  username: string;
+  name?: string;
+  tagline: string;
+  profile_image: string | null;
+  theme_color: string;
+  skills: Skill[];
+  featured_projects?: Project[];
+}
+
 export interface FeaturedDeveloper {
   id: number;
-  portfolio: Portfolio;
+  portfolio: PortfolioCarousel;
   display_order: number;
   is_active: boolean;
   featured_since: string;

@@ -185,7 +185,7 @@ if USE_S3_STORAGE:
 
     STORAGES = {
         'default': {
-            'BACKEND': 'storages.backends.s3.S3Storage',
+            'BACKEND': 'BE.storage_backends.MinIOStorage',
         },
         'staticfiles': {
             'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',

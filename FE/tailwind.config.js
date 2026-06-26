@@ -23,6 +23,28 @@ export default {
           900: '#7c2d12',
           950: '#431407',
         },
+        bg: 'var(--bg)',
+        surface: {
+          DEFAULT: 'var(--surface)',
+          muted: 'var(--surface-2)',
+        },
+        content: {
+          DEFAULT: 'var(--text)',
+          muted: 'var(--text-muted)',
+        },
+        line: 'var(--border)',
+        accent: {
+          DEFAULT: 'var(--accent)',
+          fg: 'var(--accent-fg)',
+          50: 'var(--accent-50)',
+          100: 'var(--accent-100)',
+          200: 'var(--accent-200)',
+          300: 'var(--accent-300)',
+          400: 'var(--accent-400)',
+          500: 'var(--accent-500)',
+          600: 'var(--accent-600)',
+          700: 'var(--accent-700)',
+        },
       },
       fontFamily: {
         display: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
@@ -38,6 +60,7 @@ export default {
         'bounce-gentle': 'bounceGentle 2s ease-in-out infinite',
         'shimmer': 'shimmer 2.5s linear infinite',
         'spin-slow': 'spin 20s linear infinite',
+        'drawer-in': 'drawerIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards',
       },
       keyframes: {
         fadeIn: {
@@ -55,6 +78,10 @@ export default {
         slideIn: {
           from: { transform: 'translateX(-20px)', opacity: '0' },
           to: { transform: 'translateX(0)', opacity: '1' },
+        },
+        drawerIn: {
+          from: { transform: 'translateX(100%)' },
+          to: { transform: 'translateX(0)' },
         },
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },

@@ -38,6 +38,23 @@ class ProjectImageSerializer(serializers.ModelSerializer):
         fields = ['id', 'image', 'caption', 'order']
 
 
+class ProjectCardSerializer(serializers.ModelSerializer):
+    """Lightweight project payload for lists and carousels."""
+    technologies_list = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Project
+        fields = [
+            'id', 'title', 'slug', 'description', 'image', 'thumbnail',
+            'technologies_list', 'live_url', 'github_url', 'is_featured', 'order',
+        ]
+
+    def get_technologies_list(self, obj):
+        if obj.technologies:
+            return [tech.strip() for tech in obj.technologies.split(',')]
+        return []
+
+
 class ProjectSerializer(serializers.ModelSerializer):
     technologies_list = serializers.SerializerMethodField()
     case_study = CaseStudySerializer(read_only=True)

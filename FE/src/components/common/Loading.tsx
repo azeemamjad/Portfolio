@@ -1,14 +1,24 @@
 import React from 'react';
+import AnimatedBackground from './AnimatedBackground';
 
-const Loading: React.FC = () => {
+interface LoadingProps {
+  label?: string;
+  variant?: 'default' | 'company';
+}
+
+const Loading: React.FC<LoadingProps> = ({ label = 'Loading...', variant = 'default' }) => {
+  const isCompany = variant === 'company';
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
-      <div className="flex flex-col items-center gap-4">
-        <div className="relative w-16 h-16">
-          <div className="absolute inset-0 border-4 border-primary-200 dark:border-primary-900 rounded-full"></div>
-          <div className="absolute inset-0 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+    <div className={`loading-screen${isCompany ? ' company-theme' : ''}`}>
+      <AnimatedBackground useAccent={isCompany} />
+      <div className="loading-screen__content" role="status" aria-live="polite" aria-busy="true">
+        <div className="loading-screen__orb" aria-hidden>
+          <span className="loading-screen__ring loading-screen__ring--outer" />
+          <span className="loading-screen__ring loading-screen__ring--inner" />
+          <span className="loading-screen__core" />
         </div>
-        <p className="text-gray-600 dark:text-gray-400 font-medium">Loading portfolio...</p>
+        <p className="loading-screen__label">{label}</p>
       </div>
     </div>
   );

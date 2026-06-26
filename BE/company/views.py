@@ -1,12 +1,18 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
+from django.db.models import Prefetch
 from .models import CompanyProfile, FeaturedDeveloper
+from portfolio.models import Project
 from .serializers import (
     CompanyProfileSerializer,
     FeaturedDeveloperSerializer,
     FeaturedDeveloperDetailSerializer
+)
+
+FEATURED_PROJECTS_PREFETCH = Prefetch(
+    'portfolio__projects',
+    queryset=Project.objects.filter(is_featured=True).order_by('order'),
 )
 
 
@@ -42,7 +48,10 @@ class FeaturedDeveloperViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = FeaturedDeveloper.objects.filter(
         is_active=True,
         portfolio__is_active=True
-    ).select_related('portfolio').prefetch_related('portfolio__about', 'portfolio__skills')
+    ).select_related('portfolio').prefetch_related(
+        'portfolio__skills',
+        FEATURED_PROJECTS_PREFETCH,
+    )
     serializer_class = FeaturedDeveloperSerializer
     
     def get_serializer_class(self):
