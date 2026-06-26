@@ -10,22 +10,42 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+import dj_database_url
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(BASE_DIR / '.env')
+
+
+def env_bool(key: str, default: bool = False) -> bool:
+    return os.environ.get(key, str(default)).lower() in ('true', '1', 'yes')
+
+
+def env_list(key: str, default: str = '') -> list[str]:
+    return [item.strip() for item in os.environ.get(key, default).split(',') if item.strip()]
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-onnxgw1(ksfw)&63sszg0j8_th)_tvp^+^%v$jyz1i3sx&6c33'
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'django-insecure-onnxgw1(ksfw)&63sszg0j8_th)_tvp^+^%v$jyz1i3sx&6c33',
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = env_bool('DEBUG', False)
 
-ALLOWED_HOSTS = ["backend.dev-link.cloud", "dev-link.cloud", "www.dev-link.cloud", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = env_list(
+    'ALLOWED_HOSTS',
+    'backend.dev-link.cloud,dev-link.cloud,www.dev-link.cloud,localhost,127.0.0.1',
+)
 
 
 # Application definition
@@ -37,11 +57,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     # Third party apps
     'rest_framework',
     'corsheaders',
-    
+
     # Local apps
     'portfolio',
     'company',
@@ -81,12 +101,23 @@ WSGI_APPLICATION = 'BE.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        ),
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -126,8 +157,50 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT') or str(BASE_DIR / 'media')
+
+# MinIO / S3-compatible object storage (enabled when AWS_S3_ENDPOINT_URL is set)
+USE_S3_STORAGE = bool(os.environ.get('AWS_S3_ENDPOINT_URL'))
+
+if USE_S3_STORAGE:
+    AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+    AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
+    AWS_S3_ENDPOINT_URL = os.environ['AWS_S3_ENDPOINT_URL']
+    AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', 'us-east-1')
+    AWS_S3_SIGNATURE_VERSION = os.environ.get('AWS_S3_SIGNATURE_VERSION', 's3v4')
+    AWS_S3_ADDRESSING_STYLE = os.environ.get('AWS_S3_ADDRESSING_STYLE', 'path')
+    AWS_DEFAULT_ACL = os.environ.get('AWS_DEFAULT_ACL') or None
+    if AWS_DEFAULT_ACL and AWS_DEFAULT_ACL.lower() == 'none':
+        AWS_DEFAULT_ACL = None
+    AWS_QUERYSTRING_AUTH = env_bool('AWS_QUERYSTRING_AUTH', False)
+    AWS_S3_FILE_OVERWRITE = False
+
+    endpoint = AWS_S3_ENDPOINT_URL.rstrip('/')
+    MEDIA_URL = f'{endpoint}/{AWS_STORAGE_BUCKET_NAME}/'
+
+    STORAGES = {
+        'default': {
+            'BACKEND': 'storages.backends.s3.S3Storage',
+        },
+        'staticfiles': {
+            'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+        },
+    }
+else:
+    MEDIA_URL = os.environ.get('MEDIA_URL', 'media/')
+    STORAGES = {
+        'default': {
+            'BACKEND': 'django.core.files.storage.FileSystemStorage',
+            'OPTIONS': {
+                'location': MEDIA_ROOT,
+                'base_url': MEDIA_URL,
+            },
+        },
+        'staticfiles': {
+            'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+        },
+    }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -135,23 +208,18 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS Settings
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:3000",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:3000",
-    "http://dev-link.cloud",
-    "https://dev-link.cloud",
-    "http://www.dev-link.cloud",
-    "https://www.dev-link.cloud"
-]
+CORS_ALLOWED_ORIGINS = env_list(
+    'CORS_ALLOWED_ORIGINS',
+    'http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,'
+    'http://127.0.0.1:3000,http://dev-link.cloud,https://dev-link.cloud,'
+    'http://www.dev-link.cloud,https://www.dev-link.cloud',
+)
 
-CSRF_TRUSTED_ORIGINS = [
-    "http://dev-link.cloud",
-    "https://dev-link.cloud",
-    "http://www.dev-link.cloud",
-    "https://www.dev-link.cloud"
-]
+CSRF_TRUSTED_ORIGINS = env_list(
+    'CSRF_TRUSTED_ORIGINS',
+    'http://dev-link.cloud,https://dev-link.cloud,'
+    'http://www.dev-link.cloud,https://www.dev-link.cloud',
+)
 
 CORS_ALLOW_CREDENTIALS = True
 

@@ -25,7 +25,7 @@ urlpatterns = [
     path('', include('portfolio.urls')),
 ]
 
-# Serve media files in development
-if settings.DEBUG:
+# Serve local media files in development only (not used with S3/MinIO)
+if settings.DEBUG and not getattr(settings, 'USE_S3_STORAGE', False):
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

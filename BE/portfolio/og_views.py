@@ -1,26 +1,32 @@
+from django.conf import settings
 from django.http import HttpResponse
 from portfolio.models import Portfolio, BlogPost
 from company.models import CompanyProfile
 
 SITE_URL = 'https://dev-link.cloud'
-MEDIA_BASE = 'https://backend.dev-link.cloud/media/'
 
 
 def _abs_image(field):
     """Convert an ImageField or path string to an absolute URL."""
     if not field:
         return ''
-    # ImageField object — get the file name
-    name = getattr(field, 'name', None) or str(field)
+    if hasattr(field, 'url'):
+        try:
+            return field.url
+        except ValueError:
+            return ''
+    name = str(field)
     if not name:
         return ''
     if name.startswith('http'):
         return name
-    # Remove any leading slash or 'media/' prefix to avoid doubling
+    base = settings.MEDIA_URL
+    if not base.endswith('/'):
+        base += '/'
     name = name.lstrip('/')
     if name.startswith('media/'):
         name = name[len('media/'):]
-    return MEDIA_BASE + name
+    return base + name
 
 
 def _html(title, description, image, url):
