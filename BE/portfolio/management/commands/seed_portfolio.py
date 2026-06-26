@@ -1,13 +1,39 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
 from portfolio.models import (
-    Portfolio, About, Skill, Project, Service, Testimonial, Achievement, Hobby
+    Portfolio, About, Skill, Project, ProjectImage, Service, Testimonial, Achievement, Hobby
 )
 from datetime import date
+import urllib.request
 
 
 class Command(BaseCommand):
     help = 'Seeds the database with sample portfolio data'
+
+    def seed_project_gallery(self, project: Project, count: int = 4) -> None:
+        if project.images.exists():
+            return
+        for i in range(count):
+            seed = f'{project.slug or project.id}-{i}'
+            url = f'https://picsum.photos/seed/{seed}/1200/800'
+            try:
+                with urllib.request.urlopen(url, timeout=20) as response:
+                    data = response.read()
+                gallery_image = ProjectImage(
+                    project=project,
+                    order=i,
+                    caption='' if i == 0 else f'Screenshot {i + 1}',
+                )
+                gallery_image.image.save(
+                    f'{project.slug or project.id}-{i}.jpg',
+                    ContentFile(data),
+                    save=True,
+                )
+            except Exception as exc:
+                self.stdout.write(
+                    self.style.WARNING(f'Gallery image {i} skipped for {project.title}: {exc}')
+                )
 
     def add_arguments(self, parser):
         parser.add_argument('username', type=str, help='Username for the portfolio')
@@ -62,18 +88,18 @@ class Command(BaseCommand):
         
         # Create Skills
         skills_data = [
-            {'name': 'JavaScript', 'category': 'programming', 'proficiency': 'expert', 'proficiency_percentage': 95, 'icon': '🟨', 'order': 1},
-            {'name': 'Python', 'category': 'programming', 'proficiency': 'advanced', 'proficiency_percentage': 90, 'icon': '🐍', 'order': 2},
-            {'name': 'TypeScript', 'category': 'programming', 'proficiency': 'advanced', 'proficiency_percentage': 88, 'icon': '🔷', 'order': 3},
-            {'name': 'React', 'category': 'framework', 'proficiency': 'expert', 'proficiency_percentage': 92, 'icon': '⚛️', 'order': 4},
-            {'name': 'Django', 'category': 'framework', 'proficiency': 'advanced', 'proficiency_percentage': 85, 'icon': '🌿', 'order': 5},
-            {'name': 'Node.js', 'category': 'framework', 'proficiency': 'advanced', 'proficiency_percentage': 87, 'icon': '🟢', 'order': 6},
-            {'name': 'PostgreSQL', 'category': 'database', 'proficiency': 'advanced', 'proficiency_percentage': 80, 'icon': '🐘', 'order': 7},
-            {'name': 'MongoDB', 'category': 'database', 'proficiency': 'intermediate', 'proficiency_percentage': 75, 'icon': '🍃', 'order': 8},
-            {'name': 'Docker', 'category': 'tool', 'proficiency': 'advanced', 'proficiency_percentage': 82, 'icon': '🐳', 'order': 9},
-            {'name': 'Git', 'category': 'tool', 'proficiency': 'expert', 'proficiency_percentage': 93, 'icon': '📦', 'order': 10},
-            {'name': 'Problem Solving', 'category': 'soft', 'proficiency': 'expert', 'proficiency_percentage': 90, 'icon': '🧩', 'order': 11},
-            {'name': 'Team Collaboration', 'category': 'soft', 'proficiency': 'advanced', 'proficiency_percentage': 88, 'icon': '🤝', 'order': 12},
+            {'name': 'JavaScript', 'category': 'programming', 'proficiency': 'expert', 'proficiency_percentage': 95, 'icon': '🟨', 'order': 1, 'summary': 'Core language for modern web development — ES6+, async/await, and building interactive client-side experiences.'},
+            {'name': 'Python', 'category': 'programming', 'proficiency': 'advanced', 'proficiency_percentage': 90, 'icon': '🐍', 'order': 2, 'summary': 'Versatile backend and scripting language used for APIs, automation, data work, and rapid product development.'},
+            {'name': 'TypeScript', 'category': 'programming', 'proficiency': 'advanced', 'proficiency_percentage': 88, 'icon': '🔷', 'order': 3, 'summary': 'Typed JavaScript for safer, scalable codebases with strong IDE support and fewer runtime surprises.'},
+            {'name': 'React', 'category': 'framework', 'proficiency': 'expert', 'proficiency_percentage': 92, 'icon': '⚛️', 'order': 4, 'summary': 'Component-based UI library for building fast, maintainable single-page applications with hooks and modern patterns.'},
+            {'name': 'Django', 'category': 'framework', 'proficiency': 'advanced', 'proficiency_percentage': 85, 'icon': '🌿', 'order': 5, 'summary': 'High-level Python web framework for secure, batteries-included APIs and admin-backed applications.'},
+            {'name': 'Node.js', 'category': 'framework', 'proficiency': 'advanced', 'proficiency_percentage': 87, 'icon': '🟢', 'order': 6, 'summary': 'JavaScript runtime for scalable server-side apps, REST APIs, and real-time services.'},
+            {'name': 'PostgreSQL', 'category': 'database', 'proficiency': 'advanced', 'proficiency_percentage': 80, 'icon': '🐘', 'order': 7, 'summary': 'Reliable relational database for complex queries, transactions, and production-grade data modeling.'},
+            {'name': 'MongoDB', 'category': 'database', 'proficiency': 'intermediate', 'proficiency_percentage': 75, 'icon': '🍃', 'order': 8, 'summary': 'Document database for flexible schemas, rapid iteration, and horizontally scalable workloads.'},
+            {'name': 'Docker', 'category': 'tool', 'proficiency': 'advanced', 'proficiency_percentage': 82, 'icon': '🐳', 'order': 9, 'summary': 'Containerization for consistent dev/prod environments and simplified deployment pipelines.'},
+            {'name': 'Git', 'category': 'tool', 'proficiency': 'expert', 'proficiency_percentage': 93, 'icon': '📦', 'order': 10, 'summary': 'Version control for branching workflows, code review, and reliable collaboration across teams.'},
+            {'name': 'Problem Solving', 'category': 'soft', 'proficiency': 'expert', 'proficiency_percentage': 90, 'icon': '🧩', 'order': 11, 'summary': 'Breaking down complex requirements, debugging systematically, and delivering practical solutions under constraints.'},
+            {'name': 'Team Collaboration', 'category': 'soft', 'proficiency': 'advanced', 'proficiency_percentage': 88, 'icon': '🤝', 'order': 12, 'summary': 'Clear communication, code reviews, and cross-functional teamwork to ship quality software on schedule.'},
         ]
         
         for skill_data in skills_data:
@@ -114,14 +140,74 @@ class Command(BaseCommand):
                 'is_featured': False,
                 'order': 3,
             },
+            {
+                'title': 'DevLink Portfolio Platform',
+                'description': 'Multi-tenant portfolio platform with custom themes, blog, and contact inbox for developers and agencies.',
+                'detailed_description': 'Full-stack SaaS built with Django REST and React. Supports per-user accent colors, OG image generation, and MinIO media storage.',
+                'technologies': 'React, Django, PostgreSQL, MinIO, Docker, Tailwind CSS',
+                'live_url': 'https://dev-link.cloud',
+                'github_url': f'https://github.com/{username}/portfolio',
+                'outcome': 'Powers live developer portfolios with admin dashboard and deployment pipeline',
+                'is_featured': True,
+                'order': 4,
+                'start_date': date(2024, 3, 1),
+                'end_date': None,
+            },
+            {
+                'title': 'AI Code Review Assistant',
+                'description': 'GitHub App that analyzes pull requests and suggests improvements for security, performance, and style.',
+                'detailed_description': 'Integrates with GitHub webhooks, runs static analysis, and posts inline review comments using an LLM pipeline.',
+                'technologies': 'Python, FastAPI, Redis, OpenAI API, GitHub Actions',
+                'github_url': f'https://github.com/{username}/ai-code-review',
+                'demo_url': 'https://demo.example.com/code-review',
+                'outcome': 'Reduced review turnaround time by 40% across pilot teams',
+                'is_featured': True,
+                'order': 5,
+                'start_date': date(2024, 6, 1),
+                'end_date': date(2025, 1, 15),
+            },
+            {
+                'title': 'Restaurant POS System',
+                'description': 'Point-of-sale web app for small restaurants with table management, kitchen display, and daily sales reports.',
+                'technologies': 'React, Node.js, PostgreSQL, Socket.io, Stripe',
+                'live_url': 'https://pos.example.com',
+                'github_url': f'https://github.com/{username}/restaurant-pos',
+                'is_featured': False,
+                'order': 6,
+                'start_date': date(2023, 1, 1),
+                'end_date': date(2023, 9, 30),
+            },
+            {
+                'title': 'DevOps Monitoring Suite',
+                'description': 'Lightweight monitoring dashboard for server health, uptime checks, and alert notifications via Slack and email.',
+                'technologies': 'Python, Django, Celery, Redis, Grafana, Docker',
+                'github_url': f'https://github.com/{username}/devops-monitor',
+                'outcome': 'Monitors 50+ services with sub-minute alert latency',
+                'is_featured': False,
+                'order': 7,
+                'start_date': date(2023, 4, 1),
+                'end_date': date(2024, 2, 28),
+            },
+            {
+                'title': 'Social Media Scheduler',
+                'description': 'Schedule and publish posts across Twitter, LinkedIn, and Instagram with a unified content calendar.',
+                'technologies': 'Next.js, TypeScript, Prisma, PostgreSQL, BullMQ',
+                'live_url': 'https://scheduler.example.com',
+                'github_url': f'https://github.com/{username}/social-scheduler',
+                'is_featured': False,
+                'order': 8,
+                'start_date': date(2024, 8, 1),
+                'end_date': None,
+            },
         ]
         
         for project_data in projects_data:
-            Project.objects.get_or_create(
+            project, _ = Project.objects.get_or_create(
                 portfolio=portfolio,
                 title=project_data['title'],
                 defaults=project_data
             )
+            self.seed_project_gallery(project)
         self.stdout.write(self.style.SUCCESS(f'Created {len(projects_data)} projects'))
         
         # Create Services

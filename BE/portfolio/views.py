@@ -21,7 +21,16 @@ class PortfolioViewSet(viewsets.ReadOnlyModelViewSet):
     API endpoint for portfolios
     Retrieve a portfolio by username
     """
-    queryset = Portfolio.objects.filter(is_active=True)
+    queryset = Portfolio.objects.filter(is_active=True).prefetch_related(
+        'projects__images',
+        'projects__testimonials',
+        'projects__case_study',
+        'skills',
+        'services',
+        'testimonials',
+        'achievements',
+        'hobbies',
+    )
     serializer_class = PortfolioSerializer
     lookup_field = 'username'
     
@@ -36,17 +45,26 @@ class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
     API endpoint for projects within a portfolio
     """
     serializer_class = ProjectSerializer
+    lookup_field = 'slug'
     
     def get_queryset(self):
         username = self.kwargs.get('username')
         portfolio = get_object_or_404(Portfolio, username=username, is_active=True)
-        return Project.objects.filter(portfolio=portfolio)
+        return (
+            Project.objects.filter(portfolio=portfolio)
+            .prefetch_related('images', 'testimonials')
+            .select_related('case_study')
+        )
     
     @action(detail=False, methods=['get'])
     def featured(self, request, username=None):
         """Get featured projects"""
         portfolio = get_object_or_404(Portfolio, username=username, is_active=True)
-        projects = Project.objects.filter(portfolio=portfolio, is_featured=True)
+        projects = (
+            Project.objects.filter(portfolio=portfolio, is_featured=True)
+            .prefetch_related('images', 'testimonials')
+            .select_related('case_study')
+        )
         serializer = self.get_serializer(projects, many=True)
         return Response(serializer.data)
 

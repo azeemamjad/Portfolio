@@ -74,6 +74,10 @@ class Skill(models.Model):
     proficiency = models.CharField(max_length=20, choices=PROFICIENCY_CHOICES, default='intermediate')
     proficiency_percentage = models.IntegerField(default=50, help_text="0-100")
     icon = models.CharField(max_length=100, blank=True, help_text="Icon class or URL")
+    summary = models.TextField(
+        blank=True,
+        help_text="Short description shown on skill hover (1–2 sentences)",
+    )
     order = models.IntegerField(default=0)
     
     def __str__(self):
@@ -114,6 +118,20 @@ class Project(models.Model):
     
     class Meta:
         ordering = ['-is_featured', 'order', '-created_at']
+
+
+class ProjectImage(models.Model):
+    """Gallery images for a project"""
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='projects/gallery/')
+    caption = models.CharField(max_length=200, blank=True)
+    order = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.project.title} — image {self.order}"
+
+    class Meta:
+        ordering = ['order', 'id']
 
 
 class CaseStudy(models.Model):
@@ -274,14 +292,18 @@ class ContactMessage(models.Model):
     subject = models.CharField(max_length=200, blank=True)
     message = models.TextField()
     is_read = models.BooleanField(default=False)
+    is_starred = models.BooleanField(default=False)
+    admin_notes = models.TextField(blank=True, help_text='Private notes — not visible to the sender')
+    read_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
         return f"Message from {self.name}"
-    
+
     class Meta:
         ordering = ['-created_at']
-        verbose_name_plural = "Contact Messages"
+        verbose_name = 'Contact Message'
+        verbose_name_plural = 'Contact Messages'
 
 
 class Hobby(models.Model):

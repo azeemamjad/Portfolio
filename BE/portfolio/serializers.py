@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import (
-    Portfolio, About, Skill, Project, CaseStudy, Service,
+    Portfolio, About, Skill, Project, ProjectImage, CaseStudy, Service,
     Testimonial, Achievement, BlogPost, Resource, Newsletter,
     ContactMessage, Hobby
 )
@@ -32,10 +32,17 @@ class TestimonialSerializer(serializers.ModelSerializer):
         exclude = ['portfolio']
 
 
+class ProjectImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectImage
+        fields = ['id', 'image', 'caption', 'order']
+
+
 class ProjectSerializer(serializers.ModelSerializer):
     technologies_list = serializers.SerializerMethodField()
     case_study = CaseStudySerializer(read_only=True)
     testimonials = TestimonialSerializer(many=True, read_only=True)
+    images = ProjectImageSerializer(many=True, read_only=True)
     
     class Meta:
         model = Project
