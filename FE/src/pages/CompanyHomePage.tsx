@@ -22,6 +22,7 @@ import CompanyNavbar from '../components/layouts/CompanyNavbar';
 import CompanyFeaturedProjectsSection, {
   buildCompanyFeaturedProjects,
 } from '../components/sections/CompanyFeaturedProjectsSection';
+import { cachePortfolioThemes } from '../utils/portfolioThemeCache';
 
 const CompanyHomePage: React.FC = () => {
   const [company, setCompany] = useState<CompanyProfile | null>(null);
@@ -52,6 +53,16 @@ const CompanyHomePage: React.FC = () => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (developers.length === 0) return;
+    cachePortfolioThemes(
+      developers.map((d) => ({
+        username: d.portfolio.username,
+        themeColor: d.portfolio.theme_color,
+      })),
+    );
+  }, [developers]);
 
   useEffect(() => {
     if (developers.length <= 1 || paused) return;
@@ -156,7 +167,11 @@ const CompanyHomePage: React.FC = () => {
 
                     return (
                       <div key={featured.id} className="company-team-carousel__slide w-full min-w-full flex-shrink-0 px-1">
-                        <Link to={`/${p.username}`} className="block group">
+                        <Link
+                          to={`/${p.username}`}
+                          state={{ themeColor: p.theme_color, fromCompany: true }}
+                          className="block group"
+                        >
                           <article className="about-glass-card company-dev-card">
                             <div className="about-glass-card__shine" aria-hidden />
                             <div className="company-dev-card__inner">

@@ -1786,6 +1786,43 @@
     @apply text-sm font-semibold tracking-wide text-content-muted;
   }
 
+  .loading-screen--neutral {
+    --accent: #94a3b8;
+    --accent-fg: #ffffff;
+  }
+
+  .dark .loading-screen--neutral {
+    --accent: #64748b;
+    --accent-fg: #f8fafc;
+  }
+
+  /* Portfolio hero — cursor-weighted 3D tilt (image only) */
+  .tilt-profile {
+    @apply relative w-full;
+    transform-style: preserve-3d;
+  }
+
+  .tilt-profile__inner {
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .tilt-profile__glare {
+    @apply absolute inset-0 pointer-events-none transition-opacity duration-300;
+    mix-blend-mode: soft-light;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tilt-profile__inner {
+      transform: none !important;
+      transition: none !important;
+    }
+
+    .tilt-profile__glare {
+      display: none;
+    }
+  }
+
   @keyframes loading-spin {
     to {
       transform: rotate(360deg);

@@ -11,6 +11,7 @@ export interface CompanyFeaturedProject {
     username: string;
     name?: string;
     profile_image: string | null;
+    theme_color: string;
   };
 }
 
@@ -22,6 +23,7 @@ export function buildCompanyFeaturedProjects(developers: FeaturedDeveloper[]): C
         username: dev.portfolio.username,
         name: dev.portfolio.name,
         profile_image: dev.portfolio.profile_image,
+        theme_color: dev.portfolio.theme_color,
       },
     })),
   );
@@ -82,6 +84,7 @@ const CompanyFeaturedProjectsSection: React.FC<CompanyFeaturedProjectsSectionPro
                 <div className="company-project-card__body">
                   <Link
                     to={`/${developer.username}`}
+                    state={{ themeColor: developer.theme_color, fromCompany: true }}
                     className="company-project-card__developer"
                   >
                     {developer.profile_image ? (
@@ -117,6 +120,7 @@ const CompanyFeaturedProjectsSection: React.FC<CompanyFeaturedProjectsSectionPro
                   <div className="company-project-card__actions">
                     <Link
                       to={`/${developer.username}/projects/${project.slug}`}
+                      state={{ themeColor: developer.theme_color, fromCompany: true }}
                       className="company-project-card__cta"
                     >
                       View project

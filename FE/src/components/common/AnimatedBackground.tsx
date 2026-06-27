@@ -3,21 +3,28 @@ import { hexToRgba } from '../../utils/color';
 
 interface AnimatedBackgroundProps {
   useAccent?: boolean;
+  accentHex?: string;
 }
 
 function readAccentHex(): string {
+  const portfolioEl = document.querySelector('.portfolio-theme');
+  if (portfolioEl) {
+    const portfolioAccent = getComputedStyle(portfolioEl).getPropertyValue('--accent').trim();
+    if (portfolioAccent) return portfolioAccent;
+  }
   const companyEl = document.querySelector('.company-theme');
   if (companyEl) {
     const companyAccent = getComputedStyle(companyEl).getPropertyValue('--accent').trim();
     if (companyAccent) return companyAccent;
   }
-  const portfolioEl = document.querySelector('.portfolio-theme');
-  const source = portfolioEl ?? document.documentElement;
-  const value = getComputedStyle(source).getPropertyValue('--accent').trim();
+  const value = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
   return value || '#f97316';
 }
 
-const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ useAccent = false }) => {
+const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
+  useAccent = false,
+  accentHex,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -46,7 +53,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ useAccent = fal
     const isDarkMode = () => document.documentElement.classList.contains('dark');
 
     const getPalette = () => {
-      const accent = useAccent ? readAccentHex() : '#6366f1';
+      const accent = accentHex ?? (useAccent ? readAccentHex() : '#6366f1');
       const darkAlphas = [0.2, 0.16, 0.12, 0.14];
       const lightAlphas = [0.07, 0.06, 0.05, 0.06];
       const alphas = isDarkMode() ? darkAlphas : lightAlphas;
@@ -93,7 +100,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ useAccent = fal
       cancelAnimationFrame(animationFrameId);
       observer.disconnect();
     };
-  }, [useAccent]);
+  }, [useAccent, accentHex]);
 
   return (
     <div className="fixed inset-0 w-full h-full pointer-events-none overflow-hidden" aria-hidden>
