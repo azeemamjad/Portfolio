@@ -5,6 +5,7 @@ import type { Portfolio } from '../../types';
 import TimelineSection from '../../components/sections/TimelineSection';
 import FeaturedProjectsSection from '../../components/sections/FeaturedProjectsSection';
 import SkillsMarquee from '../../components/common/SkillsMarquee';
+import TiltProfileImage from '../../components/common/TiltProfileImage';
 
 interface PortfolioHomePageProps {
   portfolio: Portfolio;
@@ -46,15 +47,7 @@ const PortfolioHomePage: React.FC<PortfolioHomePageProps> = ({ portfolio }) => {
                     className="absolute -bottom-2 -right-2 h-10 w-10 border-b-2 border-r-2 border-accent rounded-br-xl"
                     aria-hidden
                   />
-                  <div className="relative rounded-2xl bg-surface p-2 shadow-xl border border-line">
-                    <div className="rounded-xl overflow-hidden aspect-[4/5] ring-1 ring-accent/25">
-                      <img
-                        src={profile_image}
-                        alt={displayName}
-                        className="w-full h-full object-cover object-top"
-                      />
-                    </div>
-                  </div>
+                  <TiltProfileImage src={profile_image} alt={displayName} />
                 </div>
               </div>
             )}

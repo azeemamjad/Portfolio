@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Routes, Route, useParams } from 'react-router-dom';
+import { Routes, Route, useParams, useLocation } from 'react-router-dom';
 import { portfolioAPI } from '../../services/api';
 import type { Portfolio } from '../../types';
+import {
+  cachePortfolioThemes,
+  readCachedPortfolioTheme,
+  type PortfolioNavigationState,
+} from '../../utils/portfolioThemeCache';
 
 // Layout
 import PortfolioLayout from '../../components/layouts/PortfolioLayout';
@@ -24,6 +29,10 @@ import ErrorMessage from '../../components/common/ErrorMessage';
 
 const PortfolioRouter: React.FC = () => {
   const { username } = useParams<{ username: string }>();
+  const location = useLocation();
+  const navState = location.state as PortfolioNavigationState | null;
+  const prefetchThemeColor = navState?.themeColor ?? readCachedPortfolioTheme(username);
+  const fromCompany = navState?.fromCompany === true;
   const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,6 +49,7 @@ const PortfolioRouter: React.FC = () => {
         setLoading(true);
         const data = await portfolioAPI.getPortfolio(username);
         setPortfolio(data);
+        cachePortfolioThemes([{ username: data.username, themeColor: data.theme_color }]);
         
         // Update document title
         document.title = `${data.name || data.username} : Portfolio`;
@@ -70,7 +80,19 @@ const PortfolioRouter: React.FC = () => {
   }, [username]);
 
   if (loading) {
-    return <Loading label="Loading portfolio..." />;
+    const loadingVariant = prefetchThemeColor
+      ? 'default'
+      : fromCompany
+        ? 'company'
+        : 'neutral';
+
+    return (
+      <Loading
+        label="Loading portfolio..."
+        themeColor={prefetchThemeColor}
+        variant={loadingVariant}
+      />
+    );
   }
 
   if (error || !portfolio) {
