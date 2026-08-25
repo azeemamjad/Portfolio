@@ -9,10 +9,10 @@ interface SkillsMarqueeProps {
 }
 
 const proficiencyBadge: Record<Skill['proficiency'], string> = {
-  beginner: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/35 dark:text-yellow-300',
-  intermediate: 'bg-blue-100 text-blue-800 dark:bg-blue-900/35 dark:text-blue-300',
-  advanced: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/35 dark:text-emerald-300',
-  expert: 'bg-accent-50 text-accent-700 dark:bg-accent/20 dark:text-accent-300',
+  beginner: 'bg-surface-muted text-content-muted',
+  intermediate: 'bg-surface-muted text-content-muted',
+  advanced: 'bg-surface-muted text-content',
+  expert: 'bg-surface-muted text-content',
 };
 
 interface SkillHoverCardProps {
@@ -53,7 +53,7 @@ const SkillHoverCard: React.FC<SkillHoverCardProps> = ({ skill, anchor }) => {
         </div>
         <div className="h-1.5 rounded-full bg-surface-muted overflow-hidden">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-accent-400 to-accent-600"
+            className="h-full rounded-full bg-content"
             style={{ width: `${skill.proficiency_percentage}%` }}
           />
         </div>

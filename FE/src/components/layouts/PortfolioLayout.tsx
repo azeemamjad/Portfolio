@@ -112,21 +112,20 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({
                 <img
                   src={profileImage}
                   alt={username}
-                  className="navbar-brand__avatar group-hover:scale-105 transition-transform duration-300"
+                  className="navbar-brand__avatar"
                 />
               ) : (
-                <div className="navbar-brand__fallback group-hover:scale-105 transition-transform duration-300">
+                <div className="navbar-brand__fallback">
                   {username.charAt(0).toUpperCase()}
                 </div>
               )}
-              <span className="navbar-brand__status" aria-hidden />
             </div>
             <div className="flex flex-col leading-none min-w-0">
-              <span className="text-sm font-bold text-content group-hover:text-accent transition-colors font-display tracking-wide truncate">
+              <span className="text-sm font-medium text-content group-hover:text-accent transition-colors truncate">
                 {displayName}
               </span>
-              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium tracking-wider uppercase mt-0.5">
-                Available
+              <span className="text-[11px] text-content-muted font-medium tracking-wide mt-0.5">
+                Portfolio
               </span>
             </div>
           </Link>
@@ -138,7 +137,6 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({
               aria-hidden
             />
             {navItems.map((item, i) => {
-              const Icon = item.icon;
               const active = isActive(item.path);
               return (
                 <Link
@@ -149,8 +147,7 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({
                     active ? 'navbar-glass-nav__link--active' : 'navbar-glass-nav__link--idle'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${active ? 'text-accent' : ''}`} />
-                  <span className="hidden xl:inline">{item.label}</span>
+                  <span>{item.label}</span>
                 </Link>
               );
             })}
@@ -162,8 +159,7 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({
               to={`/${username}/contact`}
               className="navbar-glass-btn navbar-glass-btn--cta"
             >
-              <MessageCircle className="w-3.5 h-3.5" />
-              Hire Me
+              Contact
             </Link>
             <button
               type="button"
@@ -218,9 +214,8 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({
               })}
             </nav>
             <div className="p-4 border-t border-line/50">
-              <Link to={`/${username}/contact`} className="btn-primary w-full rounded-2xl">
-                <MessageCircle className="w-4 h-4" />
-                Hire Me
+              <Link to={`/${username}/contact`} className="btn-primary w-full">
+                Contact
               </Link>
             </div>
           </aside>

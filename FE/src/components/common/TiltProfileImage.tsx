@@ -6,7 +6,7 @@ interface TiltProfileImageProps {
   className?: string;
 }
 
-const MAX_TILT = 12;
+const MAX_TILT = 8;
 
 const TiltProfileImage: React.FC<TiltProfileImageProps> = ({ src, alt, className = '' }) => {
   const frameRef = useRef<HTMLDivElement>(null);
@@ -35,7 +35,7 @@ const TiltProfileImage: React.FC<TiltProfileImageProps> = ({ src, alt, className
     setTilt({
       rotateX: (0.5 - y) * MAX_TILT,
       rotateY: (x - 0.5) * MAX_TILT,
-      scale: 1.025,
+      scale: 1.012,
     });
     setGlare({ x: x * 100, y: y * 100, opacity: 0.22 });
   }, []);
@@ -56,8 +56,8 @@ const TiltProfileImage: React.FC<TiltProfileImageProps> = ({ src, alt, className
             : 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
-        <div className="relative rounded-2xl bg-surface p-2 shadow-xl border border-line">
-          <div className="rounded-xl overflow-hidden aspect-[4/5] ring-1 ring-accent/25 relative">
+        <div className="relative rounded-lg bg-surface p-1.5 border border-line">
+          <div className="rounded-md overflow-hidden aspect-[4/5] relative">
             <img src={src} alt={alt} className="w-full h-full object-cover object-top" />
             <div
               className="tilt-profile__glare"

@@ -101,24 +101,23 @@ const CompanyHomePage: React.FC = () => {
       />
 
       {/* Hero */}
-      <section id="home" className="relative z-10 py-20 md:py-28 scroll-mt-28">
-        <div className="container-custom text-center">
-          <div className="max-w-4xl mx-auto animate-fade-in-up">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8 bg-accent-50 dark:bg-accent/15 border border-accent/25 text-accent text-sm font-semibold">
-              <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-              {company.tagline || 'We build great software'}
-            </div>
+      <section id="home" className="relative z-10 py-24 md:py-32 scroll-mt-28">
+        <div className="container-custom">
+          <div className="max-w-3xl animate-fade-in-up">
+            <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-content-muted mb-5">
+              {company.tagline || 'Software studio'}
+            </p>
 
             <h1 className="heading-primary text-content">
-              Welcome to <span className="text-gradient">{company.name}</span>
+              {company.name}
             </h1>
 
-            <p className="text-lg md:text-xl text-content-muted mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-content-muted mb-10 max-w-2xl leading-relaxed">
               {company.description}
             </p>
 
             {company.services_list?.length > 0 && (
-              <div className="flex flex-wrap justify-center gap-2.5 mb-10">
+              <div className="flex flex-wrap gap-2 mb-10">
                 {company.services_list.map((service) => (
                   <span key={service} className="company-hero-chip">
                     {service}
@@ -129,8 +128,7 @@ const CompanyHomePage: React.FC = () => {
 
             {company.email && (
               <a href={`mailto:${company.email}`} className="btn-primary inline-flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                Contact Us
+                Start a project
               </a>
             )}
           </div>
