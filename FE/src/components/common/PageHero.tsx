@@ -11,14 +11,14 @@ const PageHero: React.FC<PageHeroProps> = ({ label, title, highlight, descriptio
   return (
     <section className="page-hero">
       <div className="container-custom">
-        <div className="max-w-3xl mx-auto text-center">
+        <div className="max-w-3xl">
           <span className="section-label text-accent-600 dark:text-accent-400">{label}</span>
           <h1 className="page-hero__title text-content">
-            {title}{' '}
-            {highlight && <span className="text-gradient">{highlight}</span>}
+            {title}
+            {highlight ? ` ${highlight}` : ''}
           </h1>
           {description && (
-            <p className="page-hero__desc text-content-muted max-w-2xl mx-auto">
+            <p className="page-hero__desc text-content-muted max-w-2xl">
               {description}
             </p>
           )}

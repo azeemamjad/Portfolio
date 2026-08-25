@@ -41,12 +41,12 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
     setCanvasSize();
     window.addEventListener('resize', setCanvasSize);
 
-    const orbs = Array.from({ length: 4 }, (_, i) => ({
+    const orbs = Array.from({ length: 2 }, (_, i) => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      radius: 250 + Math.random() * 350,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: (Math.random() - 0.5) * 0.18,
+      radius: 280 + Math.random() * 180,
       colorIndex: i,
     }));
 
@@ -54,8 +54,8 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
 
     const getPalette = () => {
       const accent = accentHex ?? (useAccent ? readAccentHex() : '#6366f1');
-      const darkAlphas = [0.2, 0.16, 0.12, 0.14];
-      const lightAlphas = [0.07, 0.06, 0.05, 0.06];
+      const darkAlphas = [0.08, 0.05];
+      const lightAlphas = [0.035, 0.025];
       const alphas = isDarkMode() ? darkAlphas : lightAlphas;
       return alphas.map((a) => hexToRgba(accent, a));
     };

@@ -114,7 +114,7 @@ const CompanyNavbar: React.FC<CompanyNavbarProps> = ({ name, logo, tagline, emai
               )}
             </div>
             <div className="flex flex-col leading-none min-w-0">
-              <span className="text-sm font-bold text-content group-hover:text-accent transition-colors font-display tracking-wide truncate">
+              <span className="text-sm font-medium text-content group-hover:text-accent transition-colors truncate">
                 {name}
               </span>
               {tagline && (
@@ -132,7 +132,6 @@ const CompanyNavbar: React.FC<CompanyNavbarProps> = ({ name, logo, tagline, emai
               aria-hidden
             />
             {NAV_ITEMS.map((item, i) => {
-              const Icon = item.icon;
               const active = activeSection === item.id;
               return (
                 <a
@@ -149,8 +148,7 @@ const CompanyNavbar: React.FC<CompanyNavbarProps> = ({ name, logo, tagline, emai
                     active ? 'navbar-glass-nav__link--active' : 'navbar-glass-nav__link--idle'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${active ? 'text-accent' : ''}`} />
-                  <span className="hidden xl:inline">{item.label}</span>
+                  <span>{item.label}</span>
                 </a>
               );
             })}
@@ -160,8 +158,7 @@ const CompanyNavbar: React.FC<CompanyNavbarProps> = ({ name, logo, tagline, emai
             <ThemeToggle variant="glass" />
             {email && (
               <a href={`mailto:${email}`} className="navbar-glass-btn navbar-glass-btn--cta">
-                <Mail className="w-3.5 h-3.5" />
-                Contact Us
+                Contact
               </a>
             )}
             <button

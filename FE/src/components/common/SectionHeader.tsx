@@ -13,20 +13,14 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
   title,
   description,
   className = '',
-  accent = 'user',
 }) => {
-  const labelClass =
-    accent === 'brand'
-      ? 'text-primary-600 dark:text-primary-400'
-      : 'text-accent-600 dark:text-accent-400';
-
   return (
     <div className={`section-header ${className}`}>
-      <span className={`section-label ${labelClass}`}>{label}</span>
+      <span className="section-label">{label}</span>
       <h2 className="heading-secondary text-content">{title}</h2>
       <div className="section-underline" />
       {description && (
-        <p className="text-content-muted mt-5 max-w-xl mx-auto text-base">{description}</p>
+        <p className="text-content-muted mt-5 max-w-xl text-base leading-relaxed">{description}</p>
       )}
     </div>
   );

@@ -160,11 +160,11 @@ const AboutSection: React.FC<AboutSectionProps> = ({
             <div className="about-availability-card__inner">
               <p className="about-availability-card__eyebrow">Currently</p>
               <p className="about-availability-card__title">
-                Open to exciting opportunities and collaborations
+                Open to selected roles and collaborations
               </p>
               <div className="about-availability-card__status">
                 <span className="about-availability-card__dot" aria-hidden />
-                <span>Available for hire</span>
+                <span>Currently available</span>
               </div>
               {username && (
                 <Link to={`/${username}/contact`} className="about-availability-card__btn">
