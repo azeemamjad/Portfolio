@@ -16,7 +16,7 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials 
     Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
-        className={`w-4 h-4 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200 dark:text-gray-700'}`}
+        className={`w-4 h-4 ${i < rating ? 'fill-accent text-accent' : 'text-content-muted/30'}`}
       />
     ));
 
@@ -25,10 +25,12 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials 
       <div className="container-custom">
         {/* Header */}
         <div className="section-header">
-          <span className="section-label">Social Proof</span>
-          <h2 className="heading-secondary text-gray-900 dark:text-white">What People Say</h2>
-          <div className="section-underline" />
-          <p className="text-gray-500 dark:text-gray-400 mt-5 max-w-xl mx-auto text-base">
+          <span className="section-label">
+            <span className="section-label__rule" aria-hidden />
+            Social Proof
+          </span>
+          <h2 className="heading-secondary text-content">What People Say</h2>
+          <p className="text-content-muted mt-5 max-w-xl mx-auto text-base">
             Feedback from clients and colleagues I've had the pleasure of working with.
           </p>
         </div>
@@ -42,9 +44,12 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials 
             >
               {/* Quote icon + stars */}
               <div className="flex items-start justify-between mb-5">
-                <div className="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-950/50
-                                flex items-center justify-center">
-                  <Quote className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                     style={{
+                       background: 'color-mix(in oklch, var(--accent) 10%, transparent)',
+                       border: '1px solid color-mix(in oklch, var(--accent) 18%, transparent)',
+                     }}>
+                  <Quote className="w-5 h-5 text-accent" />
                 </div>
                 <div className="flex items-center gap-0.5">
                   {renderStars(t.rating)}
@@ -52,12 +57,12 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials 
               </div>
 
               {/* Testimonial text */}
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed flex-1 mb-6 italic text-sm">
+              <p className="text-content-muted leading-relaxed flex-1 mb-6 italic text-sm">
                 "{t.content}"
               </p>
 
               {/* Client */}
-              <div className="flex items-center gap-3 pt-5 border-t border-gray-100 dark:border-gray-700">
+              <div className="flex items-center gap-3 pt-5 border-t border-line">
                 {t.client_image ? (
                   <img
                     src={t.client_image}
@@ -65,16 +70,15 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials 
                     className="w-11 h-11 rounded-xl object-cover flex-shrink-0"
                   />
                 ) : (
-                  <div className="w-11 h-11 rounded-xl flex-shrink-0
-                                  bg-gradient-to-br from-primary-500 to-purple-600
-                                  flex items-center justify-center text-white text-base font-bold">
+                  <div className="w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center text-accent-fg text-base font-semibold"
+                       style={{ background: 'linear-gradient(145deg, var(--accent-500), var(--accent-600))' }}>
                     {t.client_name.charAt(0).toUpperCase()}
                   </div>
                 )}
                 <div className="min-w-0">
-                  <p className="font-semibold text-gray-900 dark:text-white text-sm truncate">{t.client_name}</p>
+                  <p className="font-semibold text-content text-sm truncate">{t.client_name}</p>
                   {t.client_role && (
-                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                    <p className="text-xs text-content-muted truncate">
                       {t.client_role}{t.client_company ? ` · ${t.client_company}` : ''}
                     </p>
                   )}

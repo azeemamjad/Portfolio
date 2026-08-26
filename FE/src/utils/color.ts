@@ -1,4 +1,4 @@
-export const BRAND_ACCENT = '#f97316';
+export const BRAND_ACCENT = '#635bff';
 
 const HEX_RE = /^#([0-9A-Fa-f]{6})$/;
 

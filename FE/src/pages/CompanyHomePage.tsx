@@ -101,14 +101,15 @@ const CompanyHomePage: React.FC = () => {
       />
 
       {/* Hero */}
-      <section id="home" className="relative z-10 py-24 md:py-32 scroll-mt-28">
+      <section id="home" className="relative z-10 pt-36 md:pt-44 pb-24 md:pb-32 scroll-mt-28">
         <div className="container-custom">
           <div className="max-w-3xl animate-fade-in-up">
-            <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-content-muted mb-5">
+            <p className="inline-flex items-center gap-2 text-[12px] font-medium uppercase tracking-[0.16em] text-content-muted mb-6">
+              <span className="inline-block w-6 h-px bg-content-muted/40" aria-hidden />
               {company.tagline || 'Software studio'}
             </p>
 
-            <h1 className="heading-primary text-content">
+            <h1 className="heading-primary text-content mb-6">
               {company.name}
             </h1>
 
@@ -117,7 +118,7 @@ const CompanyHomePage: React.FC = () => {
             </p>
 
             {company.services_list?.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-10">
+              <div className="flex flex-wrap gap-2 mb-12">
                 {company.services_list.map((service) => (
                   <span key={service} className="company-hero-chip">
                     {service}
@@ -126,11 +127,19 @@ const CompanyHomePage: React.FC = () => {
               </div>
             )}
 
-            {company.email && (
-              <a href={`mailto:${company.email}`} className="btn-primary inline-flex items-center gap-2">
-                Start a project
-              </a>
-            )}
+            <div className="flex flex-wrap items-center gap-3">
+              {company.email && (
+                <a href={`mailto:${company.email}`} className="btn-primary inline-flex items-center gap-2">
+                  Start a project
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              )}
+              {developers.length > 0 && (
+                <a href="#developers" className="btn-outline inline-flex items-center gap-2">
+                  Meet the team
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </section>

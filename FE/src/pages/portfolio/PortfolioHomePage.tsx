@@ -25,7 +25,7 @@ const PortfolioHomePage: React.FC<PortfolioHomePageProps> = ({ portfolio }) => {
 
   return (
     <div>
-      <section className="pb-20 md:pb-28 pt-10 md:pt-16 relative overflow-hidden">
+      <section className="pb-24 md:pb-32 pt-16 md:pt-24 relative overflow-hidden">
         <div className="container-custom w-full">
           <div
             className={`grid grid-cols-1 gap-12 lg:gap-16 items-center ${
@@ -33,11 +33,12 @@ const PortfolioHomePage: React.FC<PortfolioHomePageProps> = ({ portfolio }) => {
             }`}
           >
             <div className={profile_image ? 'lg:col-span-7 order-2 lg:order-1' : ''}>
-              <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-content-muted mb-5">
+              <p className="inline-flex items-center gap-2 text-[12px] font-medium uppercase tracking-[0.16em] text-content-muted mb-6">
+                <span className="inline-block w-6 h-px bg-content-muted/40" aria-hidden />
                 Software engineer
               </p>
 
-              <h1 className="heading-primary text-content mb-4">
+              <h1 className="heading-primary text-content mb-5">
                 {displayName}
               </h1>
 
@@ -48,7 +49,7 @@ const PortfolioHomePage: React.FC<PortfolioHomePageProps> = ({ portfolio }) => {
               )}
 
               {about?.bio && (
-                <p className="text-base text-content-muted mb-8 max-w-xl leading-relaxed">
+                <p className="text-base text-content-muted mb-10 max-w-xl leading-relaxed">
                   {about.bio}
                 </p>
               )}
@@ -82,15 +83,15 @@ const PortfolioHomePage: React.FC<PortfolioHomePageProps> = ({ portfolio }) => {
           </div>
 
           {skills.length > 0 && (
-            <SkillsMarquee skills={skills} className="mt-16 md:mt-20" />
+            <SkillsMarquee skills={skills} className="mt-20 md:mt-24" />
           )}
 
           {(socialLinks.length > 0) && (
-            <div className="mt-14 pt-8 border-t border-line flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+            <div className="mt-16 pt-8 border-t border-line flex flex-col sm:flex-row sm:items-center justify-between gap-5">
               <p className="text-sm text-content-muted max-w-md">
                 Open to freelance, full-time roles, and selected collaborations.
               </p>
-              <div className="flex flex-wrap items-center gap-4">
+              <div className="flex flex-wrap items-center gap-5">
                 {socialLinks.map(({ href, label, icon: Icon }) => (
                   <a
                     key={label}
