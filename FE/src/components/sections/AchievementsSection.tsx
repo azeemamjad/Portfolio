@@ -23,34 +23,34 @@ const typeConfig: Record<
   { badge: string; label: string; icon: LucideIcon; accent: string }
 > = {
   award: {
-    badge: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/35 dark:text-yellow-300',
+    badge: 'bg-surface-muted text-content',
     label: 'Award',
     icon: Medal,
-    accent: 'from-yellow-400/20 to-amber-500/10',
+    accent: 'from-accent/8 to-transparent',
   },
   certification: {
-    badge: 'bg-blue-100 text-blue-800 dark:bg-blue-900/35 dark:text-blue-300',
+    badge: 'bg-surface-muted text-content',
     label: 'Certification',
     icon: Shield,
-    accent: 'from-blue-400/20 to-blue-600/10',
+    accent: 'from-accent/8 to-transparent',
   },
   recognition: {
-    badge: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/35 dark:text-emerald-300',
+    badge: 'bg-surface-muted text-content',
     label: 'Recognition',
     icon: Award,
-    accent: 'from-emerald-400/20 to-green-600/10',
+    accent: 'from-accent/8 to-transparent',
   },
   publication: {
-    badge: 'bg-purple-100 text-purple-800 dark:bg-purple-900/35 dark:text-purple-300',
+    badge: 'bg-surface-muted text-content',
     label: 'Publication',
     icon: BookOpen,
-    accent: 'from-purple-400/20 to-violet-600/10',
+    accent: 'from-accent/8 to-transparent',
   },
   other: {
     badge: 'bg-surface-muted text-content-muted',
     label: 'Other',
     icon: Sparkles,
-    accent: 'from-accent/15 to-accent/5',
+    accent: 'from-accent/8 to-transparent',
   },
 };
 

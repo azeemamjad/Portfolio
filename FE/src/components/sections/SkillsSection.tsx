@@ -22,23 +22,23 @@ const proficiencyConfig: Record<
   { badge: string; bar: string; label: string }
 > = {
   beginner: {
-    badge: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/35 dark:text-yellow-300',
-    bar: 'from-yellow-400 to-amber-500',
+    badge: 'bg-surface-muted text-content-muted',
+    bar: 'bg-content-muted/50',
     label: 'Beginner',
   },
   intermediate: {
-    badge: 'bg-blue-100 text-blue-800 dark:bg-blue-900/35 dark:text-blue-300',
-    bar: 'from-blue-400 to-blue-600',
+    badge: 'bg-surface-muted text-content-muted',
+    bar: 'bg-content-muted/70',
     label: 'Intermediate',
   },
   advanced: {
-    badge: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/35 dark:text-emerald-300',
-    bar: 'from-emerald-400 to-green-600',
+    badge: 'bg-surface-muted text-content',
+    bar: 'bg-accent/80',
     label: 'Advanced',
   },
   expert: {
     badge: 'bg-accent-50 text-accent-700 dark:bg-accent/20 dark:text-accent-300',
-    bar: 'from-accent-400 to-accent-600',
+    bar: 'bg-accent',
     label: 'Expert',
   },
 };
@@ -84,7 +84,7 @@ function SkillCard({ skill }: { skill: Skill }) {
 
       <div className="skills-glass-card__bar-track" aria-hidden>
         <div
-          className={`skills-glass-card__bar-fill bg-gradient-to-r ${cfg.bar}`}
+          className={`skills-glass-card__bar-fill ${cfg.bar}`}
           style={{ width: `${skill.proficiency_percentage}%` }}
         />
       </div>

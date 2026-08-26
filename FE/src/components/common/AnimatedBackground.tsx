@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { hexToRgba } from '../../utils/color';
 
 interface AnimatedBackgroundProps {
@@ -18,94 +18,54 @@ function readAccentHex(): string {
     if (companyAccent) return companyAccent;
   }
   const value = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-  return value || '#f97316';
+  return value || '#635bff';
 }
 
 const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
   useAccent = false,
   accentHex,
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [accent, setAccent] = useState<string>(() => {
+    if (typeof document === 'undefined') return accentHex ?? '#6366f1';
+    if (accentHex) return accentHex;
+    if (!useAccent) return '#6366f1';
+    return readAccentHex();
+  });
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!useAccent || accentHex) return;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const setCanvasSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    setCanvasSize();
-    window.addEventListener('resize', setCanvasSize);
-
-    const orbs = Array.from({ length: 2 }, (_, i) => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.18,
-      vy: (Math.random() - 0.5) * 0.18,
-      radius: 280 + Math.random() * 180,
-      colorIndex: i,
-    }));
-
-    const isDarkMode = () => document.documentElement.classList.contains('dark');
-
-    const getPalette = () => {
-      const accent = accentHex ?? (useAccent ? readAccentHex() : '#6366f1');
-      const darkAlphas = [0.08, 0.05];
-      const lightAlphas = [0.035, 0.025];
-      const alphas = isDarkMode() ? darkAlphas : lightAlphas;
-      return alphas.map((a) => hexToRgba(accent, a));
-    };
-
-    let animationFrameId: number;
-
-    const animate = () => {
-      const colors = getPalette();
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      orbs.forEach((orb) => {
-        orb.x += orb.vx;
-        orb.y += orb.vy;
-
-        if (orb.x < -orb.radius) orb.x = canvas.width + orb.radius;
-        if (orb.x > canvas.width + orb.radius) orb.x = -orb.radius;
-        if (orb.y < -orb.radius) orb.y = canvas.height + orb.radius;
-        if (orb.y > canvas.height + orb.radius) orb.y = -orb.radius;
-
-        const gradient = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, orb.radius);
-        gradient.addColorStop(0, colors[orb.colorIndex % colors.length]);
-        gradient.addColorStop(1, 'transparent');
-
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    const observer = new MutationObserver(() => {
-      /* palette refresh on theme / accent change */
-    });
+    const observer = new MutationObserver(() => setAccent(readAccentHex()));
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    const raf = window.setTimeout(() => setAccent(readAccentHex()), 200);
 
     return () => {
-      window.removeEventListener('resize', setCanvasSize);
-      cancelAnimationFrame(animationFrameId);
+      window.clearTimeout(raf);
       observer.disconnect();
     };
   }, [useAccent, accentHex]);
 
+  const isDark =
+    typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
+  const baseAccent = accent || (useAccent ? '#635bff' : '#6366f1');
+  const softAlpha = isDark ? 0.12 : 0.06;
+  const softerAlpha = isDark ? 0.07 : 0.035;
+
   return (
     <div className="fixed inset-0 w-full h-full pointer-events-none overflow-hidden" aria-hidden>
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-bg/40" />
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(60rem 60rem at 12% -10%, ${hexToRgba(baseAccent, softAlpha)}, transparent 60%),
+            radial-gradient(50rem 50rem at 100% 8%, ${hexToRgba(baseAccent, softerAlpha)}, transparent 55%),
+            radial-gradient(48rem 48rem at 50% 120%, ${hexToRgba(baseAccent, softerAlpha)}, transparent 60%)
+          `,
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-bg/60" />
     </div>
   );
 };
