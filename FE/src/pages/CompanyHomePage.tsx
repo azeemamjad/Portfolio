@@ -2,15 +2,21 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
+  ArrowUpRight,
   Award,
+  Boxes,
   ChevronLeft,
   ChevronRight,
+  Code2,
   Github,
+  Layers,
   Linkedin,
   Mail,
   MapPin,
   Phone,
+  Sparkles,
   Twitter,
+  Users,
 } from 'lucide-react';
 import { companyAPI } from '../services/api';
 import type { CompanyProfile, FeaturedDeveloper } from '../types';
@@ -113,7 +119,8 @@ const CompanyHomePage: React.FC = () => {
         />
 
         <div className="container-custom relative">
-          <div className="max-w-3xl animate-fade-in-up">
+          <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-12 lg:gap-16">
+            <div className="lg:col-span-7 animate-fade-in-up">
             <p className="section-label mb-6">
               <span className="section-label__rule" aria-hidden />
               {company.tagline || 'Software studio'}
@@ -158,6 +165,11 @@ const CompanyHomePage: React.FC = () => {
                   Meet the team
                 </a>
               )}
+            </div>
+            </div>
+
+            <div className="lg:col-span-5 flex justify-center lg:justify-end animate-fade-in-up [animation-delay:150ms]">
+              <HeroShowcaseCard company={company} developers={developers} />
             </div>
           </div>
         </div>
@@ -368,6 +380,142 @@ const CompanyHomePage: React.FC = () => {
           </p>
         </div>
       </footer>
+    </div>
+  );
+};
+
+interface HeroShowcaseCardProps {
+  company: CompanyProfile;
+  developers: FeaturedDeveloper[];
+}
+
+/**
+ * Apple-style hero showcase card: availability pill, live stats and a featured
+ * developer spotlight — fills the right side of the company hero.
+ */
+const HeroShowcaseCard: React.FC<HeroShowcaseCardProps> = ({ company, developers }) => {
+  const totalProjects = useMemo(
+    () => developers.reduce((acc, d) => acc + (d.portfolio.featured_projects?.length ?? 0), 0),
+    [developers],
+  );
+  const totalSkills = useMemo(
+    () => new Set(developers.flatMap((d) => d.portfolio.skills.map((s) => s.name))).size,
+    [developers],
+  );
+
+  const stats: { icon: React.ComponentType<{ className?: string }>; label: string; value: number }[] = [
+    { icon: Users, label: 'Developers', value: developers.length },
+    ...(totalProjects > 0 ? [{ icon: Boxes, label: 'Projects', value: totalProjects }] : []),
+    { icon: Code2, label: 'Skills', value: totalSkills },
+    { icon: Layers, label: 'Services', value: company.services_list?.length ?? 0 },
+  ];
+
+  const lead = developers[0];
+  const wideIndex = stats.length % 2 !== 0 ? stats.length - 1 : -1;
+
+  return (
+    <div className="relative w-full max-w-md lg:max-w-none">
+      {/* Accent glow behind the card */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-16 -right-10 h-56 w-56 rounded-full blur-3xl"
+        style={{ background: 'color-mix(in oklch, var(--accent) 26%, transparent)' }}
+      />
+
+      <div className="relative overflow-hidden rounded-[2rem] border border-[var(--glass-border-strong)] bg-white/70 dark:bg-[rgba(20,20,23,0.72)] backdrop-blur-2xl backdrop-saturate-150 shadow-[var(--glass-shadow-elevated)] p-7 md:p-8">
+        {/* Top gradient wash */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-28"
+          style={{
+            background:
+              'linear-gradient(180deg, color-mix(in oklch, var(--accent) 14%, transparent), transparent)',
+          }}
+        />
+
+        {/* Availability */}
+        <div className="relative flex items-center gap-2.5">
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" aria-hidden />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" aria-hidden />
+          </span>
+          <p className="text-[13px] font-semibold tracking-tight text-content">
+            Available for new projects
+          </p>
+          <Sparkles className="ml-auto h-4 w-4 text-accent" aria-hidden />
+        </div>
+
+        {/* Stats */}
+        <dl className="relative mt-6 grid grid-cols-2 gap-3">
+          {stats.map(({ icon: Icon, label, value }, i) => {
+            const wide = i === wideIndex;
+            return (
+              <div
+                key={label}
+                className={`rounded-2xl border border-[color-mix(in_oklch,var(--text)_8%,transparent)] bg-[color-mix(in_oklch,var(--text)_3%,transparent)] p-4 ${
+                  wide ? 'col-span-2 flex items-center gap-4' : ''
+                }`}
+              >
+                <div
+                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_oklch,var(--accent)_28%,transparent)] bg-[color-mix(in_oklch,var(--accent)_12%,transparent)] ${
+                    wide ? 'h-11 w-11 rounded-2xl' : ''
+                  }`}
+                >
+                  <Icon className="h-4 w-4 text-accent" aria-hidden />
+                </div>
+                <div className={wide ? 'flex items-baseline gap-3' : 'mt-3'}>
+                  <dd className="text-3xl font-semibold tracking-tight tabular-nums text-content">
+                    {value}
+                  </dd>
+                  <dt
+                    className={`text-[11px] font-semibold uppercase tracking-wider text-content-muted ${
+                      wide ? '' : 'mt-1'
+                    }`}
+                  >
+                    {label}
+                  </dt>
+                </div>
+              </div>
+            );
+          })}
+        </dl>
+
+        {/* Featured developer spotlight */}
+        {lead && (
+          <>
+            <div className="relative my-6 h-px bg-[color-mix(in_oklch,var(--text)_8%,transparent)]" />
+            <Link
+              to={`/${lead.portfolio.username}`}
+              state={{ themeColor: lead.portfolio.theme_color, fromCompany: true }}
+              className="group relative flex items-center gap-3 -m-2 rounded-2xl p-2 transition-colors duration-200 hover:bg-[color-mix(in_oklch,var(--accent)_7%,transparent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              {lead.portfolio.profile_image ? (
+                <img
+                  src={lead.portfolio.profile_image}
+                  alt={lead.portfolio.name || lead.portfolio.username}
+                  className="h-12 w-12 rounded-2xl object-cover ring-1 ring-line"
+                />
+              ) : (
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-base font-bold text-accent-fg">
+                  {(lead.portfolio.name || lead.portfolio.username).charAt(0).toUpperCase()}
+                </div>
+              )}
+              <div className="min-w-0">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-content-muted">
+                  Featured developer
+                </p>
+                <p className="truncate text-sm font-semibold text-content transition-colors group-hover:text-accent">
+                  {lead.portfolio.name || lead.portfolio.username}
+                </p>
+              </div>
+              <ArrowUpRight
+                className="ml-auto h-5 w-5 shrink-0 text-content-muted transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
+                aria-hidden
+              />
+            </Link>
+          </>
+        )}
+      </div>
     </div>
   );
 };
