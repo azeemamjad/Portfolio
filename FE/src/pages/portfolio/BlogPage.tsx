@@ -49,49 +49,68 @@ const BlogPage: React.FC = () => {
       />
       <div className="page-content-section">
         <div className="container-custom mt-8 md:mt-10">
-        {posts.length === 0 ? (
-          <div className="text-center py-20">
-            <BookOpen className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
-            <p className="text-neutral-400 text-lg font-medium">No posts yet</p>
-            <p className="text-neutral-400 text-sm mt-1">Check back soon for new content.</p>
-          </div>
-        ) : (
-          <>
-            {/* Posts grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {posts.map((post) => (
-                <BlogCard key={post.id} post={post} username={username!} />
-              ))}
-            </div>
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-3 mt-12">
-                <button
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                  className="w-9 h-9 rounded-lg border border-neutral-200 flex items-center justify-center
-                             text-neutral-500 hover:border-orange-400 hover:text-orange-600
-                             disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <span className="text-sm text-neutral-500">
-                  Page <span className="font-semibold text-neutral-900">{page}</span> of {totalPages}
-                </span>
-                <button
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                  className="w-9 h-9 rounded-lg border border-neutral-200 flex items-center justify-center
-                             text-neutral-500 hover:border-orange-400 hover:text-orange-600
-                             disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
+          {posts.length === 0 ? (
+            <div className="text-center py-24 md:py-28">
+              <div className="w-16 h-16 mx-auto mb-5 rounded-2xl flex items-center justify-center
+                              bg-[color-mix(in_oklch,var(--text)_5%,transparent)]
+                              border border-[color-mix(in_oklch,var(--text)_8%,transparent)]">
+                <BookOpen className="w-7 h-7 text-content-muted" />
               </div>
-            )}
-          </>
-        )}
+              <p className="text-xl font-semibold text-content">No posts yet</p>
+              <p className="text-content-muted text-sm mt-2">Check back soon for new content.</p>
+            </div>
+          ) : (
+            <>
+              {/* Featured story */}
+              <FeaturedCard post={posts[0]} username={username!} />
+
+              {/* Posts grid */}
+              {posts.length > 1 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 md:mt-8">
+                  {posts.slice(1).map((post) => (
+                    <BlogCard key={post.id} post={post} username={username!} />
+                  ))}
+                </div>
+              )}
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-4 mt-14">
+                  <button
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={page === 1}
+                    aria-label="Previous page"
+                    className="w-9 h-9 rounded-full border border-line bg-transparent flex items-center justify-center
+                               text-content-muted hover:border-accent/40 hover:text-accent
+                               disabled:opacity-40 disabled:cursor-not-allowed
+                               disabled:hover:border-line disabled:hover:text-content-muted
+                               transition-all duration-200
+                               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent
+                               focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <span className="text-sm text-content-muted">
+                    Page <span className="font-semibold text-content">{page}</span> of {totalPages}
+                  </span>
+                  <button
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={page === totalPages}
+                    aria-label="Next page"
+                    className="w-9 h-9 rounded-full border border-line bg-transparent flex items-center justify-center
+                               text-content-muted hover:border-accent/40 hover:text-accent
+                               disabled:opacity-40 disabled:cursor-not-allowed
+                               disabled:hover:border-line disabled:hover:text-content-muted
+                               transition-all duration-200
+                               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent
+                               focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </>
@@ -103,47 +122,66 @@ interface BlogCardProps {
   username: string;
 }
 
-const BlogCard: React.FC<BlogCardProps> = ({ post, username }) => {
-  const dateStr = post.published_at
+const formatDate = (post: BlogPost): string =>
+  post.published_at
     ? new Date(post.published_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
     : new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
-  const readTime = Math.max(1, Math.ceil((post.content || post.excerpt || '').split(/\s+/).length / 200));
+const readTimeOf = (post: BlogPost): number =>
+  Math.max(1, Math.ceil((post.content || post.excerpt || '').split(/\s+/).length / 200));
 
+/* Large lead story — Apple editorial featured card */
+const FeaturedCard: React.FC<BlogCardProps> = ({ post, username }) => {
   return (
     <Link
       to={`/${username}/blog/${post.slug}`}
-      className="card group flex flex-col overflow-hidden hover:-translate-y-1"
+      className="group flex flex-col md:flex-row overflow-hidden rounded-[1.75rem]
+                 bg-[var(--glass-bg)] backdrop-blur-xl backdrop-saturate-150
+                 border border-[var(--glass-border)] shadow-[var(--glass-shadow)]
+                 transition-all duration-300
+                 hover:-translate-y-1
+                 hover:border-[color-mix(in_oklch,var(--accent)_32%,var(--glass-border))]
+                 hover:shadow-[var(--glass-shadow-elevated)]
+                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent
+                 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
     >
       {/* Cover image */}
       {post.featured_image ? (
-        <div className="h-44 overflow-hidden bg-neutral-100 flex-shrink-0">
+        <div className="md:w-1/2 shrink-0 h-56 md:h-auto overflow-hidden bg-surface-muted
+                        border-b md:border-b-0 md:border-r border-line">
           <img
             src={post.featured_image}
             alt={post.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
           />
         </div>
       ) : (
-        <div className="h-44 flex-shrink-0 bg-gradient-to-br from-orange-50 to-amber-50
-                        flex items-center justify-center border-b border-neutral-100">
-          <BookOpen className="w-10 h-10 text-orange-200" />
+        <div className="md:w-1/2 shrink-0 h-56 md:h-auto flex items-center justify-center bg-surface-muted
+                        border-b md:border-b-0 md:border-r border-line">
+          <BookOpen className="w-12 h-12 text-content-muted/40" />
         </div>
       )}
 
-      <div className="p-5 flex flex-col flex-1">
+      {/* Body */}
+      <div className="flex-1 min-w-0 flex flex-col p-6 md:p-8">
         {/* Badges */}
-        <div className="flex items-center gap-2 mb-3 flex-wrap">
+        <div className="flex items-center gap-2 mb-4 flex-wrap">
           {post.is_featured && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
-                             bg-orange-100 text-orange-600 text-[11px] font-semibold">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full
+                             bg-accent/10 text-accent border border-accent/20
+                             text-[11px] font-semibold">
               <Star className="w-3 h-3" />
               Featured
             </span>
           )}
-          {post.tags_list.slice(0, 2).map((tag) => (
-            <span key={tag} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
-                                       bg-neutral-100 text-neutral-500 text-[11px] font-medium">
+          {post.tags_list.slice(0, 3).map((tag) => (
+            <span
+              key={tag}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium
+                         text-content-muted
+                         bg-[color-mix(in_oklch,var(--text)_5%,transparent)]
+                         border border-[color-mix(in_oklch,var(--text)_8%,transparent)]"
+            >
               <Tag className="w-2.5 h-2.5" />
               {tag}
             </span>
@@ -151,26 +189,119 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, username }) => {
         </div>
 
         {/* Title */}
-        <h2 className="text-base font-bold text-neutral-900 leading-snug mb-2
-                       group-hover:text-orange-600 transition-colors line-clamp-2">
+        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-content leading-[1.15]
+                       mb-3 line-clamp-2 group-hover:text-accent transition-colors duration-300">
           {post.title}
         </h2>
 
         {/* Excerpt */}
         {post.excerpt && (
-          <p className="text-neutral-500 text-sm leading-relaxed line-clamp-3 flex-1">
+          <p className="text-content-muted text-base leading-relaxed line-clamp-3 mb-6">
+            {post.excerpt}
+          </p>
+        )}
+
+        {/* Meta + read more */}
+        <div className="mt-auto flex flex-wrap items-center gap-2 pt-5 border-t border-line text-xs text-content-muted">
+          <span>{formatDate(post)}</span>
+          <span aria-hidden="true" className="w-1 h-1 rounded-full bg-content-muted/50" />
+          <span className="flex items-center gap-1">
+            <Clock className="w-3 h-3" />
+            {readTimeOf(post)} min read
+          </span>
+          <span aria-hidden="true" className="w-1 h-1 rounded-full bg-content-muted/50" />
+          <span className="flex items-center gap-1">
+            <Eye className="w-3 h-3" />
+            {post.views}
+          </span>
+          <span className="ml-auto inline-flex items-center gap-1 text-sm font-semibold text-accent">
+            Read story
+            <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+};
+
+/* Refined grid card */
+const BlogCard: React.FC<BlogCardProps> = ({ post, username }) => {
+  return (
+    <Link
+      to={`/${username}/blog/${post.slug}`}
+      className="group flex flex-col overflow-hidden rounded-2xl
+                 bg-[var(--glass-bg)] backdrop-blur-xl backdrop-saturate-150
+                 border border-[var(--glass-border)] shadow-[var(--glass-shadow)]
+                 transition-all duration-300
+                 hover:-translate-y-1
+                 hover:border-[color-mix(in_oklch,var(--accent)_32%,var(--glass-border))]
+                 hover:shadow-[var(--glass-shadow-elevated)]
+                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent
+                 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+    >
+      {/* Cover image */}
+      {post.featured_image ? (
+        <div className="h-44 shrink-0 overflow-hidden bg-surface-muted border-b border-line">
+          <img
+            src={post.featured_image}
+            alt={post.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          />
+        </div>
+      ) : (
+        <div className="h-44 shrink-0 flex items-center justify-center bg-surface-muted border-b border-line">
+          <BookOpen className="w-10 h-10 text-content-muted/40" />
+        </div>
+      )}
+
+      <div className="p-5 flex flex-col flex-1 min-w-0">
+        {/* Badges */}
+        <div className="flex items-center gap-2 mb-3 flex-wrap">
+          {post.is_featured && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+                             bg-accent/10 text-accent border border-accent/20
+                             text-[11px] font-semibold">
+              <Star className="w-3 h-3" />
+              Featured
+            </span>
+          )}
+          {post.tags_list.slice(0, 2).map((tag) => (
+            <span
+              key={tag}
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium
+                         text-content-muted
+                         bg-[color-mix(in_oklch,var(--text)_5%,transparent)]
+                         border border-[color-mix(in_oklch,var(--text)_8%,transparent)]"
+            >
+              <Tag className="w-2.5 h-2.5" />
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* Title */}
+        <h2 className="text-base font-semibold text-content leading-snug mb-2
+                       group-hover:text-accent transition-colors duration-300 line-clamp-2">
+          {post.title}
+        </h2>
+
+        {/* Excerpt */}
+        {post.excerpt && (
+          <p className="text-content-muted text-sm leading-relaxed line-clamp-3 flex-1">
             {post.excerpt}
           </p>
         )}
 
         {/* Meta */}
-        <div className="flex items-center gap-4 mt-4 pt-4 border-t border-neutral-100 text-xs text-neutral-400">
-          <span>{dateStr}</span>
+        <div className="flex items-center gap-2 mt-4 pt-4 border-t border-line text-xs text-content-muted">
+          <span>{formatDate(post)}</span>
+          <span aria-hidden="true" className="w-1 h-1 rounded-full bg-content-muted/50" />
           <span className="flex items-center gap-1">
             <Clock className="w-3 h-3" />
-            {readTime} min read
+            {readTimeOf(post)} min read
           </span>
-          <span className="flex items-center gap-1 ml-auto">
+          <span aria-hidden="true" className="w-1 h-1 rounded-full bg-content-muted/50" />
+          <span className="flex items-center gap-1">
             <Eye className="w-3 h-3" />
             {post.views}
           </span>

@@ -101,41 +101,60 @@ const CompanyHomePage: React.FC = () => {
       />
 
       {/* Hero */}
-      <section id="home" className="relative z-10 pt-36 md:pt-44 pb-24 md:pb-32 scroll-mt-28">
-        <div className="container-custom">
+      <section id="home" className="relative z-10 pt-40 md:pt-48 pb-24 md:pb-32 scroll-mt-28">
+        {/* Apple-style radial glow behind the hero */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 -top-32 z-0 h-[38rem]"
+          style={{
+            background:
+              'radial-gradient(56rem 32rem at 50% 0%, color-mix(in oklch, var(--accent) 15%, transparent), transparent 64%)',
+          }}
+        />
+
+        <div className="container-custom relative">
           <div className="max-w-3xl animate-fade-in-up">
-            <p className="inline-flex items-center gap-2 text-[12px] font-medium uppercase tracking-[0.16em] text-content-muted mb-6">
-              <span className="inline-block w-6 h-px bg-content-muted/40" aria-hidden />
+            <p className="section-label mb-6">
+              <span className="section-label__rule" aria-hidden />
               {company.tagline || 'Software studio'}
             </p>
 
-            <h1 className="heading-primary text-content mb-6">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.05] text-content mb-6">
               {company.name}
             </h1>
 
-            <p className="text-lg md:text-xl text-content-muted mb-10 max-w-2xl leading-relaxed">
+            <p className="text-xl md:text-2xl text-content-muted max-w-2xl mb-12 leading-relaxed">
               {company.description}
             </p>
 
             {company.services_list?.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-12">
+              <div className="flex flex-wrap gap-2.5 mb-14">
                 {company.services_list.map((service) => (
-                  <span key={service} className="company-hero-chip">
+                  <span
+                    key={service}
+                    className="company-hero-chip transition-colors duration-150 hover:border-content/30 hover:text-content"
+                  >
                     {service}
                   </span>
                 ))}
               </div>
             )}
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-4">
               {company.email && (
-                <a href={`mailto:${company.email}`} className="btn-primary inline-flex items-center gap-2">
+                <a
+                  href={`mailto:${company.email}`}
+                  className="inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-[17px] font-semibold text-accent-fg transition-all duration-200 hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+                >
                   Start a project
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-[18px] h-[18px]" />
                 </a>
               )}
               {developers.length > 0 && (
-                <a href="#developers" className="btn-outline inline-flex items-center gap-2">
+                <a
+                  href="#developers"
+                  className="inline-flex items-center gap-2 rounded-full border border-line bg-transparent px-7 py-3.5 text-[17px] font-medium text-content transition-colors duration-200 hover:bg-surface-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-line focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+                >
                   Meet the team
                 </a>
               )}
@@ -148,7 +167,7 @@ const CompanyHomePage: React.FC = () => {
       <CompanyFeaturedProjectsSection items={featuredProjects} />
 
       {/* Developers */}
-      <section id="developers" className="company-team-section relative z-10 py-20 md:py-24 scroll-mt-28">
+      <section id="developers" className="company-team-section relative z-10 py-24 md:py-28 scroll-mt-28">
         <div className="container-custom">
           <SectionHeader
             label="The People"
@@ -163,7 +182,7 @@ const CompanyHomePage: React.FC = () => {
               onMouseEnter={() => setPaused(true)}
               onMouseLeave={() => setPaused(false)}
             >
-              <div className="company-team-carousel__viewport overflow-hidden rounded-2xl">
+              <div className="company-team-carousel__viewport overflow-hidden rounded-[1.75rem]">
                 <div
                   className="company-team-carousel__track flex transition-transform duration-500 ease-out"
                   style={{ transform: `translateX(-${currentSlide * 100}%)` }}
@@ -179,9 +198,9 @@ const CompanyHomePage: React.FC = () => {
                           state={{ themeColor: p.theme_color, fromCompany: true }}
                           className="block group"
                         >
-                          <article className="about-glass-card company-dev-card">
+                          <article className="about-glass-card company-dev-card rounded-[1.75rem]">
                             <div className="about-glass-card__shine" aria-hidden />
-                            <div className="company-dev-card__inner">
+                            <div className="company-dev-card__inner p-7 md:p-9">
                               <div className="company-dev-card__avatar-wrap">
                                 {p.profile_image ? (
                                   <img
@@ -203,7 +222,7 @@ const CompanyHomePage: React.FC = () => {
 
                               <div className="company-dev-card__content">
                                 <p className="about-glass-card__eyebrow">Developer</p>
-                                <h3 className="company-dev-card__name">{displayName}</h3>
+                                <h3 className="company-dev-card__name text-3xl md:text-4xl font-semibold tracking-tight leading-[1.1]">{displayName}</h3>
 
                                 {p.tagline && (
                                   <p className="company-dev-card__tagline">{p.tagline}</p>
@@ -274,7 +293,7 @@ const CompanyHomePage: React.FC = () => {
       </section>
 
       {/* Contact */}
-      <section id="contact" className="relative z-10 py-20 md:py-24 scroll-mt-28">
+      <section id="contact" className="relative z-10 py-24 md:py-28 scroll-mt-28">
         <div className="container-custom">
           <SectionHeader
             label="Reach Out"
@@ -283,9 +302,9 @@ const CompanyHomePage: React.FC = () => {
             className="mb-10 md:mb-12"
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {company.email && (
-              <a href={`mailto:${company.email}`} className="about-glass-card company-contact-card group">
+              <a href={`mailto:${company.email}`} className="about-glass-card company-contact-card group rounded-[1.75rem] p-8">
                 <div className="about-glass-card__shine" aria-hidden />
                 <div className="about-glass-card__icon mx-auto mb-4">
                   <Mail className="w-4 h-4 text-accent" />
@@ -295,7 +314,7 @@ const CompanyHomePage: React.FC = () => {
               </a>
             )}
             {company.phone && (
-              <a href={`tel:${company.phone}`} className="about-glass-card company-contact-card group">
+              <a href={`tel:${company.phone}`} className="about-glass-card company-contact-card group rounded-[1.75rem] p-8">
                 <div className="about-glass-card__shine" aria-hidden />
                 <div className="about-glass-card__icon mx-auto mb-4">
                   <Phone className="w-4 h-4 text-accent" />
@@ -305,7 +324,7 @@ const CompanyHomePage: React.FC = () => {
               </a>
             )}
             {company.address && (
-              <div className="about-glass-card company-contact-card">
+              <div className="about-glass-card company-contact-card rounded-[1.75rem] p-8">
                 <div className="about-glass-card__shine" aria-hidden />
                 <div className="about-glass-card__icon mx-auto mb-4">
                   <MapPin className="w-4 h-4 text-accent" />
@@ -317,7 +336,7 @@ const CompanyHomePage: React.FC = () => {
           </div>
 
           {(company.linkedin_url || company.github_url || company.twitter_url) && (
-            <div className="flex justify-center gap-3 mt-10">
+            <div className="flex justify-center gap-3 mt-12">
               {[
                 { url: company.linkedin_url, icon: Linkedin, label: 'LinkedIn' },
                 { url: company.github_url, icon: Github, label: 'GitHub' },
@@ -331,7 +350,7 @@ const CompanyHomePage: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="navbar-glass-btn navbar-glass-btn--icon"
+                    className="navbar-glass-btn navbar-glass-btn--icon hover:-translate-y-0.5"
                   >
                     <Icon className="w-5 h-5" />
                   </a>

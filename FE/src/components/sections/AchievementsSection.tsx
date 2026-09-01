@@ -118,7 +118,7 @@ function AchievementCard({ item }: { item: Achievement }) {
       <AchievementVisual item={item} />
 
       <div className="achievement-glass-card__body">
-        <h3 className="achievement-glass-card__title">{item.title}</h3>
+        <h3 className="achievement-glass-card__title font-semibold tracking-tight">{item.title}</h3>
 
         <p className="achievement-glass-card__issuer">
           <span className="achievement-glass-card__issuer-label">Issued by</span>
@@ -233,7 +233,7 @@ const AchievementsSection: React.FC<AchievementsSectionProps> = ({
           {stats.map((stat) => (
             <div key={stat.label} className="achievements-stat-card">
               <div className="achievements-stat-card__shine" aria-hidden />
-              <p className="achievements-stat-card__value">{stat.value}</p>
+              <p className="achievements-stat-card__value font-semibold">{stat.value}</p>
               <p className="achievements-stat-card__label">{stat.label}</p>
             </div>
           ))}

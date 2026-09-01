@@ -1,6 +1,7 @@
 import React from 'react';
 import { DollarSign, ArrowRight } from 'lucide-react';
 import type { Service } from '../../types';
+import SectionHeader from '../common/SectionHeader';
 
 interface ServicesSectionProps {
   services: Service[];
@@ -12,28 +13,22 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ services }) => {
   return (
     <section className="section-padding bg-section-alt">
       <div className="container-custom">
-        {/* Header */}
-        <div className="section-header">
-          <span className="section-label">
-            <span className="section-label__rule" aria-hidden />
-            What I Offer
-          </span>
-          <h2 className="heading-secondary text-content">Services</h2>
-          <p className="text-content-muted mt-5 max-w-xl mx-auto text-base">
-            Professional services tailored to bring your ideas to life with quality and care.
-          </p>
-        </div>
+        <SectionHeader
+          label="What I Offer"
+          title="Services"
+          description="Professional services tailored to bring your ideas to life with quality and care."
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, i) => (
             <div
               key={service.id}
-              className="card p-7 group card-hover animate-fade-in-up"
+              className="card p-7 group card-hover animate-fade-in-up rounded-2xl backdrop-blur-xl backdrop-saturate-150 bg-white/70 dark:bg-[rgba(20,20,23,0.7)] border-[var(--glass-border)] shadow-[var(--glass-shadow)]"
               style={{ animationDelay: `${i * 0.08}s` }}
             >
               {/* Icon */}
               {service.icon && (
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-105"
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-105"
                      style={{
                        background: 'color-mix(in oklch, var(--accent) 10%, transparent)',
                        border: '1px solid color-mix(in oklch, var(--accent) 18%, transparent)',
@@ -42,7 +37,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ services }) => {
                 </div>
               )}
 
-              <h3 className="text-lg font-semibold text-content mb-3 transition-colors duration-200 group-hover:text-accent">
+              <h3 className="text-lg font-semibold tracking-tight text-content mb-3 transition-colors duration-200 group-hover:text-accent">
                 {service.title}
               </h3>
 

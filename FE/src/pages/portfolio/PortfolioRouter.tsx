@@ -64,9 +64,10 @@ const PortfolioRouter: React.FC = () => {
           }
           metaThemeColor.setAttribute('content', data.theme_color);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
+        const status = (err as { response?: { status?: number } })?.response?.status;
         console.error('Error fetching portfolio:', err);
-        if (err.response?.status === 404) {
+        if (status === 404) {
           setError(`Portfolio not found for username: ${username}`);
         } else {
           setError('Failed to load portfolio. Please try again later.');

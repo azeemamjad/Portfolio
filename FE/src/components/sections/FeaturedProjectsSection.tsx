@@ -129,7 +129,7 @@ function StackCard({ project, username, relativeIndex, isCenter }: StackCardProp
 
         {isCenter && (
           <div className="featured-stack-card__body">
-            <h3 className="featured-stack-card__title">{project.title}</h3>
+            <h3 className="featured-stack-card__title font-semibold tracking-tight">{project.title}</h3>
             <p className="featured-stack-card__desc">{project.description}</p>
 
             {techs.length > 0 && (
@@ -183,7 +183,9 @@ const FeaturedProjectsSection: React.FC<FeaturedProjectsSectionProps> = ({
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
   const touchStartX = useRef<number | null>(null);
   const total = projects.length;
 
@@ -196,7 +198,10 @@ const FeaturedProjectsSection: React.FC<FeaturedProjectsSectionProps> = ({
   }, [total]);
 
   useEffect(() => {
-    setReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const onChange = () => setReducedMotion(mq.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
   }, []);
 
   useEffect(() => {

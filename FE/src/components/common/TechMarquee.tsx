@@ -32,6 +32,13 @@ const TechMarquee: React.FC<TechMarqueeProps> = ({
               key={`${tech}-${i}`}
               className="skills-marquee__item"
               aria-hidden={i >= items.length}
+              style={{
+                background: 'var(--glass-bg)',
+                borderColor: 'var(--glass-border)',
+                borderRadius: '9999px',
+                backdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-saturate))',
+                WebkitBackdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-saturate))',
+              }}
             >
               <span className="skills-marquee__name">{tech}</span>
             </span>

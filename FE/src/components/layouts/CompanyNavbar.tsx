@@ -114,7 +114,7 @@ const CompanyNavbar: React.FC<CompanyNavbarProps> = ({ name, logo, tagline, emai
               )}
             </div>
             <div className="flex flex-col leading-none min-w-0">
-              <span className="text-sm font-medium text-content group-hover:text-accent transition-colors truncate">
+              <span className="text-sm font-semibold tracking-tight text-content group-hover:text-accent transition-colors truncate">
                 {name}
               </span>
               {tagline && (
@@ -185,7 +185,7 @@ const CompanyNavbar: React.FC<CompanyNavbarProps> = ({ name, logo, tagline, emai
           />
           <aside className="navbar-drawer-panel absolute right-0 top-0 h-full w-[min(100%,20rem)] animate-drawer-in flex flex-col">
             <div className="flex items-center justify-between p-4 border-b border-line/50">
-              <p className="font-display font-bold text-content">Menu</p>
+              <p className="font-display font-semibold tracking-tight text-content">Menu</p>
               <button
                 type="button"
                 onClick={() => setDrawerOpen(false)}
@@ -219,7 +219,7 @@ const CompanyNavbar: React.FC<CompanyNavbarProps> = ({ name, logo, tagline, emai
             </nav>
             {email && (
               <div className="p-4 border-t border-line/50">
-                <a href={`mailto:${email}`} className="btn-primary w-full rounded-2xl">
+                <a href={`mailto:${email}`} className="btn-primary w-full rounded-full">
                   <Mail className="w-4 h-4" />
                   Contact Us
                 </a>
