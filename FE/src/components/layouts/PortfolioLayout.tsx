@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   Home, User, Briefcase, Code, Award, MessageCircle, BookOpen, Menu, X,
@@ -28,20 +28,28 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({
   const navRef = useRef<HTMLElement>(null);
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
-  const navItems = [
-    { path: `/${username}`, label: 'Home', icon: Home },
-    { path: `/${username}/about`, label: 'About', icon: User },
-    { path: `/${username}/projects`, label: 'Projects', icon: Briefcase },
-    { path: `/${username}/skills`, label: 'Skills', icon: Code },
-    { path: `/${username}/achievements`, label: 'Achievements', icon: Award },
-    { path: `/${username}/blog`, label: 'Blog', icon: BookOpen },
-    { path: `/${username}/contact`, label: 'Contact', icon: MessageCircle },
-  ];
+  const navItems = useMemo(
+    () => [
+      { path: `/${username}`, label: 'Home', icon: Home },
+      { path: `/${username}/about`, label: 'About', icon: User },
+      { path: `/${username}/projects`, label: 'Projects', icon: Briefcase },
+      { path: `/${username}/skills`, label: 'Skills', icon: Code },
+      { path: `/${username}/achievements`, label: 'Achievements', icon: Award },
+      { path: `/${username}/blog`, label: 'Blog', icon: BookOpen },
+      { path: `/${username}/contact`, label: 'Contact', icon: MessageCircle },
+    ],
+    [username],
+  );
 
-  const isActive = (path: string) => {
-    if (path === `/${username}`) return location.pathname === path;
-    return location.pathname.startsWith(path);
-  };
+  const isActive = useCallback(
+    (path: string) => {
+      if (path === `/${username}`) return location.pathname === path;
+      return location.pathname.startsWith(path);
+    },
+    [location.pathname, username],
+  );
+
+  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -49,10 +57,6 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
-  useEffect(() => {
-    setDrawerOpen(false);
-  }, [location.pathname]);
 
   useEffect(() => {
     document.body.style.overflow = drawerOpen ? 'hidden' : '';
@@ -74,7 +78,7 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({
     updateIndicator();
     window.addEventListener('resize', updateIndicator);
     return () => window.removeEventListener('resize', updateIndicator);
-  }, [location.pathname, username]);
+  }, [location.pathname, username, isActive, navItems]);
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -203,6 +207,7 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({
                   <Link
                     key={item.path}
                     to={item.path}
+                    onClick={closeDrawer}
                     className={`navbar-drawer-link ${
                       active ? 'navbar-drawer-link--active' : 'navbar-drawer-link--idle'
                     }`}
@@ -214,7 +219,7 @@ const PortfolioLayout: React.FC<PortfolioLayoutProps> = ({
               })}
             </nav>
             <div className="p-4 border-t border-line/50">
-              <Link to={`/${username}/contact`} className="btn-primary w-full">
+              <Link to={`/${username}/contact`} onClick={closeDrawer} className="btn-primary w-full">
                 Contact
               </Link>
             </div>

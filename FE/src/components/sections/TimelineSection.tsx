@@ -191,27 +191,32 @@ const TimelineSection: React.FC<TimelineSectionProps> = ({ achievements }) => {
         className={`${snapClass(snapIndex)} roadmap-card`}
       >
         <Card className="roadmap-card__inner h-full p-8 md:p-12" hover={false}>
-          <div className="flex items-start justify-between gap-4 mb-6">
-            <span className="text-4xl md:text-5xl" aria-hidden>
+          <div className="flex items-start justify-between gap-4 mb-8">
+            <span
+              className="flex h-14 w-14 md:h-16 md:w-16 shrink-0 items-center justify-center rounded-2xl bg-surface-muted text-3xl md:text-4xl"
+              aria-hidden
+            >
               {cfg.emoji}
             </span>
             <div className="text-right">
               {showYear && (
-                <p className="text-sm font-bold text-accent mb-1">{showYear}</p>
+                <p className="text-2xl md:text-3xl font-semibold leading-none tracking-tight text-accent mb-1.5">
+                  {showYear}
+                </p>
               )}
-              <time className="text-sm md:text-base font-semibold text-content-muted whitespace-nowrap">
+              <time className="text-sm md:text-base font-medium text-content-muted whitespace-nowrap">
                 {formatMonth(item.date_received)}
               </time>
             </div>
           </div>
 
           <span
-            className={`inline-block px-3 py-1.5 rounded-lg text-xs md:text-sm font-bold uppercase tracking-wide mb-5 ${cfg.badge}`}
+            className={`inline-block px-3.5 py-1.5 rounded-full text-xs md:text-sm font-semibold uppercase tracking-wide ring-1 ring-inset ring-black/5 dark:ring-white/10 mb-6 ${cfg.badge}`}
           >
             {cfg.label}
           </span>
 
-          <h3 className="text-2xl md:text-3xl font-bold text-content leading-snug mb-3">
+          <h3 className="text-2xl md:text-3xl font-semibold text-content leading-snug mb-3">
             {item.title}
           </h3>
 
@@ -222,7 +227,7 @@ const TimelineSection: React.FC<TimelineSectionProps> = ({ achievements }) => {
           {item.description && (
             <>
               <p
-                className={`text-lg md:text-xl text-content-muted leading-relaxed ${
+                className={`text-base md:text-lg text-content-muted leading-relaxed ${
                   !isExpanded && isLong ? 'line-clamp-5' : ''
                 }`}
               >
@@ -232,7 +237,7 @@ const TimelineSection: React.FC<TimelineSectionProps> = ({ achievements }) => {
                 <button
                   type="button"
                   onClick={() => toggle(item.id)}
-                  className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:opacity-80 transition-opacity"
+                  className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-4 py-2 text-sm font-semibold text-accent transition-all duration-200 hover:bg-accent/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
                 >
                   {isExpanded ? 'Show less' : 'Read more'}
                   <ChevronDown
@@ -253,12 +258,14 @@ const TimelineSection: React.FC<TimelineSectionProps> = ({ achievements }) => {
     <>
       <article data-roadmap-snap className={`${snapClass(snapIndex++)} roadmap-slide`}>
         <Card className="roadmap-slide__inner h-full p-8 md:p-12 flex flex-col justify-center" hover={false}>
-          <p className="text-sm font-bold uppercase tracking-widest text-accent mb-4">Start</p>
-          <h3 className="text-2xl md:text-4xl font-bold text-content mb-4">The journey begins</h3>
-          <p className="text-lg md:text-xl text-content-muted leading-relaxed">
+          <span className="inline-flex w-fit items-center rounded-full bg-accent/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-accent mb-5">
+            Start
+          </span>
+          <h3 className="text-2xl md:text-4xl font-semibold tracking-tight text-content mb-4">The journey begins</h3>
+          <p className="text-base md:text-lg text-content-muted leading-relaxed">
             Scroll down to move through each milestone. Scroll back up anytime to revisit.
           </p>
-          <p className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-accent">
+          <p className="mt-8 inline-flex w-fit items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-semibold text-content-muted">
             Scroll down <ArrowRight className="w-4 h-4 rotate-90" />
           </p>
         </Card>
@@ -279,14 +286,17 @@ const TimelineSection: React.FC<TimelineSectionProps> = ({ achievements }) => {
           className="roadmap-slide__inner roadmap-slide__inner--end h-full p-8 md:p-12 flex flex-col justify-center"
           hover={false}
         >
-          <p className="text-4xl mb-4" aria-hidden>
+          <span
+            className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-surface-muted text-3xl"
+            aria-hidden
+          >
             🚀
-          </p>
-          <h3 className="text-2xl md:text-4xl font-bold text-content mb-4">Present day</h3>
-          <p className="text-lg md:text-xl text-content-muted leading-relaxed">
+          </span>
+          <h3 className="text-2xl md:text-4xl font-semibold tracking-tight text-content mb-4">Present day</h3>
+          <p className="text-base md:text-lg text-content-muted leading-relaxed">
             Still learning, building, and growing.
           </p>
-          <p className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-accent">
+          <p className="mt-8 inline-flex w-fit items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-semibold text-content-muted">
             Keep scrolling <ArrowRight className="w-4 h-4 rotate-90" />
           </p>
         </Card>

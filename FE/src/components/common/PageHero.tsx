@@ -16,12 +16,12 @@ const PageHero: React.FC<PageHeroProps> = ({ label, title, highlight, descriptio
             <span className="section-label__rule" aria-hidden />
             {label}
           </span>
-          <h1 className="page-hero__title text-content">
+          <h1 className="page-hero__title text-content text-5xl md:text-6xl font-semibold tracking-tight leading-[1.05]">
             {title}
             {highlight ? ` ${highlight}` : ''}
           </h1>
           {description && (
-            <p className="page-hero__desc text-content-muted max-w-2xl">
+            <p className="page-hero__desc text-content-muted max-w-2xl text-lg leading-relaxed mt-4">
               {description}
             </p>
           )}

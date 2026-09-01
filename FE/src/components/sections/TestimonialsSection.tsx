@@ -1,6 +1,7 @@
 import React from 'react';
 import { Star, Quote } from 'lucide-react';
 import type { Testimonial } from '../../types';
+import SectionHeader from '../common/SectionHeader';
 
 interface TestimonialsSectionProps {
   testimonials: Testimonial[];
@@ -23,28 +24,22 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials 
   return (
     <section className="section-padding">
       <div className="container-custom">
-        {/* Header */}
-        <div className="section-header">
-          <span className="section-label">
-            <span className="section-label__rule" aria-hidden />
-            Social Proof
-          </span>
-          <h2 className="heading-secondary text-content">What People Say</h2>
-          <p className="text-content-muted mt-5 max-w-xl mx-auto text-base">
-            Feedback from clients and colleagues I've had the pleasure of working with.
-          </p>
-        </div>
+        <SectionHeader
+          label="Social Proof"
+          title="What People Say"
+          description="Feedback from clients and colleagues I've had the pleasure of working with."
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {display.map((t, i) => (
             <div
               key={t.id}
-              className="card p-7 flex flex-col animate-fade-in-up hover:-translate-y-1"
+              className="card p-7 flex flex-col animate-fade-in-up card-hover rounded-2xl backdrop-blur-xl backdrop-saturate-150 bg-white/70 dark:bg-[rgba(20,20,23,0.7)] border-[var(--glass-border)] shadow-[var(--glass-shadow)]"
               style={{ animationDelay: `${i * 0.08}s` }}
             >
               {/* Quote icon + stars */}
               <div className="flex items-start justify-between mb-5">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                <div className="w-10 h-10 rounded-2xl flex items-center justify-center"
                      style={{
                        background: 'color-mix(in oklch, var(--accent) 10%, transparent)',
                        border: '1px solid color-mix(in oklch, var(--accent) 18%, transparent)',
@@ -76,7 +71,7 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials 
                   </div>
                 )}
                 <div className="min-w-0">
-                  <p className="font-semibold text-content text-sm truncate">{t.client_name}</p>
+                  <p className="font-semibold tracking-tight text-content text-sm truncate">{t.client_name}</p>
                   {t.client_role && (
                     <p className="text-xs text-content-muted truncate">
                       {t.client_role}{t.client_company ? ` · ${t.client_company}` : ''}

@@ -38,36 +38,46 @@ const PortfolioHomePage: React.FC<PortfolioHomePageProps> = ({ portfolio }) => {
                 Software engineer
               </p>
 
-              <h1 className="heading-primary text-content mb-5">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.05] text-content mb-8">
                 {displayName}
               </h1>
 
               {tagline && (
-                <p className="text-lg md:text-xl text-content-muted mb-6 max-w-xl font-normal leading-relaxed">
+                <p className="text-xl md:text-2xl text-content-muted mb-8 max-w-xl font-normal leading-snug">
                   {tagline}
                 </p>
               )}
 
               {about?.bio && (
-                <p className="text-base text-content-muted mb-10 max-w-xl leading-relaxed">
+                <p className="text-base md:text-lg text-content-muted mb-12 max-w-xl leading-relaxed">
                   {about.bio}
                 </p>
               )}
 
-              <div className="flex flex-wrap items-center gap-3">
-                <Link to={`/${username}/projects`} className="btn-primary">
+              <div className="flex flex-wrap items-center gap-3 md:gap-4">
+                <Link
+                  to={`/${username}/projects`}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 text-[17px] font-semibold text-accent-fg transition-all duration-200 hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+                >
                   View work
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="h-[18px] w-[18px]" />
                 </Link>
 
                 {about?.resume_file && (
-                  <a href={about.resume_file} download className="btn-outline">
-                    <Download className="w-4 h-4" />
+                  <a
+                    href={about.resume_file}
+                    download
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-line bg-surface px-7 py-3.5 text-[17px] font-medium text-content transition-colors duration-200 hover:bg-surface-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+                  >
+                    <Download className="h-[18px] w-[18px]" />
                     Resume
                   </a>
                 )}
 
-                <Link to={`/${username}/contact`} className="btn-secondary">
+                <Link
+                  to={`/${username}/contact`}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-line bg-transparent px-7 py-3.5 text-[17px] font-medium text-content-muted transition-colors duration-200 hover:border-content hover:text-content focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+                >
                   Contact
                 </Link>
               </div>
@@ -91,14 +101,14 @@ const PortfolioHomePage: React.FC<PortfolioHomePageProps> = ({ portfolio }) => {
               <p className="text-sm text-content-muted max-w-md">
                 Open to freelance, full-time roles, and selected collaborations.
               </p>
-              <div className="flex flex-wrap items-center gap-5">
+              <div className="flex flex-wrap items-center gap-2.5">
                 {socialLinks.map(({ href, label, icon: Icon }) => (
                   <a
                     key={label}
                     href={href}
                     target={label === 'Email' ? undefined : '_blank'}
                     rel={label === 'Email' ? undefined : 'noopener noreferrer'}
-                    className="inline-flex items-center gap-2 text-sm text-content-muted hover:text-content transition-colors"
+                    className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-content-muted transition-all duration-200 hover:-translate-y-0.5 hover:border-content hover:text-content focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
                   >
                     <Icon className="w-4 h-4" />
                     {label}

@@ -74,10 +74,10 @@ function SkillCard({ skill }: { skill: Skill }) {
           </div>
         )}
         <div className="skills-glass-card__meta min-w-0 flex-1">
-          <h4 className="skills-glass-card__name">{skill.name}</h4>
+          <h4 className="skills-glass-card__name font-semibold">{skill.name}</h4>
           <span className={`skills-glass-card__badge ${cfg.badge}`}>{cfg.label}</span>
         </div>
-        <span className="skills-glass-card__pct">{skill.proficiency_percentage}%</span>
+        <span className="skills-glass-card__pct font-semibold">{skill.proficiency_percentage}%</span>
       </div>
 
       <p className="skills-glass-card__summary">{summary}</p>
@@ -136,7 +136,7 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({ skills, showHeader = true
           {stats.map((stat) => (
             <div key={stat.label} className="skills-stat-card">
               <div className="skills-stat-card__shine" aria-hidden />
-              <p className="skills-stat-card__value">{stat.value}</p>
+              <p className="skills-stat-card__value font-semibold">{stat.value}</p>
               <p className="skills-stat-card__label">{stat.label}</p>
             </div>
           ))}
@@ -157,7 +157,7 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({ skills, showHeader = true
                   </div>
                   <div>
                     <p className="skills-section__category-eyebrow">{group.eyebrow}</p>
-                    <h3 className="skills-section__category-title">{group.label}</h3>
+                    <h3 className="skills-section__category-title font-semibold">{group.label}</h3>
                   </div>
                   <span className="skills-section__category-count">
                     {group.skills.length} skill{group.skills.length === 1 ? '' : 's'}

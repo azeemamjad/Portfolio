@@ -190,7 +190,7 @@ const ProjectDetailPage: React.FC = () => {
             <ProjectImageGallery slides={gallerySlides} title={project.title} />
           </section>
 
-          <div className="project-detail__content-col">
+          <div className="project-detail__content-col lg:sticky lg:top-28 self-start">
             <header className="project-detail__meta">
               <div className="flex flex-wrap items-center gap-2">
                 {project.is_featured && (
@@ -215,7 +215,9 @@ const ProjectDetailPage: React.FC = () => {
             </header>
 
             <section className="project-detail__heading">
-              <h1 className="project-detail__title">{project.title}</h1>
+              <h1 className="project-detail__title text-4xl md:text-5xl font-semibold tracking-tight leading-[1.08]">
+                {project.title}
+              </h1>
             </section>
 
             <section className="project-detail__description">
@@ -240,7 +242,7 @@ const ProjectDetailPage: React.FC = () => {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="project-detail__action"
+                    className="project-detail__action px-6 py-3"
                   >
                     <Icon className="w-4 h-4" />
                     {label}
@@ -268,14 +270,14 @@ const ProjectDetailPage: React.FC = () => {
             <div className="project-detail__case-study">
               <div className="project-detail__case-study-header">
                 <p className="about-glass-card__eyebrow">Case study</p>
-                <h2 className="text-xl font-bold text-content">How it was built</h2>
+                <h2 className="text-2xl font-semibold tracking-tight text-content">How it was built</h2>
               </div>
               <div className="project-detail__case-study-grid">
                 {CASE_STUDY_SECTIONS.map(({ key, label, eyebrow }) =>
                   caseStudy![key] ? (
                     <section key={key} className="about-glass-card project-detail__case-card">
                       <p className="about-glass-card__eyebrow">{eyebrow}</p>
-                      <h3 className="text-base font-bold text-content mb-2">{label}</h3>
+                      <h3 className="text-base font-semibold text-content mb-2">{label}</h3>
                       <p className="about-glass-card__body whitespace-pre-line">{caseStudy![key]}</p>
                     </section>
                   ) : null,
@@ -288,7 +290,7 @@ const ProjectDetailPage: React.FC = () => {
             <div className="project-detail__testimonials">
               <div className="project-detail__case-study-header">
                 <p className="about-glass-card__eyebrow">Feedback</p>
-                <h2 className="text-xl font-bold text-content">Client testimonials</h2>
+                <h2 className="text-2xl font-semibold tracking-tight text-content">Client testimonials</h2>
               </div>
               <div className="flex flex-col gap-4">
                 {project.testimonials.map((t) => (
@@ -333,7 +335,7 @@ const ProjectDetailPage: React.FC = () => {
             </dl>
           </section>
 
-          <Link to={`/${username}/projects`} className="project-detail__action project-detail__action--back">
+          <Link to={`/${username}/projects`} className="project-detail__action project-detail__action--back px-6 py-3">
             <ArrowLeft className="w-4 h-4" />
             All projects
           </Link>

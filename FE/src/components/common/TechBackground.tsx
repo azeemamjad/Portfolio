@@ -4,6 +4,18 @@ import React from 'react';
  * CSS-only animated tech background with matrix-style effect
  * Alternative to AnimatedBackground (Canvas-based)
  */
+
+const CODE_SNIPPETS = ['</>', '{}', '[]', 'fn()', 'const', 'var', 'let', 'if', 'for'];
+
+// Randomized layout computed once at module load so render stays pure.
+const FLOATERS = Array.from({ length: 20 }, () => ({
+  left: Math.random() * 100,
+  top: Math.random() * 100,
+  delay: Math.random() * 10,
+  duration: 15 + Math.random() * 10,
+  char: CODE_SNIPPETS[Math.floor(Math.random() * CODE_SNIPPETS.length)],
+}));
+
 const TechBackground: React.FC = () => {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
@@ -14,18 +26,18 @@ const TechBackground: React.FC = () => {
 
       {/* Floating Code Blocks */}
       <div className="absolute inset-0">
-        {[...Array(20)].map((_, i) => (
+        {FLOATERS.map((floater, i) => (
           <div
             key={i}
             className="code-block absolute text-xs font-mono text-primary-500/30 dark:text-primary-400/20"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 10}s`,
-              animationDuration: `${15 + Math.random() * 10}s`,
+              left: `${floater.left}%`,
+              top: `${floater.top}%`,
+              animationDelay: `${floater.delay}s`,
+              animationDuration: `${floater.duration}s`,
             }}
           >
-            {['</>','{}','[]','fn()','const','var','let','if','for'][Math.floor(Math.random() * 9)]}
+            {floater.char}
           </div>
         ))}
       </div>

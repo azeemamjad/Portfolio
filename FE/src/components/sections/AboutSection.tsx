@@ -102,7 +102,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({
                   </div>
                   <div>
                     <p className="about-glass-card__eyebrow">Profile</p>
-                    <h3 className="about-glass-card__label">{block.title}</h3>
+                    <h3 className="about-glass-card__label font-semibold">{block.title}</h3>
                   </div>
                 </div>
                 <BlockBody content={block.content} />
@@ -119,7 +119,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({
                 </div>
                 <div>
                   <p className="about-glass-card__eyebrow">Reach out</p>
-                  <h3 className="about-glass-card__label">Connect with me</h3>
+                  <h3 className="about-glass-card__label font-semibold">Connect with me</h3>
                 </div>
               </div>
 
@@ -167,7 +167,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({
                 <span>Currently available</span>
               </div>
               {username && (
-                <Link to={`/${username}/contact`} className="about-availability-card__btn">
+                <Link to={`/${username}/contact`} className="about-availability-card__btn rounded-full">
                   Start a conversation
                   <ArrowRight className="w-4 h-4" />
                 </Link>

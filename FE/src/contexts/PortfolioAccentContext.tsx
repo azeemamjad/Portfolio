@@ -29,6 +29,8 @@ export const PortfolioAccentProvider: React.FC<PortfolioAccentProviderProps> = (
   );
 };
 
+// Fast refresh only tracks component exports; the hook is a public API of this module.
+// eslint-disable-next-line react-refresh/only-export-components
 export function usePortfolioAccent() {
   return useContext(PortfolioAccentContext);
 }

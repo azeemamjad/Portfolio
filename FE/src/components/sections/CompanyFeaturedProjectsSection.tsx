@@ -15,6 +15,8 @@ export interface CompanyFeaturedProject {
   };
 }
 
+// Fast refresh only tracks component exports; the builder is a public helper used by CompanyHomePage.
+// eslint-disable-next-line react-refresh/only-export-components
 export function buildCompanyFeaturedProjects(developers: FeaturedDeveloper[]): CompanyFeaturedProject[] {
   return developers.flatMap((dev) =>
     (dev.portfolio.featured_projects ?? []).map((project) => ({
@@ -58,7 +60,7 @@ const CompanyFeaturedProjectsSection: React.FC<CompanyFeaturedProjectsSectionPro
   if (items.length === 0) return null;
 
   return (
-    <section id="projects" className="company-projects-section relative z-10 py-20 md:py-24 scroll-mt-28">
+    <section id="projects" className="company-projects-section relative z-10 py-24 md:py-32 scroll-mt-28">
       <div className="container-custom">
         <SectionHeader
           label="Our Work"
@@ -75,13 +77,13 @@ const CompanyFeaturedProjectsSection: React.FC<CompanyFeaturedProjectsSectionPro
             return (
               <article
                 key={`${developer.username}-${project.id}`}
-                className="company-project-card animate-fade-in-up"
+                className="company-project-card group animate-fade-in-up rounded-[1.75rem]"
                 style={{ animationDelay: `${index * 0.07}s` }}
               >
                 <div className="company-project-card__shine" aria-hidden />
                 <ProjectVisual project={project} />
 
-                <div className="company-project-card__body">
+                <div className="company-project-card__body p-7 md:p-9">
                   <Link
                     to={`/${developer.username}`}
                     state={{ themeColor: developer.theme_color, fromCompany: true }}
@@ -104,13 +106,13 @@ const CompanyFeaturedProjectsSection: React.FC<CompanyFeaturedProjectsSectionPro
                     </span>
                   </Link>
 
-                  <h3 className="company-project-card__title">{project.title}</h3>
+                  <h3 className="company-project-card__title text-2xl md:text-3xl tracking-tight">{project.title}</h3>
                   <p className="company-project-card__desc">{project.description}</p>
 
                   {techs.length > 0 && (
                     <div className="company-project-card__tags">
                       {techs.map((tech) => (
-                        <span key={tech} className="company-project-card__tag">
+                        <span key={tech} className="company-project-card__tag rounded-full">
                           {tech}
                         </span>
                       ))}
@@ -124,7 +126,7 @@ const CompanyFeaturedProjectsSection: React.FC<CompanyFeaturedProjectsSectionPro
                       className="company-project-card__cta"
                     >
                       View project
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                     </Link>
                     {project.live_url && (
                       <a

@@ -38,9 +38,10 @@ const ContactSection: React.FC<ContactSectionProps> = ({
       setSubmitStatus('success');
       setFormData({ name: '', email: '', subject: '', message: '' });
       setTimeout(() => setSubmitStatus('idle'), 6000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setSubmitStatus('error');
-      setErrorMessage(err.response?.data?.message || 'Failed to send message. Please try again.');
+      const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      setErrorMessage(message || 'Failed to send message. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -58,20 +59,31 @@ const ContactSection: React.FC<ContactSectionProps> = ({
         )}
 
         <div className="max-w-2xl mx-auto">
-          <Card className="p-8 md:p-10" hover={false}>
+          <Card
+            className="p-8 md:p-10 rounded-[1.75rem] backdrop-blur-xl backdrop-saturate-150 bg-white/70 dark:bg-[rgba(20,20,23,0.7)] border-[var(--glass-border)] shadow-[var(--glass-shadow)]"
+            hover={false}
+          >
             {submitStatus === 'success' ? (
-              <div className="text-center py-10 animate-fade-in-up">
-                <div className="w-16 h-16 rounded-2xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-5">
+              <div className="text-center py-12 md:py-14 animate-fade-in-up">
+                <div className="w-16 h-16 rounded-2xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-6">
                   <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-content mb-2">Message Sent!</h3>
-                <p className="text-content-muted mb-7">Thanks for reaching out — I'll get back to you soon!</p>
-                <button type="button" onClick={() => setSubmitStatus('idle')} className="btn-secondary">
+                <h3 className="text-2xl md:text-3xl font-semibold tracking-tight text-content mb-2">
+                  Message Sent!
+                </h3>
+                <p className="text-content-muted mb-8">
+                  Thanks for reaching out — I'll get back to you soon!
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setSubmitStatus('idle')}
+                  className="btn-secondary rounded-full"
+                >
                   Send Another
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label htmlFor="name" className="block text-sm font-semibold text-content mb-2">
@@ -124,7 +136,11 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                 )}
 
                 <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                  <button type="submit" disabled={isSubmitting} className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="btn-primary rounded-full px-6 py-3 text-[17px] disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
                     {isSubmitting ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

@@ -22,7 +22,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
       </span>
       <h2 className="heading-secondary text-content">{title}</h2>
       {description && (
-        <p className="text-content-muted mt-5 max-w-xl text-base leading-relaxed">{description}</p>
+        <p className="text-content-muted mt-4 max-w-xl text-base leading-relaxed">{description}</p>
       )}
     </div>
   );

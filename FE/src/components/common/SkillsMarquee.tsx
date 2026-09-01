@@ -103,7 +103,14 @@ const SkillsMarquee: React.FC<SkillsMarqueeProps> = ({
 
   return (
     <div className={`skills-marquee ${className}`}>
-      <p className="skills-marquee__headline">{headline}</p>
+      <div className="flex items-center gap-3">
+        <span
+          className="inline-block h-px w-6 shrink-0"
+          style={{ background: 'color-mix(in oklch, var(--accent) 55%, transparent)' }}
+          aria-hidden
+        />
+        <p className="skills-marquee__headline">{headline}</p>
+      </div>
       <div className="skills-marquee__viewport">
         <div className={`skills-marquee__track${paused ? ' skills-marquee__track--paused' : ''}`}>
           {loop.map((skill, i) => (
