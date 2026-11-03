@@ -7,6 +7,7 @@ import {
   readCachedPortfolioTheme,
   type PortfolioNavigationState,
 } from '../../utils/portfolioThemeCache';
+import { useRouteMetadata } from '../../utils/routeMetadata';
 
 // Layout
 import PortfolioLayout from '../../components/layouts/PortfolioLayout';
@@ -50,11 +51,9 @@ const PortfolioRouter: React.FC = () => {
         const data = await portfolioAPI.getPortfolio(username);
         setPortfolio(data);
         cachePortfolioThemes([{ username: data.username, themeColor: data.theme_color }]);
-        
-        // Update document title
-        document.title = `${data.name || data.username} : Portfolio`;
-        
-        // Update theme color meta tag if available
+
+        // Update theme color meta tag if available.
+        // Route titles/descriptions are owned by each page via useRouteMetadata.
         if (data.theme_color) {
           let metaThemeColor = document.querySelector('meta[name="theme-color"]');
           if (!metaThemeColor) {
@@ -80,6 +79,11 @@ const PortfolioRouter: React.FC = () => {
     fetchPortfolio();
   }, [username]);
 
+  useRouteMetadata({
+    title: error ? `Portfolio not found — ${username ?? ''}`.trim() : 'Portfolio',
+    path: username ? `/${username}` : '/',
+  });
+
   if (loading) {
     const loadingVariant = prefetchThemeColor
       ? 'default'
@@ -100,24 +104,46 @@ const PortfolioRouter: React.FC = () => {
     return <ErrorMessage message={error || 'Portfolio not found'} />;
   }
 
+  const displayName = portfolio.name || portfolio.username;
+  const about = portfolio.about;
+
   return (
     <PortfolioAccentProvider themeColor={portfolio.theme_color}>
-      <PortfolioLayout username={portfolio.username} name={portfolio.name} profileImage={portfolio.profile_image}>
+      <PortfolioLayout
+        username={portfolio.username}
+        name={displayName}
+        profileImage={portfolio.profile_image}
+        resumeUrl={about?.resume_file || null}
+        email={about?.email || ''}
+        githubUrl={about?.github_url || ''}
+        linkedinUrl={about?.linkedin_url || ''}
+      >
         <Routes>
           <Route path="/" element={<PortfolioHomePage portfolio={portfolio} />} />
-          <Route path="/about" element={<AboutPage about={portfolio.about} username={portfolio.username} />} />
-          <Route path="/projects" element={<ProjectsPage projects={portfolio.projects} username={portfolio.username} />} />
-          <Route path="/projects/:slug" element={<ProjectDetailPage />} />
-          <Route path="/skills" element={<SkillsPage skills={portfolio.skills} />} />
-          <Route path="/achievements" element={<AchievementsPage achievements={portfolio.achievements} />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:slug" element={<BlogPostPage />} />
+          <Route path="/about" element={<AboutPage about={about} username={portfolio.username} achievements={portfolio.achievements} displayName={displayName} tagline={portfolio.tagline} />} />
+          <Route path="/projects" element={<ProjectsPage projects={portfolio.projects} username={portfolio.username} displayName={displayName} tagline={portfolio.tagline} />} />
+          <Route
+            path="/projects/:slug"
+            element={
+              <ProjectDetailPage
+                username={portfolio.username}
+                displayName={displayName}
+                profileImage={portfolio.profile_image}
+              />
+            }
+          />
+          <Route path="/skills" element={<SkillsPage skills={portfolio.skills} username={portfolio.username} displayName={displayName} tagline={portfolio.tagline} />} />
+          <Route path="/achievements" element={<AchievementsPage achievements={portfolio.achievements} username={portfolio.username} displayName={displayName} tagline={portfolio.tagline} />} />
+          <Route path="/blog" element={<BlogPage username={portfolio.username} displayName={displayName} tagline={portfolio.tagline} />} />
+          <Route path="/blog/:slug" element={<BlogPostPage username={portfolio.username} displayName={displayName} tagline={portfolio.tagline} />} />
           <Route
             path="/contact"
             element={
               <ContactPage
                 username={portfolio.username}
-                about={portfolio.about}
+                about={about}
+                displayName={displayName}
+                tagline={portfolio.tagline}
               />
             }
           />

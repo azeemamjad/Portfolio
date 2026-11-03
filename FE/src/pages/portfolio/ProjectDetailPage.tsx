@@ -19,6 +19,7 @@ import ErrorMessage from '../../components/common/ErrorMessage';
 import ProjectImageGallery from '../../components/common/ProjectImageGallery';
 import TechMarquee from '../../components/common/TechMarquee';
 import { getProjectGallerySlides } from '../../utils/projectGallery';
+import { useRouteMetadata } from '../../utils/routeMetadata';
 
 function formatLongDate(date: string) {
   return new Date(date).toLocaleDateString('en-US', {
@@ -113,7 +114,7 @@ function ContentSection({
       <div className="about-glass-card__head">
         {Icon && (
           <div className="about-glass-card__icon">
-            <Icon className="w-4 h-4 text-accent" />
+            <Icon className="w-4 h-4 text-accent" aria-hidden />
           </div>
         )}
         <div>
@@ -126,11 +127,34 @@ function ContentSection({
   );
 }
 
-const ProjectDetailPage: React.FC = () => {
-  const { username, slug } = useParams<{ username: string; slug: string }>();
+interface ProjectDetailPageProps {
+  username: string;
+  displayName: string;
+  profileImage?: string | null;
+}
+
+const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
+  username: usernameProp,
+  displayName,
+  profileImage,
+}) => {
+  const { username: usernameParam, slug } = useParams<{ username: string; slug: string }>();
+  const username = usernameProp || usernameParam || '';
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Route metadata lives here so navigating between projects — and from a
+  // project to any other page — always replaces the previous route's tags
+  // (UX-04). While loading, a generic title prevents stale values.
+  useRouteMetadata({
+    title: project ? `${project.title} — ${displayName}` : `Project — ${displayName}`,
+    description: project?.description || undefined,
+    path: username && slug ? `/${username}/projects/${slug}` : undefined,
+    image: project
+      ? project.image || project.thumbnail || profileImage
+      : profileImage,
+  });
 
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
@@ -143,7 +167,6 @@ const ProjectDetailPage: React.FC = () => {
         setLoading(true);
         const data = await portfolioAPI.getProject(username, slug);
         setProject(data);
-        document.title = `${data.title} — ${username}`;
       } catch (err: unknown) {
         const status = (err as { response?: { status?: number } })?.response?.status;
         setError(status === 404 ? 'Project not found.' : 'Failed to load this project.');
@@ -181,7 +204,7 @@ const ProjectDetailPage: React.FC = () => {
     <div className="project-detail page-content-section">
       <div className="container-custom project-detail__container">
         <Link to={`/${username}/projects`} className="project-detail__back">
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4" aria-hidden />
           Back to Projects
         </Link>
 
@@ -195,20 +218,20 @@ const ProjectDetailPage: React.FC = () => {
               <div className="flex flex-wrap items-center gap-2">
                 {project.is_featured && (
                   <span className="project-detail__badge">
-                    <Star className="w-3 h-3 fill-current" />
+                    <Star className="w-3 h-3 fill-current" aria-hidden />
                     Featured
                   </span>
                 )}
                 {dateRange && (
                   <span className="project-detail__meta-pill">
-                    <Calendar className="w-3.5 h-3.5" />
+                    <Calendar className="w-3.5 h-3.5" aria-hidden />
                     {dateRange}
                   </span>
                 )}
               </div>
               {project.updated_at && (
                 <p className="project-detail__updated">
-                  <Clock className="w-3.5 h-3.5" />
+                  <Clock className="w-3.5 h-3.5" aria-hidden />
                   Updated {formatUpdated(project.updated_at)}
                 </p>
               )}
@@ -243,8 +266,9 @@ const ProjectDetailPage: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="project-detail__action px-6 py-3"
+                    aria-label={`${label} for ${project.title} (opens in a new tab)`}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-4 h-4" aria-hidden />
                     {label}
                   </a>
                 ))}
@@ -320,8 +344,15 @@ const ProjectDetailPage: React.FC = () => {
                   <dt>Links</dt>
                   <dd className="flex flex-wrap gap-2">
                     {links.map(({ href, label }) => (
-                      <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="project-detail__fact-link">
-                        <Link2 className="w-3 h-3" />
+                      <a
+                        key={label}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="project-detail__fact-link"
+                        aria-label={`${label} for ${project.title} (opens in a new tab)`}
+                      >
+                        <Link2 className="w-3 h-3" aria-hidden />
                         {label}
                       </a>
                     ))}
@@ -335,10 +366,18 @@ const ProjectDetailPage: React.FC = () => {
             </dl>
           </section>
 
-          <Link to={`/${username}/projects`} className="project-detail__action project-detail__action--back px-6 py-3">
-            <ArrowLeft className="w-4 h-4" />
-            All projects
-          </Link>
+          <div className="flex flex-wrap items-center gap-4">
+            <Link to={`/${username}/projects`} className="project-detail__action project-detail__action--back px-6 py-3">
+              <ArrowLeft className="w-4 h-4" aria-hidden />
+              All projects
+            </Link>
+            <Link
+              to={`/${username}/contact`}
+              className="project-detail__action px-6 py-3"
+            >
+              Have a similar project? Get in touch
+            </Link>
+          </div>
         </div>
       </div>
     </div>

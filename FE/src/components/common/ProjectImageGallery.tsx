@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, ImageIcon } from 'lucide-react';
 import type { GallerySlide } from '../../utils/projectGallery';
 
 const SWIPE_MS = 240;
-const AUTO_MS = 4200;
 const MAX_STACK_DEPTH = 3;
 
 function getRelativeIndex(index: number, active: number, total: number) {
@@ -117,7 +116,6 @@ interface ProjectImageGalleryProps {
 
 const ProjectImageGallery: React.FC<ProjectImageGalleryProps> = ({ slides, title }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
   const [failed, setFailed] = useState<Set<number>>(new Set());
   const touchStartX = useRef<number | null>(null);
   const total = slides.length;
@@ -130,13 +128,9 @@ const ProjectImageGallery: React.FC<ProjectImageGalleryProps> = ({ slides, title
     setActiveIndex((i) => (i - 1 + total) % total);
   }, [total]);
 
-  useEffect(() => {
-    if (total <= 1 || paused) return;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) return;
-    const id = window.setInterval(goNext, AUTO_MS);
-    return () => window.clearInterval(id);
-  }, [goNext, total, paused]);
+  // No auto-rotation: screenshots change only on explicit user action
+  // (arrows, thumbnails, swipe), which also removes the hover-only pause
+  // accessibility problem.
 
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -157,8 +151,6 @@ const ProjectImageGallery: React.FC<ProjectImageGalleryProps> = ({ slides, title
   return (
     <div
       className="featured-stack featured-stack--gallery"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
       style={{ '--featured-swipe-ms': `${SWIPE_MS}ms` } as React.CSSProperties}
