@@ -107,7 +107,7 @@ export interface Testimonial {
 export interface Achievement {
   id: number;
   title: string;
-  type: 'award' | 'certification' | 'recognition' | 'publication' | 'other';
+  type: 'award' | 'certification' | 'recognition' | 'publication' | 'experience' | 'education' | 'other';
   issuer: string;
   description: string;
   image: string | null;

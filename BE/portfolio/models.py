@@ -194,6 +194,8 @@ class Achievement(models.Model):
         ('certification', 'Certification'),
         ('recognition', 'Recognition'),
         ('publication', 'Publication'),
+        ('experience', 'Experience'),
+        ('education', 'Education'),
         ('other', 'Other'),
     ]
     

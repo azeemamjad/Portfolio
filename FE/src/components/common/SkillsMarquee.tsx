@@ -8,13 +8,6 @@ interface SkillsMarqueeProps {
   className?: string;
 }
 
-const proficiencyBadge: Record<Skill['proficiency'], string> = {
-  beginner: 'bg-surface-muted text-content-muted',
-  intermediate: 'bg-surface-muted text-content-muted',
-  advanced: 'bg-surface-muted text-content',
-  expert: 'bg-surface-muted text-content',
-};
-
 interface SkillHoverCardProps {
   skill: Skill;
   anchor: DOMRect;
@@ -38,24 +31,6 @@ const SkillHoverCard: React.FC<SkillHoverCardProps> = ({ skill, anchor }) => {
         )}
         <div className="min-w-0">
           <h4 className="font-bold text-content text-sm leading-tight">{skill.name}</h4>
-          <span
-            className={`inline-block mt-1.5 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wide capitalize ${proficiencyBadge[skill.proficiency]}`}
-          >
-            {skill.proficiency}
-          </span>
-        </div>
-      </div>
-
-      <div className="mb-3">
-        <div className="flex justify-between text-[10px] text-content-muted mb-1">
-          <span>Proficiency</span>
-          <span className="font-semibold">{skill.proficiency_percentage}%</span>
-        </div>
-        <div className="h-1.5 rounded-full bg-surface-muted overflow-hidden">
-          <div
-            className="h-full rounded-full bg-content"
-            style={{ width: `${skill.proficiency_percentage}%` }}
-          />
         </div>
       </div>
 
