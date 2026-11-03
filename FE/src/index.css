@@ -366,6 +366,32 @@
     box-shadow: none;
   }
 
+  .navbar-glass-btn--resume {
+    @apply inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-content;
+  }
+
+  /* Skip link — visible only when focused via keyboard */
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -3.5rem;
+    z-index: 100;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background: var(--accent);
+    color: var(--accent-fg);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: top 0.15s ease;
+  }
+
+  .skip-link:focus-visible {
+    top: 0.75rem;
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
   .navbar-drawer-backdrop {
     background: color-mix(in oklch, var(--bg) 40%, transparent);
     -webkit-backdrop-filter: blur(8px) saturate(140%);
@@ -403,9 +429,9 @@
     @apply text-content;
   }
 
-  /* Featured projects — stacked swipe carousel */
+  /* Featured projects — static grid section */
   .featured-projects-section {
-    @apply relative overflow-hidden pt-24 md:pt-32 pb-16 md:pb-20 bg-transparent;
+    @apply relative overflow-hidden bg-transparent;
   }
 
   .featured-projects-section__header {
@@ -570,70 +596,6 @@
     color: var(--accent);
   }
 
-  .featured-stack__nav {
-    @apply absolute top-1/2 -translate-y-1/2 z-50 w-9 h-9 rounded-full flex items-center justify-center text-content;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    transition: transform 0.15s steps(2, jump-end), background 0.15s ease;
-  }
-
-  .featured-stack__nav:hover {
-    transform: translateY(-50%) scale(1.06);
-    background: var(--glass-bg-scrolled);
-  }
-
-  .featured-stack__nav:active {
-    transform: translateY(-50%) scale(0.94);
-  }
-
-  .featured-stack__nav--prev {
-    left: max(0.25rem, calc(50% - 17.5rem));
-  }
-
-  .featured-stack__nav--next {
-    right: max(0.25rem, calc(50% - 17.5rem));
-  }
-
-  @media (max-width: 639px) {
-    .featured-stack__nav--prev {
-      left: 0;
-    }
-
-    .featured-stack__nav--next {
-      right: 0;
-    }
-  }
-
-  .featured-stack__dots {
-    @apply flex items-center justify-center gap-2 mt-5;
-  }
-
-  .featured-stack__dot {
-    @apply w-2 h-2 rounded-full p-0 border-0 cursor-pointer;
-    background: color-mix(in oklch, var(--text) 18%, transparent);
-    transition: transform 0.18s steps(3, jump-end), background 0.18s steps(3, end);
-  }
-
-  .featured-stack__dot--active {
-    @apply w-6;
-    background: var(--accent);
-    border-radius: 9999px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .featured-stack-card {
-      transition: transform 0.01s linear, opacity 0.01s linear;
-    }
-
-    .featured-stack__nav,
-    .featured-stack__dot {
-      transition: none;
-    }
-  }
-
   /* Gallery stack — project detail (same animation as featured projects, wider cards) */
   .featured-stack--gallery {
     @apply w-full;
@@ -705,6 +667,26 @@
     }
   }
 
+  /* Gallery navigation arrows (project detail screenshots) */
+  .featured-stack__nav {
+    @apply absolute top-1/2 -translate-y-1/2 z-50 w-9 h-9 rounded-full flex items-center justify-center text-content;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    transition: transform 0.15s steps(2, jump-end), background 0.15s ease;
+  }
+
+  .featured-stack__nav:hover {
+    transform: translateY(-50%) scale(1.06);
+    background: var(--glass-bg-scrolled);
+  }
+
+  .featured-stack__nav:active {
+    transform: translateY(-50%) scale(0.94);
+  }
+
   .featured-stack__nav--gallery.featured-stack__nav--prev {
     left: max(0rem, calc(50% - 21rem));
   }
@@ -730,6 +712,16 @@
 
     .featured-stack__nav--gallery.featured-stack__nav--next {
       right: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .featured-stack-card {
+      transition: transform 0.01s linear, opacity 0.01s linear;
+    }
+
+    .featured-stack__nav {
+      transition: none;
     }
   }
 
@@ -966,37 +958,6 @@
     @apply mb-8 md:mb-10;
   }
 
-  .skills-section__stats {
-    @apply grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-10 md:mb-12;
-  }
-
-  .skills-stat-card {
-    @apply relative rounded-2xl p-4 md:p-5 overflow-hidden text-center;
-    background: var(--glass-bg);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-  }
-
-  .skills-stat-card__shine {
-    @apply absolute inset-0 pointer-events-none;
-    background: linear-gradient(
-      125deg,
-      color-mix(in oklch, white 5%, transparent) 0%,
-      transparent 45%
-    );
-    opacity: 0.15;
-  }
-
-  .skills-stat-card__value {
-    @apply relative text-2xl md:text-3xl font-extrabold text-content leading-none;
-  }
-
-  .skills-stat-card__label {
-    @apply relative mt-1.5 text-[11px] font-bold uppercase tracking-wider text-content-muted;
-  }
-
   .skills-section__categories {
     @apply flex flex-col gap-10 md:gap-12;
   }
@@ -1077,239 +1038,90 @@
     @apply font-bold text-content text-sm leading-tight truncate;
   }
 
-  .skills-glass-card__badge {
-    @apply inline-block mt-1.5 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wide;
-  }
-
-  .skills-glass-card__pct {
-    @apply text-sm font-extrabold text-content shrink-0 tabular-nums;
-  }
-
   .skills-glass-card__summary {
-    @apply relative text-xs md:text-sm text-content-muted leading-relaxed line-clamp-2 mb-4 flex-1;
+    @apply relative text-xs md:text-sm text-content-muted leading-relaxed flex-1;
   }
 
-  .skills-glass-card__bar-track {
-    @apply relative h-1.5 rounded-full overflow-hidden mt-auto;
-    background: color-mix(in oklch, var(--text) 6%, transparent);
+  /* Experience & education records */
+  .experience-record-list {
+    @apply relative flex flex-col max-w-3xl;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
-  .skills-glass-card__bar-fill {
-    @apply h-full rounded-full transition-all duration-1000 ease-out;
+  .experience-record {
+    @apply relative flex flex-col sm:flex-row gap-2 sm:gap-8 py-5;
+    border-bottom: 1px solid color-mix(in oklch, var(--text) 8%, transparent);
   }
 
-  /* Achievements page */
-  .achievements-section__container {
-    @apply mt-8 md:mt-10;
+  .experience-record:first-child {
+    @apply pt-0;
   }
 
-  .achievements-section__stats {
-    @apply grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-8 md:mb-10;
+  .experience-record:last-child {
+    border-bottom: 0;
+    @apply pb-0;
   }
 
-  .achievements-stat-card {
-    @apply relative rounded-2xl p-4 md:p-5 overflow-hidden text-center;
-    background: var(--glass-bg);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
+  .experience-record__timeline {
+    @apply sm:w-28 sm:shrink-0;
   }
 
-  .achievements-stat-card__shine {
-    @apply absolute inset-0 pointer-events-none;
-    background: linear-gradient(
-      125deg,
-      color-mix(in oklch, white 5%, transparent) 0%,
-      transparent 45%
-    );
-    opacity: 0.15;
+  .experience-record__date {
+    @apply text-sm font-semibold tabular-nums;
+    color: color-mix(in oklch, var(--accent) 85%, var(--text));
   }
 
-  .achievements-stat-card__value {
-    @apply relative text-2xl md:text-3xl font-extrabold text-content leading-none;
+  .experience-record__body {
+    @apply min-w-0 flex-1;
   }
 
-  .achievements-stat-card__label {
-    @apply relative mt-1.5 text-[11px] font-bold uppercase tracking-wider text-content-muted;
+  .experience-record__title {
+    @apply text-base md:text-lg font-semibold text-content leading-snug;
   }
 
-  .achievements-section__filters {
-    @apply flex flex-wrap justify-center gap-2 mb-8 md:mb-10;
+  .experience-record__type {
+    @apply inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold;
   }
 
-  .achievements-section__filter {
-    @apply px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200;
-    background: color-mix(in oklch, var(--text) 5%, transparent);
-    border: 1px solid color-mix(in oklch, var(--text) 10%, transparent);
-    color: var(--text-muted);
+  .experience-record__issuer {
+    @apply text-sm text-content-muted font-medium mt-0.5;
   }
 
-  .achievements-section__filter:hover {
-    border-color: color-mix(in oklch, var(--accent) 35%, transparent);
+  .experience-record__description {
+    @apply text-sm text-content-muted leading-relaxed mt-2 whitespace-pre-line;
+  }
+
+  .experience-record__link {
+    @apply inline-flex items-center gap-1.5 mt-3 text-sm font-semibold;
     color: var(--accent);
   }
 
-  .achievements-section__filter--active {
-    background: color-mix(in oklch, var(--accent) 88%, transparent);
-    border-color: color-mix(in oklch, var(--accent) 40%, transparent);
-    color: var(--accent-fg);
-    box-shadow: 0 1px 3px color-mix(in oklch, var(--accent) 18%, transparent);
+  .experience-record__link:hover {
+    text-decoration: underline;
   }
 
-  .achievements-section__grid {
-    @apply flex flex-col gap-8 md:gap-10 max-w-5xl mx-auto;
+  /* About page — collapsible detailed story */
+  .about-story-details__summary {
+    @apply cursor-pointer list-none;
   }
 
-  .achievement-glass-card {
-    @apply relative rounded-2xl overflow-hidden h-full flex flex-col md:flex-row;
-    background: var(--glass-bg);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-    transition:
-      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-      border-color 0.3s ease,
-      box-shadow 0.3s ease;
-    min-height: 20rem;
+  .about-story-details__summary::-webkit-details-marker {
+    display: none;
   }
 
-  @media (min-width: 768px) {
-    .achievement-glass-card {
-      min-height: 22rem;
-    }
+  .about-story-details__summary:focus-visible {
+    @apply outline-none ring-2 rounded-2xl;
+    --tw-ring-color: var(--accent);
   }
 
-  .achievement-glass-card:hover {
-    transform: translateY(-4px);
-    border-color: color-mix(in oklch, var(--accent) 32%, var(--glass-border));
-    box-shadow: var(--glass-shadow-elevated);
+  .about-story-details__hint {
+    @apply ml-3 text-[10px] font-semibold uppercase tracking-wider text-content-muted;
   }
 
-  .achievement-glass-card__shine {
-    @apply absolute inset-0 pointer-events-none z-10;
-    background: linear-gradient(
-      125deg,
-      color-mix(in oklch, white 5%, transparent) 0%,
-      transparent 45%
-    );
-    opacity: 0.14;
-  }
-
-  .achievement-glass-card__visual {
-    @apply relative overflow-hidden shrink-0;
-    height: 14rem;
-    border-bottom: 1px solid color-mix(in oklch, var(--text) 6%, transparent);
-  }
-
-  @media (min-width: 768px) {
-    .achievement-glass-card__visual {
-      @apply w-[42%] min-w-[16rem];
-      height: auto;
-      min-height: 22rem;
-      border-bottom: 0;
-      border-right: 1px solid color-mix(in oklch, var(--text) 6%, transparent);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .achievement-glass-card__visual {
-      @apply w-[40%];
-      min-height: 24rem;
-    }
-  }
-
-  .achievement-glass-card__image {
-    @apply w-full h-full object-cover;
-    min-height: 14rem;
-    background: color-mix(in oklch, var(--surface-muted) 60%, transparent);
-  }
-
-  @media (min-width: 768px) {
-    .achievement-glass-card__image {
-      min-height: 22rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .achievement-glass-card__image {
-      min-height: 24rem;
-    }
-  }
-
-  .achievement-glass-card__placeholder {
-    @apply w-full h-full flex items-center justify-center;
-    min-height: 14rem;
-  }
-
-  @media (min-width: 768px) {
-    .achievement-glass-card__placeholder {
-      min-height: 22rem;
-    }
-  }
-
-  .achievement-glass-card__type {
-    @apply absolute top-4 left-4 z-20 px-3 py-1 rounded-lg text-xs font-bold shadow-sm;
-  }
-
-  .achievement-glass-card__body {
-    @apply relative flex flex-col flex-1 p-6 md:p-8 lg:p-9;
-  }
-
-  .achievement-glass-card__title {
-    @apply text-xl md:text-2xl lg:text-3xl font-bold text-content leading-tight mb-3;
-  }
-
-  .achievement-glass-card__issuer {
-    @apply text-sm md:text-base text-content mb-4;
-  }
-
-  .achievement-glass-card__issuer-label {
-    @apply block text-[10px] font-bold uppercase tracking-wider text-content-muted mb-1;
-  }
-
-  .achievement-glass-card__description {
-    @apply text-sm md:text-base text-content-muted leading-relaxed mb-6 whitespace-pre-line;
-  }
-
-  .achievement-glass-card__meta {
-    @apply grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5 mt-auto;
-  }
-
-  .achievement-glass-card__meta-item dt {
-    @apply flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-content-muted mb-1;
-  }
-
-  .achievement-glass-card__meta-item dd {
-    @apply text-sm font-semibold text-content;
-  }
-
-  .achievement-glass-card__expired {
-    @apply flex flex-wrap items-center gap-2;
-    color: color-mix(in oklch, #ef4444 75%, var(--text));
-  }
-
-  .achievement-glass-card__expired-badge {
-    @apply px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide;
-    background: color-mix(in oklch, #ef4444 15%, transparent);
-    color: #ef4444;
-  }
-
-  .achievement-glass-card__link {
-    @apply inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200;
-    background: color-mix(in oklch, var(--accent) 12%, transparent);
-    border: 1px solid color-mix(in oklch, var(--accent) 28%, transparent);
-    color: var(--accent);
-  }
-
-  .achievement-glass-card__link:hover {
-    background: color-mix(in oklch, var(--accent) 18%, transparent);
-    transform: translateY(-1px);
-  }
-
-  .achievement-glass-card__no-link {
-    @apply text-xs font-medium text-content-muted italic mt-auto;
+  .about-story-details[open] .about-story-details__hint {
+    color: color-mix(in oklch, var(--accent) 85%, var(--text));
   }
 
   .project-detail__container {
@@ -1623,136 +1435,6 @@
   @keyframes skills-marquee-ltr {
     from { transform: translateX(-50%); }
     to { transform: translateX(0); }
-  }
-
-  /* Road map — horizontal scroll section */
-  .roadmap-section {
-    overscroll-behavior: none;
-  }
-
-  .roadmap-panel {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .roadmap-panel--sticky {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    height: 100dvh;
-  }
-
-  .roadmap-section--simple .roadmap-simple-viewport {
-    padding-left: max(1.5rem, calc((100vw - 72rem) / 2 + 1.5rem));
-    padding-right: 1.5rem;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
-  }
-
-  .roadmap-track {
-    display: flex;
-    align-items: stretch;
-    gap: 12vw;
-    width: max-content;
-  }
-
-  .roadmap-track--pinned {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translate3d(0, -50%, 0);
-    will-change: transform;
-    padding-right: 0;
-  }
-
-  .roadmap-track--simple {
-    gap: 1.5rem;
-    padding-left: max(1.5rem, calc((100vw - 72rem) / 2 + 1.5rem));
-    padding-right: 1.5rem;
-  }
-
-  .roadmap-snap {
-    transition: opacity 0.35s ease, transform 0.35s ease, filter 0.35s ease;
-  }
-
-  .roadmap-snap--active {
-    opacity: 1;
-    transform: scale(1);
-    filter: none;
-    z-index: 2;
-  }
-
-  .roadmap-snap--dim {
-    opacity: 0.28;
-    transform: scale(0.94);
-    filter: blur(0.5px);
-  }
-
-  .roadmap-card,
-  .roadmap-slide {
-    width: min(92vw, 44rem);
-    scroll-snap-align: center;
-  }
-
-  .roadmap-slide__inner,
-  .roadmap-intro__card {
-    border-color: color-mix(in oklch, var(--accent) 35%, var(--border));
-    background: color-mix(in oklch, var(--accent) 6%, var(--surface));
-    min-height: 22rem;
-  }
-
-  .roadmap-slide__inner--end {
-    background: color-mix(in oklch, var(--accent) 10%, var(--surface));
-  }
-
-  .roadmap-card__inner {
-    min-height: 22rem;
-  }
-
-  .roadmap-snap--active .roadmap-card__inner,
-  .roadmap-snap--active .roadmap-slide__inner {
-    border-color: color-mix(in oklch, var(--accent) 45%, var(--border));
-    box-shadow: 0 4px 16px color-mix(in oklch, var(--accent) 10%, transparent);
-  }
-
-  .roadmap-rail {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    height: 2px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      var(--accent) 8%,
-      var(--accent) 92%,
-      transparent
-    );
-    opacity: 0.35;
-    pointer-events: none;
-  }
-
-  .roadmap-progress {
-    height: 3px;
-    border-radius: 9999px;
-    background: var(--surface-2);
-    overflow: hidden;
-    max-width: 12rem;
-    margin: 0 auto;
-  }
-
-  .roadmap-progress__bar {
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(90deg, var(--accent-400), var(--accent-600));
-    transition: width 0.12s linear;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .roadmap-track--pinned {
-      transform: translate3d(0, -50%, 0) !important;
-    }
   }
 
   /* Loading screen */

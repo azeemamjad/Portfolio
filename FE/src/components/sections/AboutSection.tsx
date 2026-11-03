@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   ArrowRight,
   Briefcase,
+  Download,
   ExternalLink,
   Mail,
   MapPin,
@@ -11,12 +12,14 @@ import {
   Sparkles,
   User,
 } from 'lucide-react';
-import type { About } from '../../types';
+import type { About, Achievement } from '../../types';
 import SectionHeader from '../common/SectionHeader';
+import ExperienceSection from './ExperienceSection';
 
 interface AboutSectionProps {
   about?: About;
   username?: string;
+  achievements?: Achievement[];
   showHeader?: boolean;
 }
 
@@ -59,25 +62,25 @@ function BlockBody({ content }: { content: string }) {
   return <p className="about-glass-card__body">{formatted.text}</p>;
 }
 
+/**
+ * About layout (UX-12): short professional summary first, then career records,
+ * then optional detailed story, values and contact information.
+ */
 const AboutSection: React.FC<AboutSectionProps> = ({
   about,
   username,
+  achievements,
   showHeader = true,
 }) => {
   if (!about) return null;
 
   const contactInfo = [
-    { icon: MapPin, value: about.location, label: 'Location', href: null },
-    { icon: Mail, value: about.email, label: 'Email', href: `mailto:${about.email}` },
-    { icon: Phone, value: about.phone, label: 'Phone', href: `tel:${about.phone}` },
+    { icon: MapPin, value: about.location, label: 'Location', href: null, external: false },
+    { icon: Mail, value: about.email, label: 'Email', href: `mailto:${about.email}`, external: false },
+    { icon: Phone, value: about.phone, label: 'Phone', href: `tel:${about.phone}`, external: false },
   ].filter((item) => item.value);
 
-  const storyBlocks = [
-    { title: 'My Story', content: about.bio, icon: User },
-    { title: 'Background', content: about.background, icon: User },
-    { title: 'Career Path', content: about.career_path, icon: Briefcase },
-    { title: 'Values', content: about.values, icon: Sparkles },
-  ].filter((b) => b.content);
+  const hasDetailedStory = Boolean(about.background || about.career_path);
 
   return (
     <section id="about" className="about-section page-content-section">
@@ -91,31 +94,82 @@ const AboutSection: React.FC<AboutSectionProps> = ({
         )}
 
         <div className="about-section__stack">
-          {storyBlocks.map((block) => {
-            const Icon = block.icon;
-            return (
-              <article key={block.title} className="about-glass-card">
-                <div className="about-glass-card__shine" aria-hidden />
-                <div className="about-glass-card__head">
-                  <div className="about-glass-card__icon">
-                    <Icon className="w-4 h-4 text-accent" />
-                  </div>
-                  <div>
-                    <p className="about-glass-card__eyebrow">Profile</p>
-                    <h3 className="about-glass-card__label font-semibold">{block.title}</h3>
-                  </div>
+          {/* 1. Short professional summary */}
+          {about.bio && (
+            <article className="about-glass-card">
+              <div className="about-glass-card__shine" aria-hidden />
+              <div className="about-glass-card__head">
+                <div className="about-glass-card__icon">
+                  <User className="w-4 h-4 text-accent" aria-hidden />
                 </div>
-                <BlockBody content={block.content} />
-              </article>
-            );
-          })}
+                <div>
+                  <p className="about-glass-card__eyebrow">Profile</p>
+                  <h3 className="about-glass-card__label font-semibold">Summary</h3>
+                </div>
+              </div>
+              <BlockBody content={about.bio} />
+            </article>
+          )}
 
-          {contactInfo.length > 0 && (
+          {/* 2. Compact career records */}
+          {achievements && achievements.length > 0 && (
+            <ExperienceSection
+              records={achievements}
+              username={username}
+              variant="summary"
+              showHeader={false}
+            />
+          )}
+
+          {/* 3. Detailed story, optional and collapsed by default */}
+          {hasDetailedStory && (
+            <details className="about-glass-card about-story-details">
+              <div className="about-glass-card__shine" aria-hidden />
+              <summary className="about-glass-card__head about-story-details__summary">
+                <div className="about-glass-card__icon">
+                  <Briefcase className="w-4 h-4 text-accent" aria-hidden />
+                </div>
+                <div>
+                  <p className="about-glass-card__eyebrow">Background</p>
+                  <h3 className="about-glass-card__label font-semibold">
+                    More about my path
+                    <span className="about-story-details__hint" aria-hidden>
+                      Show / hide
+                    </span>
+                  </h3>
+                </div>
+              </summary>
+              <div className="flex flex-col gap-5 mt-4">
+                {about.background && <BlockBody content={about.background} />}
+                {about.career_path && <BlockBody content={about.career_path} />}
+              </div>
+            </details>
+          )}
+
+          {/* 4. Values as short statements */}
+          {about.values && (
+            <article className="about-glass-card">
+              <div className="about-glass-card__shine" aria-hidden />
+              <div className="about-glass-card__head">
+                <div className="about-glass-card__icon">
+                  <Sparkles className="w-4 h-4 text-accent" aria-hidden />
+                </div>
+                <div>
+                  <p className="about-glass-card__eyebrow">How I work</p>
+                  <h3 className="about-glass-card__label font-semibold">Values</h3>
+                </div>
+              </div>
+              <BlockBody content={about.values} />
+            </article>
+          )}
+
+          {/* 5. Connect */}
+          {(contactInfo.length > 0 || about.resume_file) && (
             <article className="about-glass-card about-glass-card--contact">
               <div className="about-glass-card__shine" aria-hidden />
               <div className="about-glass-card__head">
                 <div className="about-glass-card__icon">
-                  <MessageCircle className="w-4 h-4 text-accent" />
+                  <MessageCircle className="w-4 h-4 text-accent" aria-hidden />
                 </div>
                 <div>
                   <p className="about-glass-card__eyebrow">Reach out</p>
@@ -129,15 +183,12 @@ const AboutSection: React.FC<AboutSectionProps> = ({
                   const inner = (
                     <>
                       <div className="about-contact-chip__icon">
-                        <Icon className="w-4 h-4 text-accent" />
+                        <Icon className="w-4 h-4 text-accent" aria-hidden />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="about-contact-chip__meta">{item.label}</p>
                         <p className="about-contact-chip__value">{item.value}</p>
                       </div>
-                      {item.href && (
-                        <ExternalLink className="w-3.5 h-3.5 text-content-muted shrink-0 opacity-70" />
-                      )}
                     </>
                   );
 
@@ -151,29 +202,37 @@ const AboutSection: React.FC<AboutSectionProps> = ({
                     </div>
                   );
                 })}
-              </div>
-            </article>
-          )}
 
-          <article className="about-availability-card">
-            <div className="about-availability-card__glow" aria-hidden />
-            <div className="about-availability-card__inner">
-              <p className="about-availability-card__eyebrow">Currently</p>
-              <p className="about-availability-card__title">
-                Open to selected roles and collaborations
-              </p>
-              <div className="about-availability-card__status">
-                <span className="about-availability-card__dot" aria-hidden />
-                <span>Currently available</span>
+                {about.resume_file && (
+                  <a
+                    href={about.resume_file}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="about-contact-chip"
+                  >
+                    <div className="about-contact-chip__icon">
+                      <Download className="w-4 h-4 text-accent" aria-hidden />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="about-contact-chip__meta">Resume</p>
+                      <p className="about-contact-chip__value">Open resume (PDF)</p>
+                    </div>
+                    <ExternalLink className="w-3.5 h-3.5 text-content-muted shrink-0 opacity-70" aria-hidden />
+                  </a>
+                )}
               </div>
+
               {username && (
-                <Link to={`/${username}/contact`} className="about-availability-card__btn rounded-full">
+                <Link
+                  to={`/${username}/contact`}
+                  className="inline-flex items-center gap-2 mt-5 px-5 py-2.5 rounded-full text-sm font-semibold text-accent bg-[color-mix(in_oklch,var(--accent)_12%,transparent)] border border-[color-mix(in_oklch,var(--accent)_28%,transparent)] transition-colors hover:bg-[color-mix(in_oklch,var(--accent)_18%,transparent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+                >
                   Start a conversation
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4" aria-hidden />
                 </Link>
               )}
-            </div>
-          </article>
+            </article>
+          )}
         </div>
       </div>
     </section>

@@ -17,32 +17,6 @@ interface SkillsSectionProps {
   showHeader?: boolean;
 }
 
-const proficiencyConfig: Record<
-  Skill['proficiency'],
-  { badge: string; bar: string; label: string }
-> = {
-  beginner: {
-    badge: 'bg-surface-muted text-content-muted',
-    bar: 'bg-content-muted/50',
-    label: 'Beginner',
-  },
-  intermediate: {
-    badge: 'bg-surface-muted text-content-muted',
-    bar: 'bg-content-muted/70',
-    label: 'Intermediate',
-  },
-  advanced: {
-    badge: 'bg-surface-muted text-content',
-    bar: 'bg-accent/80',
-    label: 'Advanced',
-  },
-  expert: {
-    badge: 'bg-accent-50 text-accent-700 dark:bg-accent/20 dark:text-accent-300',
-    bar: 'bg-accent',
-    label: 'Expert',
-  },
-};
-
 const categories: {
   key: Skill['category'];
   label: string;
@@ -53,12 +27,12 @@ const categories: {
   { key: 'framework', label: 'Frameworks & Libraries', eyebrow: 'Build', icon: Layers },
   { key: 'database', label: 'Databases', eyebrow: 'Data', icon: Database },
   { key: 'tool', label: 'Tools & Platforms', eyebrow: 'Ops', icon: Wrench },
-  { key: 'soft', label: 'Soft Skills', eyebrow: 'People', icon: Users },
+  { key: 'soft', label: 'Working Practices', eyebrow: 'People', icon: Users },
   { key: 'other', label: 'Other', eyebrow: 'More', icon: Sparkles },
 ];
 
 function SkillCard({ skill }: { skill: Skill }) {
-  const cfg = proficiencyConfig[skill.proficiency] ?? proficiencyConfig.intermediate;
+  // Capability statement instead of a subjective rating (UX-09).
   const summary =
     skill.summary?.trim() || `Hands-on experience with ${skill.name} across real projects.`;
 
@@ -75,23 +49,19 @@ function SkillCard({ skill }: { skill: Skill }) {
         )}
         <div className="skills-glass-card__meta min-w-0 flex-1">
           <h4 className="skills-glass-card__name font-semibold">{skill.name}</h4>
-          <span className={`skills-glass-card__badge ${cfg.badge}`}>{cfg.label}</span>
         </div>
-        <span className="skills-glass-card__pct font-semibold">{skill.proficiency_percentage}%</span>
       </div>
 
       <p className="skills-glass-card__summary">{summary}</p>
-
-      <div className="skills-glass-card__bar-track" aria-hidden>
-        <div
-          className={`skills-glass-card__bar-fill ${cfg.bar}`}
-          style={{ width: `${skill.proficiency_percentage}%` }}
-        />
-      </div>
     </article>
   );
 }
 
+/**
+ * Capability-grouped skills (UX-09): no percentage bars, proficiency averages
+ * or expert counters — plain capability statements only. Rating data stays in
+ * the model for admin use; it is simply not presented publicly.
+ */
 const SkillsSection: React.FC<SkillsSectionProps> = ({ skills, showHeader = true }) => {
   const sortedSkills = useMemo(
     () => [...skills].sort((a, b) => a.order - b.order),
@@ -107,18 +77,6 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({ skills, showHeader = true
     }))
     .filter((g) => g.skills.length > 0);
 
-  const expertCount = skills.filter((s) => s.proficiency === 'expert').length;
-  const avgProficiency = Math.round(
-    skills.reduce((sum, s) => sum + s.proficiency_percentage, 0) / skills.length,
-  );
-
-  const stats = [
-    { label: 'Skills', value: skills.length },
-    { label: 'Categories', value: grouped.length },
-    { label: 'Expert level', value: expertCount },
-    { label: 'Avg. proficiency', value: `${avgProficiency}%` },
-  ];
-
   return (
     <section id="skills" className={`skills-section${showHeader ? ' section-padding' : ' page-content-section'}`}>
       <div className="container-custom skills-section__container">
@@ -132,16 +90,6 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({ skills, showHeader = true
           />
         )}
 
-        <div className="skills-section__stats">
-          {stats.map((stat) => (
-            <div key={stat.label} className="skills-stat-card">
-              <div className="skills-stat-card__shine" aria-hidden />
-              <p className="skills-stat-card__value font-semibold">{stat.value}</p>
-              <p className="skills-stat-card__label">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-
         <div className="skills-section__categories">
           {grouped.map((group, gi) => {
             const Icon = group.icon;
@@ -153,15 +101,12 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({ skills, showHeader = true
               >
                 <header className="skills-section__category-head">
                   <div className="skills-section__category-icon">
-                    <Icon className="w-4 h-4 text-accent" />
+                    <Icon className="w-4 h-4 text-accent" aria-hidden />
                   </div>
                   <div>
                     <p className="skills-section__category-eyebrow">{group.eyebrow}</p>
                     <h3 className="skills-section__category-title font-semibold">{group.label}</h3>
                   </div>
-                  <span className="skills-section__category-count">
-                    {group.skills.length} skill{group.skills.length === 1 ? '' : 's'}
-                  </span>
                 </header>
 
                 <div className="skills-section__grid">

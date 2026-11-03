@@ -6,16 +6,31 @@ import type { BlogPost } from '../../types';
 import Loading from '../../components/common/Loading';
 import ErrorMessage from '../../components/common/ErrorMessage';
 import PageHero from '../../components/common/PageHero';
+import { buildTitle, roleFromTagline, useRouteMetadata } from '../../utils/routeMetadata';
 
 const PAGE_SIZE = 6;
 
-const BlogPage: React.FC = () => {
-  const { username } = useParams<{ username: string }>();
+interface BlogPageProps {
+  username: string;
+  displayName: string;
+  tagline?: string;
+}
+
+const BlogPage: React.FC<BlogPageProps> = ({ username: usernameProp, displayName, tagline }) => {
+  const { username: usernameParam } = useParams<{ username: string }>();
+  const username = usernameProp || usernameParam || '';
+  const role = roleFromTagline(tagline);
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useRouteMetadata({
+    title: buildTitle('Blog', displayName, role),
+    description: `Articles and notes on software development by ${displayName}.`,
+    path: `/${username}/blog`,
+  });
 
   useEffect(() => {
     if (!username) return;

@@ -7,12 +7,28 @@ import { portfolioAPI } from '../../services/api';
 import type { BlogPost } from '../../types';
 import Loading from '../../components/common/Loading';
 import ErrorMessage from '../../components/common/ErrorMessage';
+import { useRouteMetadata } from '../../utils/routeMetadata';
 
-const BlogPostPage: React.FC = () => {
-  const { username, slug } = useParams<{ username: string; slug: string }>();
+interface BlogPostPageProps {
+  username: string;
+  displayName: string;
+  tagline?: string;
+}
+
+const BlogPostPage: React.FC<BlogPostPageProps> = ({ username: usernameProp, displayName }) => {
+  const { username: usernameParam, slug } = useParams<{ username: string; slug: string }>();
+  const username = usernameProp || usernameParam || '';
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useRouteMetadata({
+    title: post ? `${post.title} — ${displayName}` : `Article — ${displayName}`,
+    description: post?.excerpt || undefined,
+    path: username && slug ? `/${username}/blog/${slug}` : undefined,
+    image: post?.featured_image || undefined,
+    type: 'article',
+  });
 
   useEffect(() => {
     if (!username || !slug) return;
